@@ -1,0 +1,36 @@
+name: Bug report
+description: Report a reproducible problem with synthetic data.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not attach confidential plaintext, passwords, keys or private .pvlt containers.
+        Use disposable demo files and remove personal paths from screenshots.
+        For suspected vulnerabilities, follow SECURITY.md and request a private channel.
+  - type: input
+    id: version
+    attributes:
+      label: Version and build
+      placeholder: 1.1.0, self-contained or framework-dependent
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Windows and .NET version
+      description: Include the Desktop Runtime version for a framework-dependent build.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Use synthetic data; include file type/size and sanitized error text.
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true

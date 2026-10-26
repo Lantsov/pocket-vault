@@ -23,10 +23,16 @@ internal static class Program
     private static int failed;
 
     [STAThread]
-    private static int Main()
+    private static int Main(string[] args)
     {
         var application = new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
         SynchronizationContext.SetSynchronizationContext(new DispatcherSynchronizationContext(application.Dispatcher));
+        if (args is ["--screenshots", string output, string samples])
+        {
+            CaptureDocumentation(output, samples);
+            application.Shutdown();
+            return 0;
+        }
         Directory.CreateDirectory(Root);
         try
         {
@@ -429,6 +435,40 @@ internal static class Program
         Rect actions = window.EncryptButton.TransformToAncestor(window).TransformBounds(new Rect(window.EncryptButton.RenderSize));
         Rect status = window.StatusCard.TransformToAncestor(window).TransformBounds(new Rect(window.StatusCard.RenderSize));
         Check(file.Bottom < password.Top && password.Bottom < actions.Top && actions.Bottom < status.Top);
+    }
+
+    private static void CaptureDocumentation(string output, string samples)
+    {
+        Directory.CreateDirectory(output);
+        Directory.CreateDirectory(samples);
+        string source = Path.Combine(samples, "project-notes.txt");
+        string container = Path.Combine(samples, "project-notes.pvlt");
+        File.WriteAllText(source, "PocketVault demonstration file. No private data.\n", Encoding.UTF8);
+        var window = OpenWindow(source, new TestDialogs { Destination = container });
+        try
+        {
+            // A normal user-resized window leaves room for the taller busy status card.
+            window.Height = 680;
+            const string demoPassword = "Public demo passphrase";
+            window.Password.Password = window.Confirmation.Password = demoPassword;
+            window.UpdateLayout();
+            CheckLayout(window);
+            SaveScreenshot(window, Path.Combine(output, "pocketvault-main.png"), 1.5);
+            Task operation = window.RunOperationAsync();
+            Check(window.IsBusy);
+            window.UpdateLayout();
+            CheckLayout(window);
+            SaveScreenshot(window, Path.Combine(output, "pocketvault-processing.png"), 1.5);
+            Complete(operation);
+            Check(File.Exists(container) && window.StatusText.Text.StartsWith("Готово", StringComparison.Ordinal));
+            Check(window.SelectFile(container));
+            window.Password.Password = demoPassword;
+            window.UpdateLayout();
+            CheckLayout(window);
+            SaveScreenshot(window, Path.Combine(output, "pocketvault-decrypt.png"), 1.5);
+            Console.WriteLine("[OK] Three documentation screenshots rendered from the real WPF window at 144 DPI.");
+        }
+        finally { window.Close(); }
     }
 
     private static void SaveScreenshot(MainWindow window, string path, double scale)
