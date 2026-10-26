@@ -17,7 +17,7 @@ Review date: **2026-10-26**. Repository: [Lantsov/pocket-vault](https://github.c
 
 ## History and disclosure audit
 
-The original repository is not shallow. GitHub lists only `main` and tag `v1.1.0`, matching local refs. The available original history consists of:
+The repository is not shallow. At the start of the review, GitHub listed only `main` and tag `v1.1.0`, matching local refs. The preparation branch was subsequently created and pushed. The available original history consists of:
 
 - `661c57c65ada7af8b13ddd4e17c0aadb75c4d372` — initial WinForms/Core project.
 - `2d8915f91906a30ac8c8025c8a11c3ebb9b6dff7` — WPF migration, tagged 1.1.0.
@@ -29,6 +29,8 @@ The two historical ICOs are the only tracked binary assets in the original histo
 Commit author/committer metadata in **both hashes above** contains personal identifiers. The relevant location is the commit object, not a working-tree file. Confirm consent or plan a separate, explicit history-cleaning operation before publication if those identifiers must remain private. No secret values or full email are repeated here.
 
 Both available Actions runs were successful and their full logs were downloaded and scanned: `40316040168` and `40320455869`. No matching secrets/private endpoints/personal user paths were found. The repository Actions-secret list was empty; this does not inspect account/organization-level secrets or unavailable/deleted logs. GitHub runner paths are ordinary ephemeral CI paths. No history/log deletion or rewriting was performed. Raw downloaded logs and audit data remain in ignored `.tools/publication-audit/`.
+
+The implementation commit `318c963064725bfa0d7100bb0ff7822491b0c4c8` and its additional file blobs were scanned again, including the five new PNGs reviewed visually. The new commit uses the owner's GitHub noreply identity. `git fsck --full --no-reflogs --unreachable` reported no unreachable objects. The new CI run's log was also scanned without matching secrets/private endpoints/personal user paths.
 
 The ignore rules cover local tools, build output, logs, vaults, IDE files, `.env*`, private-key/certificate formats, dumps and `.pvlt-*.tmp`. Ignore rules do not protect already tracked history; future additions still need review.
 
@@ -53,8 +55,9 @@ Both published EXEs identify version `1.1.0+2d8915f91906a30ac8c8025c8a11c3ebb9b6
 - Packaging: two ZIPs, project license and upstream runtime notices produced; ZIP integrity and generated SHA256SUMS verified. Exact runtime versions come from restore metadata, not the newest cached directory.
 - `git diff --check`: passed. App/Core source unchanged.
 - Documentation checker validates local destinations, image presence/alt text and code fences. English/Russian README mechanisms, limits, download links and warnings were compared.
-- External links: 19 unique destinations checked. Nine returned HTTP 200, including Microsoft downloads/docs, GitHub configuration docs and badges; ten unauthenticated project URLs returned 404 while private. The dynamic release badge returns HTTP 200 with a private-repository-data-unavailable message. Repository/release/workflow/commit/compare targets were independently verified using authenticated GitHub API. The reporting form is not yet verified usable. Public link/badge checks must be repeated after visibility changes.
-- Updated GitHub CI is validated separately on the preparation branch; see its check status before merging.
+- Documentation: 14 Markdown files and 71 local destinations passed the checker. Both READMEs rendered successfully through GitHub's GFM API.
+- External links: 21 unique destinations checked. Ten returned HTTP 200, including Microsoft downloads/docs, GitHub configuration docs and badges; eleven unauthenticated project URLs returned 404 while private. A 200 response from a dynamic badge does not itself confirm that private repository data can be resolved; no access token was embedded. Repository/release/workflow/commit/compare targets were independently verified using authenticated GitHub API. The reporting form is not yet verified usable. Public link/badge checks must be repeated after visibility changes.
+- [GitHub Windows CI run 40328883811](https://github.com/Lantsov/pocket-vault/actions/runs/40328883811) **passed** on implementation commit `318c963`: build, 42 tests, both publishes, both EXE launches, documentation checks, archive/checksum generation and four artifact uploads. CI used SDK 10.0.403/runtime 10.0.14. The subsequent report-only update does not change that executable/workflow code; its local documentation checks pass separately.
 
 ## Visual assets
 
