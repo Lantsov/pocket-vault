@@ -1,0 +1,17 @@
+name: Feature request
+description: Suggest a focused improvement.
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe your use case without private files or personal information.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Suggested behavior and alternatives
+      description: Keep PocketVault's small, offline scope in mind.
+    validations:
+      required: true

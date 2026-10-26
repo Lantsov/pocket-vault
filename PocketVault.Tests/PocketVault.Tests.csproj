@@ -6,6 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="Fixtures/v1-container.base64" LogicalName="PocketVault.LegacyContainer" />
+    <EmbeddedResource Include="Fixtures/v1.1.0-container.base64" LogicalName="PocketVault.V110Container" />
     <ProjectReference Include="../PocketVault.Core/PocketVault.Core.csproj" />
     <ProjectReference Include="../PocketVault.App/PocketVault.App.csproj" />
   </ItemGroup>

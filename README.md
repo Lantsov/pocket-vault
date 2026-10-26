@@ -1,132 +1,97 @@
-# PocketVault
+<p align="center"><a href="README.md">English</a> · <a href="docs/README.ru.md">Русский</a></p>
 
-[![Сборка и тесты](https://github.com/Lantsov/pocket-vault/actions/workflows/build.yml/badge.svg)](https://github.com/Lantsov/pocket-vault/actions/workflows/build.yml)
+<p align="center"><img src="docs/images/pocketvault-logo.png" width="80" height="80" alt="PocketVault padlock logo"></p>
 
-Небольшой файловый шифратор для Windows x64: C#, .NET 10, WPF/XAML. Тёмный компактный интерфейс, полностью локальная работа, без сетевых запросов, аналитики, облака и сторонних NuGet-зависимостей.
+<h1 align="center">PocketVault</h1>
+<p align="center"><strong>Your files. Your password. Your control.</strong></p>
+<p align="center">A small offline Windows utility that compresses and encrypts one file into a password-protected <code>.pvlt</code> container.</p>
 
-## Получение приложения
+<p align="center">
+  <a href="https://github.com/Lantsov/pocket-vault/actions/workflows/build.yml"><img src="https://github.com/Lantsov/pocket-vault/actions/workflows/build.yml/badge.svg" alt="Windows build and tests"></a>
+  <a href="https://github.com/Lantsov/pocket-vault/releases/latest"><img src="https://img.shields.io/github/v/release/Lantsov/pocket-vault?style=flat&amp;color=555" alt="Latest GitHub release"></a>
+  <img src="https://img.shields.io/badge/platform-Windows_x64-555?style=flat" alt="Windows x64">
+  <img src="https://img.shields.io/badge/.NET-10-555?style=flat" alt=".NET 10">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-555?style=flat" alt="MIT license"></a>
+</p>
 
-Стабильные сборки доступны в [последнем релизе](https://github.com/Lantsov/pocket-vault/releases/latest):
+<p align="center"><a href="https://github.com/Lantsov/pocket-vault/releases/latest"><strong>Download PocketVault</strong></a> · <a href="docs/SECURITY_MODEL.md">Security model</a> · <a href="docs/README.ru.md">По-русски</a></p>
 
-- `PocketVault-1.1.0-win-x64-self-contained.zip` — автономный EXE, установка .NET не нужна.
-- `PocketVault-1.1.0-win-x64-framework-dependent.zip` — компактный вариант для установленного .NET Desktop Runtime 10 x64. Переносите всю распакованную папку.
-- `SHA256SUMS.txt` — контрольные суммы архивов.
+## Preview
 
-Сборки текущей ветки также доступны в [GitHub Actions](https://github.com/Lantsov/pocket-vault/actions/workflows/build.yml): откройте успешный запуск и скачайте один из архивов в разделе **Artifacts**:
+<p align="center"><img src="docs/images/pocketvault-main.png" width="680" alt="PocketVault 1.1.0: dark WPF window with project-notes.txt selected, masked password fields and encryption controls"></p>
 
-- `PocketVault-win-x64-self-contained` — автономный EXE, .NET устанавливать не требуется.
-- `PocketVault-win-x64-framework-dependent` — компактная сборка для установленного .NET Desktop Runtime 10 x64.
+The current application interface is in Russian. [Decryption](docs/images/pocketvault-decrypt.png) · [Processing](docs/images/pocketvault-processing.png).
 
-Распакуйте архив перед запуском. Артефакты хранятся 14 дней; для новой сборки запустите workflow кнопкой **Run workflow**. Для скачивания нужен доступ к репозиторию и вход в GitHub. Бинарные сборки, локальный SDK и тестовые данные в Git не включаются. Также приложение можно собрать самостоятельно по инструкции ниже.
+## Why PocketVault
 
-## Запуск
+- **Fully offline.** No accounts, network requests or telemetry in the application.
+- **Password-based encryption.** AES-256-GCM with a fresh salt and nonce for each container.
+- **Compression first.** The file name and contents sit inside an encrypted ZIP.
+- **A compact Windows app.** Portable WPF interface, drag and drop, and optional Explorer integration.
+- **No third-party NuGet dependencies.** Built with the .NET libraries included in the runtime.
 
-- `dist/self-contained/PocketVault.exe` — переносимый автономный EXE, установка .NET не нужна. При первом запуске среда .NET распаковывает свои нативные библиотеки в пользовательскую временную папку. Это библиотеки программы, а не файлы пользователя.
-- `dist/framework-dependent/PocketVault.exe` — компактный вариант. Нужен [Microsoft .NET Desktop Runtime 10 x64](https://dotnet.microsoft.com/ru-ru/download/dotnet/10.0). Переносите всю папку, включая DLL и JSON.
+## Download
 
-MSI и права администратора не нужны. Исходники находятся в `PocketVault.App`, `PocketVault.Core` и `PocketVault.Tests`.
+**1.1.1 is being prepared:** a maintenance update to distribution licenses and notices. Encryption, application behavior and format v1 remain unchanged and compatible with 1.1.0. Until publication, the links below point to the latest published release.
 
-## Использование
+Download and extract an archive from the [latest release](https://github.com/Lantsov/pocket-vault/releases/latest). Both builds target **Windows x64** on a Windows version supported by .NET 10.
 
-1. Нажмите на пунктирную область или перетащите один файл в окно. Режим выбирается автоматически: `.pvlt` — расшифровка, остальные расширения — шифрование.
-2. Введите пароль и повторите его. Пароль не обрезается и не нормализуется; пробелы и регистр имеют значение. Используйте длинную уникальную парольную фразу.
-3. Нажмите «Зашифровать» и выберите место сохранения. Предлагается нейтральное случайное имя вида `vault-20261026-a7f31c42.pvlt`, без исходного имени.
-4. Для восстановления выберите `.pvlt`, введите пароль и выберите папку. По умолчанию диалог открывается рядом с контейнером. Первоначальное имя и расширение восстанавливаются из зашифрованного ZIP.
+| Build | Choose this when… |
+| --- | --- |
+| [Self-contained ZIP](https://github.com/Lantsov/pocket-vault/releases/latest) | You want a standalone EXE; no .NET installation is needed. Native runtime libraries extract on first launch. |
+| [Framework-dependent ZIP](https://github.com/Lantsov/pocket-vault/releases/latest) | You already have [.NET Desktop Runtime 10 x64](https://dotnet.microsoft.com/en-us/download/dotnet/10.0). Keep the entire extracted folder. |
 
-Существующие файлы никогда не перезаписываются. Если имя занято, выберите другую папку или переименуйте существующий файл и повторите операцию. Отмена диалога не начинает операцию. Пароль восстановления не имеет: при его утрате файл восстановить нельзя.
+Compare the archive's `Get-FileHash -Algorithm SHA256` result with [SHA256SUMS.txt](https://github.com/Lantsov/pocket-vault/releases/latest). Checksums detect differing bytes; they do not establish publisher identity if the download source is compromised.
 
-Кнопка с глазом показывает или скрывает основной пароль; подтверждение остаётся скрытым. При смене/очистке файла и запуске операции пароли очищаются. `Tab` перемещает фокус, `Enter` запускает доступное действие. Во время работы поля и настройки заблокированы, окно можно свернуть. В нижней карточке отображаются описание операции и неопределённый индикатор: криптография не сообщает побайтовый прогресс, поэтому проценты не показываются. Результат и ошибки отображаются в этой же карточке, полный путь результата доступен во всплывающей подсказке.
+The EXE is **unsigned**. Windows SmartScreen may warn about an unknown publisher. Review the source and download origin before deciding whether to run it. There is no installer and normal use does not require administrator rights.
 
-Базовый размер окна — **680 × 620 DIP**, Segoe UI, векторные пиктограммы. Поддерживается Per-Monitor V2 DPI. При нехватке рабочей области окно уменьшается до доступного размера, содержимое прокручивается; поля и действия остаются доступны с клавиатуры.
+## How it works
 
-Исходник по умолчанию сохраняется. При включении «Удалить исходник после проверки контейнера» появляется отдельное предупреждение. Перед удалением программа заново читает сохранённый контейнер, расшифровывает его и сравнивает имя и все байты с исходником. Windows-дескриптор исходника удерживается до удаления, запрещая его запись и подмену другими процессами. При ошибке записи или проверки исходник сохраняется. Удаление обычное, без Корзины; оно не гарантирует уничтожения следов на SSD/HDD, в резервных копиях, индексе или старых версиях файлов.
+1. Choose or drop one file into the window.
+2. Enter a password and repeat it. Case and spaces matter.
+3. Select **Зашифровать** (Encrypt) and save the `.pvlt` container.
+4. To restore, open the `.pvlt`, enter the password, select **Расшифровать** (Decrypt), and choose an output folder.
 
-## Иконка .pvlt и двойной щелчок
+Existing output files are never overwritten. Originals are kept by default. Optional deletion requires confirmation and a read-back check of the saved container; it is ordinary deletion, not secure erasure. See the [usage guide](docs/USAGE.md) for Explorer registration and keyboard controls.
 
-В правом верхнем углу окна нажмите значок настроек → «Зарегистрировать». Регистрация выполняется только по этому явному действию, в `HKEY_CURRENT_USER\Software\Classes`; права администратора не нужны. Тип: `PocketVault Encrypted File`. Двойной щелчок открывает окно в режиме расшифровки с выбранным контейнером. Аргумент командной строки также поддерживается:
+## Security
 
-```powershell
-.\PocketVault.exe "C:\Файлы\vault-20261026-a7f31c42.pvlt"
-```
+Format v1 derives a 256-bit key with **PBKDF2-HMAC-SHA256, 600,000 iterations**, using an independently generated **16-byte salt**. **AES-256-GCM** uses a random **12-byte nonce** and a **16-byte authentication tag**. The complete 52-byte header is authenticated as AAD. Authentication finishes before the ZIP is opened or restored content is written.
 
-Собственная иконка документа с замком извлекается из EXE в `%LOCALAPPDATA%\PocketVault\pocketvault-file.ico` только при регистрации. В проекте обе иконки — настоящие ICO с размерами 16, 24, 32, 48, 64, 128 и 256 пикселей. Их исходный генератор: `scripts/create-icons.py`; Pillow нужен только для изменения рисунков.
+The original name and contents are encrypted. The container header, encrypted length and filesystem metadata remain visible. Password guesses can be tested offline, so a long, unique passphrase matters. Read the [security model](docs/SECURITY_MODEL.md), [format specification](docs/FORMAT.md) and [vulnerability reporting policy](SECURITY.md).
 
-Для отмены используйте настройки → «Отменить регистрацию». Программа удалит свою регистрацию и иконку, восстановит предыдущее значение расширения, если оно всё ещё принадлежит PocketVault, и сохранит чужие настройки. Windows может удерживать выбранное пользователем приложение по умолчанию: при необходимости выберите PocketVault через «Открыть с помощью». Защищённый Windows `UserChoice` не изменяется. После перемещения EXE отмените старую регистрацию и зарегистрируйте новую копию; лучше отменить регистрацию до перемещения. Другая зарегистрированная копия не перезаписывается автоматически.
+## Limitations
 
-## Защита и ограничения
+- One regular file, up to **128 MiB**; no folders or batch processing.
+- ZIP and encryption run in memory and can require hundreds of MiB, approaching 1 GiB in some operations.
+- No password recovery, operation cancellation, secure erasure or independent cryptographic audit.
+- Restoring writes plaintext to a temporary file in the destination folder. A crash can leave it behind.
+- File contents and name are restored; NTFS permissions, alternate streams and other metadata are not preserved separately.
 
-- Только один обычный файл размером до **128 МиБ включительно**. ZIP создаётся в памяти; временных незашифрованных ZIP на диске нет. Размер ZIP ограничен 129 МиБ, восстановленного содержимого — 128 МиБ. Понадобится несколько сотен МиБ свободной оперативной памяти, в худшем случае около 1 ГиБ.
-- AES-256-GCM, 16-байтовый тег, независимые случайные 16-байтовая соль и 12-байтовый nonce для каждого контейнера. Ключ: PBKDF2-HMAC-SHA256, 600 000 итераций. Используются только криптографические API .NET.
-- Весь заголовок передаётся как дополнительные аутентифицируемые данные (AAD). Повреждения, обрезание, лишние байты, неподдерживаемые версии и параметры отклоняются. Аутентификация завершается **до** открытия ZIP и записи восстановленного файла.
-- Имя, расширение и содержимое исходника находятся только внутри зашифрованного ZIP. Видны формат, параметры KDF, размер шифротекста и обычные метаданные самого контейнера. Исходный размер приблизительно выводится из размера контейнера; маскировка размера не предусмотрена.
-- Из архива разрешён ровно один файл с безопасным именем без путей. Запрещены Zip Slip, абсолютные пути, альтернативные потоки NTFS, имена устройств и неоднозначные завершающие точки/пробелы.
-- Сохранение: случайный временный файл в целевой папке, `Flush(true)`, затем переименование без перезаписи. При штатной ошибке временный файл удаляется. При расшифровке этот временный файл содержит уже проверенные **открытые данные**; после аварийного отключения питания/принудительного завершения он может остаться как `.pvlt-*.tmp`. Это не временный ZIP. Атомарность и устойчивость к сбоям зависят от файловой системы, особенно на сетевых и съёмных дисках.
-- Пароль не записывается в реестр, настройки или логи. Поля очищаются после запуска операции. Ключи и доступные программе буферы открытых данных обнуляются при освобождении. Строки пароля в управляемой памяти .NET и внутренние копии Windows нельзя гарантированно стереть; защита от дампов памяти, файла подкачки, вредоносного ПО и скомпрометированной системы не заявляется.
-- Работа выполняется в фоне, окно продолжает обрабатывать события. Закрытие окна на время операции откладывается; отмена начатой операции не реализована.
-- Права доступа (ACL), альтернативные потоки, временные метки и прочие метаданные NTFS не архивируются отдельно; восстанавливаются основное содержимое и имя файла.
-- EXE не подписан сертификатом издателя. Утилита предназначена для личного использования; независимого криптографического аудита не проходила.
+## Building from source
 
-Программа защищает содержимое контейнера от обычного просмотра, предпросмотра и индексаторов без пароля. Она не удаляет уже существующие копии и результаты индексации исходного файла. Восстановленный файл снова доступен обычным приложениям и индексаторам.
-
-## Сборка, тесты, публикация
-
-Нужен Windows x64 и .NET SDK 10 с поддержкой WPF. Иконки уже включены, Python для сборки не требуется. Приложение не использует сеть; при сборке .NET может загружать официальные пакеты среды выполнения для автономной публикации.
+On Windows x64 with a stable .NET 10 SDK:
 
 ```powershell
 dotnet build PocketVault.slnx -c Release
 dotnet run --project PocketVault.Tests -c Release
-dotnet publish PocketVault.App -p:PublishProfile=FrameworkDependent
-dotnet publish PocketVault.App -p:PublishProfile=SelfContained
-```
-
-Все этапы одной командой, с отключённой телеметрией SDK:
-
-```powershell
 .\scripts\build.ps1 -Publish
-# Для SDK в нестандартной папке:
-.\scripts\build.ps1 -DotnetPath 'C:\Инструменты\dotnet\dotnet.exe' -Publish
-# Если официальные runtime-пакеты уже скачаны:
-.\scripts\build.ps1 -DotnetPath 'C:\Инструменты\dotnet\dotnet.exe' -PackageSource 'C:\Пакеты' -Publish
 ```
 
-В проекте **34 автоматических теста**. Сборка проверена локально на Windows x64 с SDK **10.0.402** и средой выполнения **10.0.13**. Автономный EXE проверен с очищенными `DOTNET_ROOT`/`DOTNET_ROOT_X64` и без SDK в `PATH`. Ориентировочный размер автономного EXE — **49,4 МиБ**, всей компактной папки — **300 КиБ**; размеры зависят от версии .NET. Скрипт сборки сохраняет результаты в `dist/test-results.txt` и изображение окна в `dist/interface.png`. Эти файлы генерируются локально и не входят в Git. Изменение реестра и выбор приложения по умолчанию тестами не выполняются.
+The tests use a standalone console runner, including real WPF windows. `dotnet test` does **not** execute them. See [build, publish and screenshot instructions](docs/BUILD.md).
 
-GitHub Actions при каждом push в `main`, pull request или ручном запуске выполняет сборку, все тесты, публикацию обоих вариантов и проверку запуска EXE на Windows. Workflow использует актуальный стабильный SDK .NET 10, действия закреплены по SHA коммитов. Программа остаётся полностью офлайн: сеть используется только инфраструктурой сборки GitHub для получения SDK и пакетов.
+## Documentation
 
-Для повторения проверки запуска опубликованного EXE:
+[Usage](docs/USAGE.md) · [Security model](docs/SECURITY_MODEL.md) · [Container format](docs/FORMAT.md) · [Build guide](docs/BUILD.md) · [Changelog](CHANGELOG.md) · [Русская версия](docs/README.ru.md)
 
-```powershell
-.\scripts\smoke-publish.ps1
-# Дополнительно проверить компактную сборку с локальным runtime:
-.\scripts\smoke-publish.ps1 -DotnetRoot 'C:\Инструменты\dotnet'
-```
+## Contributing
 
-Тестовый проект — самостоятельный консольный раннер без xUnit/MSTest и внешних пакетов. Он возвращает ненулевой код при сбое. `dotnet test` для этого проекта не запускает проверки; используйте `dotnet run --project PocketVault.Tests`. Временные тестовые папки создаются возле тестового EXE и удаляются в `finally`. Проверяются криптография, повреждения каждого класса полей, опасные ZIP, файловое сохранение, коллизии, удаление после проверки, Unicode, пустые файлы и WPF-интерфейс. Тесты не меняют реестр и не регистрируют расширение.
+Small, focused fixes are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md); changes to cryptography or the file format need particular care for compatibility. Please report suspected vulnerabilities privately as described in [SECURITY.md](SECURITY.md).
 
-WPF-проверки открывают настоящие окна: запуск с `.pvlt`, выбор режима, маршрутизация Drag & Drop, очистка/показ пароля, фокус при ошибке, операции в фоне, запрет повторного запуска и закрытия, отмена сохранения и удаления, ошибки и повтор операции. Отдельная фиксированная [фикстура предыдущей версии](PocketVault.Tests/Fixtures/README.md) проверяет совместимость старого контейнера. Всего 42 проверки.
+## License
 
-`scripts/build.ps1` сохраняет `dist/interface.png`, снимки рендера WPF при 96/120/144/192 DPI (`interface.100.png` … `interface.200.png`) и `interface.busy.png`. CI прикладывает их к отчёту тестов. Проверяются границы элементов и уменьшение окна для рабочей области высотой 500 DIP. Снимки при разных DPI проверяют рендер; они не заменяют ручное перемещение окна между физическими мониторами с разным масштабом Windows.
+[MIT](LICENSE), copyright © 2026 Lantsov. See [third-party notices](docs/THIRD_PARTY_NOTICES.md) for runtime distribution information.
 
-Если окружение ограничивает стандартную временную папку распаковки автономного EXE, smoke-скрипт принимает `-BundleExtractBaseDirectory 'C:\ДоступнаяПапка'`. Этот параметр задаёт `DOTNET_BUNDLE_EXTRACT_BASE_DIR` только запускаемым тестовым процессам.
+## Disclaimer
 
-## Бинарный формат v1
-
-Все целые числа — little-endian. ZIP зашифрован целиком, включая имена записей.
-
-| Смещение | Размер | Значение |
-| --- | --- | --- |
-| 0 | 8 | `50 56 4C 54 0D 0A 1A 0A` — сигнатура |
-| 8 | 1 | Версия: 1 |
-| 9 | 1 | KDF: 1 = PBKDF2-HMAC-SHA256 |
-| 10 | 1 | Шифр: 1 = AES-256-GCM |
-| 11 | 1 | Резерв: 0 |
-| 12 | 4 | Число итераций: 600 000 |
-| 16 | 16 | Соль |
-| 32 | 12 | Nonce |
-| 44 | 8 | Длина зашифрованного ZIP |
-| 52 | N | Шифротекст ZIP |
-| 52 + N | 16 | Тег GCM |
-
-AAD — все первые 52 байта. v1 принимает только указанные параметры, что ограничивает затраты при разборе недоверенного заголовка. Длина файла должна точно совпадать с `52 + N + 16`. Смена алгоритмов или параметров потребует новой версии/явной поддержки формата.
-
-Справочные первоисточники: [AES-GCM в .NET](https://learn.microsoft.com/dotnet/api/system.security.cryptography.aesgcm), [PBKDF2 в .NET](https://learn.microsoft.com/dotnet/api/system.security.cryptography.rfc2898derivebytes.pbkdf2), [публикация в один файл](https://learn.microsoft.com/dotnet/core/deploying/single-file/overview).
+Provided **AS IS**, under the MIT license. PocketVault has not undergone an independent cryptographic audit; implementation security is not guaranteed. You are responsible for passwords and backups, and losing a password may make recovery impossible. It does not protect a compromised OS or stop malware and keyloggers. Ordinary deletion leaves possible copies, indexes, thumbnails and disk remnants; a crash may leave plaintext temporary files. Do not rely on it as the only protection for critical data without an independent risk assessment. [Full disclaimer / полный отказ от гарантий](docs/DISCLAIMER.md).
