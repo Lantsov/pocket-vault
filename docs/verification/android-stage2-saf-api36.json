@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-26",
+  "device": "Medium_Phone_API_36.0 / emulator-5554",
+  "android": "16 / API 36 / x86_64",
+  "uiAutomation": "ADB and UI Automator",
+  "storage": "System SAF Downloads provider",
+  "syntheticOnly": true,
+  "publicPassword": "Stage2-Test-2026",
+  "originalName": "Обмен #1 (a+b) & тест.bin",
+  "originalByteCount": 320,
+  "sha256": "E42067911761887D497358D512D2B04A8472CBCCA7CA10038A445BF061728570",
+  "androidToWindows": {
+    "androidConfiguration": "Debug",
+    "containerName": "vault-20261026-ee76c557.pvlt",
+    "containerByteCount": 559,
+    "windowsReader": "VaultFiles.Decrypt",
+    "exactName": true,
+    "exactBytes": true
+  },
+  "windowsToAndroid": {
+    "windowsWriter": "VaultFiles.Encrypt",
+    "androidConfiguration": "Debug",
+    "suggestedNameMatchesOriginal": true,
+    "savedNameMatchesOriginal": true,
+    "exactBytes": true
+  },
+  "debugUiChecks": {
+    "wrongPasswordRejectedBeforeSaveDialog": true,
+    "saveCancelledThenRetrySucceeded": true,
+    "pickerCancelledAndControlsEnabled": true,
+    "privateFilesAndCache": [
+      "files/profileInstalled",
+      "files/document-smoke-result.json",
+      "files/crypto-smoke-result.json"
+    ]
+  },
+  "releaseAfterTrimmingAndAot": {
+    "installedAndLaunched": true,
+    "safPickAndCreateSucceeded": true,
+    "suggestedNameMatchesOriginal": true,
+    "existingDocumentPreserved": true,
+    "savedName": "Обмен #1 (a+b) & тест (1).bin",
+    "exactBytes": true
+  },
+  "limitations": [
+    "No physical device, API 29 runtime or ARM64 runtime was used.",
+    "Provider write/flush/close/delete faults and revoked permissions were simulated by IDocumentAccess tests on both runtimes.",
+    "No claim of atomic writes for third-party DocumentsProviders."
+  ]
+}

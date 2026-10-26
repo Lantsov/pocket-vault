@@ -4,14 +4,22 @@
              x:Class="PocketVault.Android.MainPage"
              Title="PocketVault">
     <ScrollView>
-        <VerticalStackLayout Padding="24" Spacing="20">
-            <Image Source="pocketvault_logo.png" WidthRequest="96" HeightRequest="96"
+        <VerticalStackLayout Padding="24" Spacing="12">
+            <Image Source="pocketvault_logo.png" WidthRequest="64" HeightRequest="64"
                    SemanticProperties.Description="Логотип PocketVault" />
             <Label Text="PocketVault" FontSize="32" FontAttributes="Bold" HorizontalTextAlignment="Center" />
-            <Label Text="Android MVP — техническая сборка" HorizontalTextAlignment="Center" />
-            <Button x:Name="CheckButton" Text="Проверить криптографию" Clicked="OnCheckClicked" />
+            <Label Text="Android MVP • файлы до 32 МиБ" HorizontalTextAlignment="Center" />
+            <Button x:Name="PickButton" Text="Выбрать файл" Clicked="OnPickClicked" />
+            <Label x:Name="FileLabel" Text="Файл не выбран." LineBreakMode="CharacterWrap" />
+            <Label x:Name="ModeLabel" Text="Документы, изображения, архивы и другие файлы" />
+            <Entry x:Name="PasswordEntry" Placeholder="Пароль" IsPassword="True"
+                   IsTextPredictionEnabled="False" IsSpellCheckEnabled="False" AutomationId="Password" />
+            <Entry x:Name="ConfirmationEntry" Placeholder="Повторите пароль" IsPassword="True"
+                   IsTextPredictionEnabled="False" IsSpellCheckEnabled="False" AutomationId="Confirmation" />
+            <Button x:Name="OperationButton" Text="Зашифровать" IsEnabled="False" Clicked="OnOperationClicked" />
             <ActivityIndicator x:Name="ProgressIndicator" IsVisible="False" />
-            <Label x:Name="ResultLabel" Text="Проверка ещё не запускалась." LineBreakMode="WordWrap" />
+            <Label x:Name="ResultLabel" Text="Выберите один файл через системный диалог." LineBreakMode="WordWrap" />
+            <Button x:Name="CheckButton" Text="Проверить криптографию" Clicked="OnCheckClicked" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

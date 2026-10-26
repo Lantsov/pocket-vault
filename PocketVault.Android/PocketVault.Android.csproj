@@ -15,6 +15,7 @@
     <UseDefaultPublishRuntimeIdentifier>false</UseDefaultPublishRuntimeIdentifier>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="../PocketVault.Tests/DocumentOperationChecks.cs" Link="Diagnostics/DocumentOperationChecks.cs" Condition="'$(Configuration)' == 'Debug'" />
     <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
     <ProjectReference Include="../PocketVault.Core/PocketVault.Core.csproj" />
     <MauiIcon Include="Resources/AppIcon/appicon.svg" />

@@ -25,6 +25,16 @@ internal static class Program
     [STAThread]
     private static int Main(string[] args)
     {
+        if (args is ["--android-interop-prepare", string prepareDirectory])
+        {
+            AndroidInteropChecks.Prepare(prepareDirectory);
+            return 0;
+        }
+        if (args is ["--android-interop-verify", string verifyDirectory])
+        {
+            AndroidInteropChecks.Verify(verifyDirectory);
+            return 0;
+        }
         var application = new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
         SynchronizationContext.SetSynchronizationContext(new DispatcherSynchronizationContext(application.Dispatcher));
         if (args is ["--screenshots", string output, string samples])
@@ -36,6 +46,8 @@ internal static class Program
         Directory.CreateDirectory(Root);
         try
         {
+            foreach (var check in Task.Run(DocumentOperationChecks.RunAsync).GetAwaiter().GetResult())
+                Run("Android operations: " + check.Name, () => { if (!check.Success) throw new InvalidOperationException(check.Detail); });
             byte[] valid = VaultFormat.Encrypt("Личный документ 🗝.txt", Sample, Password);
             Run("Шифрование и побайтовое восстановление", () =>
             {

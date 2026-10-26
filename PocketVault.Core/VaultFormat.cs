@@ -53,7 +53,13 @@ public static class VaultFormat
     }
 
     public static RestoredFile Decrypt(ReadOnlySpan<byte> container, string password)
+        => Decrypt(container, password, MaxFileSize);
+
+    // App-specific limit; the v1 format and existing Windows API stay unchanged.
+    public static RestoredFile Decrypt(ReadOnlySpan<byte> container, string password, int maxRestoredFileSize)
     {
+        if (maxRestoredFileSize < 0 || maxRestoredFileSize > MaxFileSize)
+            throw new ArgumentOutOfRangeException(nameof(maxRestoredFileSize));
         ValidatePassword(password);
         int length = ValidateHeader(container, container.Length);
         byte[] zip = new byte[length];
@@ -72,7 +78,7 @@ public static class VaultFormat
             {
                 throw new VaultException("Неверный пароль или файл повреждён.", ex);
             }
-            return Unpack(zip);
+            return Unpack(zip, maxRestoredFileSize);
         }
         finally
         {
@@ -96,7 +102,7 @@ public static class VaultFormat
         return (int)length;
     }
 
-    private static RestoredFile Unpack(byte[] zip)
+    private static RestoredFile Unpack(byte[] zip, int maxRestoredFileSize)
     {
         byte[]? data = null;
         try
@@ -106,8 +112,9 @@ public static class VaultFormat
             if (archive.Entries.Count != 1) throw new VaultException("Архив должен содержать ровно один файл.");
             var entry = archive.Entries[0];
             ValidateFileName(entry.FullName);
-            if (entry.Length < 0 || entry.Length > MaxFileSize)
-                throw new VaultException("Размер восстановленного файла превышает 128 МиБ.");
+            // Inspect the authenticated ZIP length before allocating the restored array.
+            if (entry.Length < 0 || entry.Length > maxRestoredFileSize)
+                throw new VaultException($"Размер восстановленного файла превышает допустимый лимит ({maxRestoredFileSize / (1024 * 1024)} МиБ).");
             data = new byte[(int)entry.Length];
             using var source = entry.Open();
             source.ReadExactly(data);
