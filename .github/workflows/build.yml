@@ -1,0 +1,68 @@
+name: Сборка и тесты
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows:
+    name: Windows x64 · .NET 10
+    runs-on: windows-latest
+    timeout-minutes: 15
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: '1'
+      DOTNET_NOLOGO: '1'
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Получить исходники
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Подготовить .NET 10 SDK
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Собрать, выполнить тесты и опубликовать оба варианта
+        run: ./scripts/build.ps1 -Publish
+
+      - name: Проверить запуск опубликованных EXE
+        run: ./scripts/smoke-publish.ps1 -DotnetRoot $env:DOTNET_ROOT
+
+      - name: Сохранить автономный EXE
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: PocketVault-win-x64-self-contained
+          path: dist/self-contained/*
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Сохранить компактную сборку
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: PocketVault-win-x64-framework-dependent
+          path: dist/framework-dependent/*
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Сохранить отчёт тестов
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: PocketVault-test-results
+          path: dist/test-results.txt
+          if-no-files-found: ignore
+          retention-days: 14

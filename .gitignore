@@ -1,0 +1,13 @@
+.tools/
+**/bin/
+**/obj/
+dist/
+TestResults/
+.vs/
+.idea/
+*.user
+*.suo
+*.log
+*.pvlt
+__pycache__/
+*.pyc

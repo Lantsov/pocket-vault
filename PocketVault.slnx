@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="PocketVault.Core/PocketVault.Core.csproj" />
+  <Project Path="PocketVault.App/PocketVault.App.csproj" />
+  <Project Path="PocketVault.Tests/PocketVault.Tests.csproj" />
+</Solution>
