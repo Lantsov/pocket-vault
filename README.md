@@ -4,12 +4,12 @@
 
 <h1 align="center">PocketVault</h1>
 <p align="center"><strong>Your files. Your password. Your control.</strong></p>
-<p align="center">A small offline Windows utility that compresses and encrypts one file into a password-protected <code>.pvlt</code> container.</p>
+<p align="center">An offline file encryption app for Windows and Android, sharing the same password-protected <code>.pvlt</code> v1 format.</p>
 
 <p align="center">
   <a href="https://github.com/Lantsov/pocket-vault/actions/workflows/build.yml"><img src="https://github.com/Lantsov/pocket-vault/actions/workflows/build.yml/badge.svg" alt="Windows build and tests"></a>
   <a href="https://github.com/Lantsov/pocket-vault/releases/latest"><img src="https://img.shields.io/github/v/release/Lantsov/pocket-vault?style=flat&amp;color=555" alt="Latest GitHub release"></a>
-  <img src="https://img.shields.io/badge/platform-Windows_x64-555?style=flat" alt="Windows x64">
+  <img src="https://img.shields.io/badge/platform-Windows_x64_%7C_Android-555?style=flat" alt="Windows x64 and Android">
   <img src="https://img.shields.io/badge/.NET-10-555?style=flat" alt=".NET 10">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-555?style=flat" alt="MIT license"></a>
 </p>
@@ -22,15 +22,21 @@
 
 The current application interface is in Russian. [Decryption](docs/images/pocketvault-decrypt.png) · [Processing](docs/images/pocketvault-processing.png).
 
+<p align="center"><img src="docs/images/android-stage4-main.png" width="250" alt="PocketVault Android running on the API 36 emulator: offline document selection and password form"> <img src="docs/images/android-stage4-decrypt.png" width="250" alt="PocketVault Android on the emulator with a pvlt container selected for decryption"></p>
+
+These are actual Android emulator screenshots with synthetic data. **Windows: 1.1.1; Android: 1.0.0 release candidate; container format: v1.** Android distribution is pending the owner's release signing key. [Android build, installation and verified testing scope](docs/ANDROID.md).
+
 ## Why PocketVault
 
 - **Fully offline.** No accounts, network requests or telemetry in the application.
 - **Password-based encryption.** AES-256-GCM with a fresh salt and nonce for each container.
 - **Compression first.** The file name and contents sit inside an encrypted ZIP.
 - **A compact Windows app.** Portable WPF interface, drag and drop, and optional Explorer integration.
-- **No third-party NuGet dependencies.** Built with the .NET libraries included in the runtime.
+- **Native interfaces.** WPF on Windows; .NET MAUI and Android's system document picker on Android.
 
 ## Download
+
+Windows 1.1.1 is published below. Android 1.0.0 has no published production-signed APK yet; follow the [Android guide](docs/ANDROID.md) for clearly labelled development builds and local release signing.
 
 Download and extract an archive from the [latest release](https://github.com/Lantsov/pocket-vault/releases/latest). Both builds target **Windows x64** on a Windows version supported by .NET 10.
 
@@ -60,10 +66,11 @@ The original name and contents are encrypted. The container header, encrypted le
 
 ## Limitations
 
-- One regular file, up to **128 MiB**; no folders or batch processing.
+- One regular file, up to **128 MiB on Windows / 32 MiB on Android**; no folders or batch processing. Windows containers exceeding Android's limit cannot be restored on Android.
 - ZIP and encryption run in memory and can require hundreds of MiB, approaching 1 GiB in some operations.
 - No password recovery, operation cancellation, secure erasure or independent cryptographic audit.
-- Restoring writes plaintext to a temporary file in the destination folder. A crash can leave it behind.
+- Windows restoration uses a plaintext temporary file in the destination folder. A crash can leave it behind. Android writes through the selected DocumentsProvider, which can retain partial files after interruption.
+- Source and restored documents may be readable by other apps, document providers and indexers. Android does not delete originals. Secure erasure is not implemented on either platform.
 - File contents and name are restored; NTFS permissions, alternate streams and other metadata are not preserved separately.
 
 ## Building from source
@@ -80,7 +87,7 @@ The tests use a standalone console runner, including real WPF windows. `dotnet t
 
 ## Documentation
 
-[Usage](docs/USAGE.md) · [Security model](docs/SECURITY_MODEL.md) · [Container format](docs/FORMAT.md) · [Build guide](docs/BUILD.md) · [Changelog](CHANGELOG.md) · [Русская версия](docs/README.ru.md)
+[Usage](docs/USAGE.md) · [Android](docs/ANDROID.md) · [Security model](docs/SECURITY_MODEL.md) · [Container format](docs/FORMAT.md) · [Build guide](docs/BUILD.md) · [Changelog](CHANGELOG.md) · [Русская версия](docs/README.ru.md)
 
 ## Contributing
 

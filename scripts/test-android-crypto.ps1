@@ -7,7 +7,7 @@ param(
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
 if (!$ApkPath) {
-    $ApkPath = Join-Path $projectRoot 'PocketVault.Android\bin\Debug\net10.0-android\com.lantsov.pocketvault-Signed.apk'
+    throw 'Specify -ApkPath for the freshly built Debug APK (or use build-android.ps1 -DeviceSerial).'
 }
 $ApkPath = (Resolve-Path -LiteralPath $ApkPath).Path
 if ($AdbPath -eq 'adb') {

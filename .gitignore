@@ -17,5 +17,12 @@ __pycache__/
 *.p12
 *.pem
 *.key
+*.jks
+*.keystore
+*.apk
+*.aab
+*.idsig
+*.binlog
+*.signing.json
 *.dmp
 .pvlt-*.tmp

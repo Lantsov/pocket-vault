@@ -2,9 +2,16 @@
 
 Notable changes based on the repository history and published releases. Dates use the release date where a release exists.
 
-## v1.1.1 — Maintenance release
+## Android 1.0.0 — release candidate, unpublished
 
-Prepared for release; not yet tagged or published.
+- Native offline .NET MAUI app for Android 10+, system document selection and saving, 32 MiB limit.
+- Common Windows/Android `.pvlt` v1 format; legacy fixtures and bidirectional interop checks.
+- Dark mobile interface, password clearing, protected recent-app snapshots and disabled backup.
+- Narrow `ACTION_VIEW` support for `content://` with `application/vnd.pocketvault`; generic MIME files use the in-app picker.
+- ARM64 APK build, explicit unsigned validation mode, owner-keystore signing with environment passwords, signature/manifest/SHA-256 checks and independent Android CI.
+- Release signing and physical ARM64/Poco validation remain pending. See the [Android guide](docs/ANDROID.md).
+
+## [Windows 1.1.1](https://github.com/Lantsov/pocket-vault/releases/tag/v1.1.1) — Maintenance release
 
 - Added required redistribution license notices for packaged .NET runtime components.
 - Improved release packaging and third-party attribution, including the framework-dependent executable host.

@@ -22,6 +22,21 @@ public partial class MainPage : ContentPage
     private bool CanRun => selected is not null && !string.IsNullOrEmpty(PasswordEntry.Text) &&
         (selected.IsContainer || PasswordEntry.Text == ConfirmationEntry.Text);
 
+    internal async Task OpenContainerAsync(string uri)
+    {
+        if (isRunning) return; // Never replace the source of an operation in progress.
+        SetBusy(true);
+        ClearSensitiveData();
+        try
+        {
+            selected = await SafDocumentAccess.OpenContainerAsync(uri);
+            UpdateSelection();
+            SetStatus("Контейнер выбран", "Имя и содержимое скрыты до проверки пароля.");
+        }
+        catch (Exception ex) { SetStatus("Не удалось открыть контейнер", UserMessage(ex)); }
+        finally { SetBusy(false); }
+    }
+
     private async void OnPickClicked(object? sender, EventArgs e)
     {
         if (isRunning) return;

@@ -4,12 +4,12 @@
 
 <h1 align="center">PocketVault</h1>
 <p align="center"><strong>Ваши файлы. Ваш пароль. Ваш контроль.</strong></p>
-<p align="center">Небольшая офлайн-утилита для Windows: сжимает и шифрует один файл в защищённый паролем контейнер <code>.pvlt</code>.</p>
+<p align="center">Офлайн-приложение для Windows и Android: шифрование файлов в общем защищённом паролем формате <code>.pvlt</code> v1.</p>
 
 <p align="center">
   <a href="https://github.com/Lantsov/pocket-vault/actions/workflows/build.yml"><img src="https://github.com/Lantsov/pocket-vault/actions/workflows/build.yml/badge.svg" alt="Сборка и тесты Windows"></a>
   <a href="https://github.com/Lantsov/pocket-vault/releases/latest"><img src="https://img.shields.io/github/v/release/Lantsov/pocket-vault?style=flat&amp;color=555" alt="Последний релиз GitHub"></a>
-  <img src="https://img.shields.io/badge/platform-Windows_x64-555?style=flat" alt="Windows x64">
+  <img src="https://img.shields.io/badge/platform-Windows_x64_%7C_Android-555?style=flat" alt="Windows x64 и Android">
   <img src="https://img.shields.io/badge/.NET-10-555?style=flat" alt=".NET 10">
   <a href="../LICENSE"><img src="https://img.shields.io/badge/license-MIT-555?style=flat" alt="Лицензия MIT"></a>
 </p>
@@ -22,15 +22,21 @@
 
 Текущий интерфейс приложения — на русском языке. [Расшифровка](images/pocketvault-decrypt.png) · [Обработка файла](images/pocketvault-processing.png).
 
+<p align="center"><img src="images/android-stage4-main.png" width="250" alt="Настоящий интерфейс PocketVault Android на эмуляторе API 36: выбор документа и пароль"> <img src="images/android-stage4-decrypt.png" width="250" alt="PocketVault Android на эмуляторе: контейнер pvlt выбран для расшифровки"></p>
+
+Это реальные снимки Android-эмулятора с синтетическими данными. **Windows: 1.1.1; Android: кандидат 1.0.0; формат контейнера: v1.** Выпуск Android ожидает ключ подписи владельца. [Сборка, установка и границы проверок Android](ANDROID.md).
+
 ## Почему PocketVault
 
 - **Полностью офлайн.** Приложение не использует аккаунты, сетевые запросы или телеметрию.
 - **Шифрование с паролем.** AES-256-GCM, новая случайная соль и nonce для каждого контейнера.
 - **Сначала сжатие.** Имя и содержимое файла находятся внутри зашифрованного ZIP.
 - **Компактное приложение Windows.** Переносимый WPF-интерфейс, перетаскивание файла и добровольная интеграция с Проводником.
-- **Без сторонних NuGet-зависимостей.** Используются библиотеки среды выполнения .NET.
+- **Нативные интерфейсы.** WPF в Windows; .NET MAUI и системный выбор документов в Android.
 
 ## Скачать
+
+Windows 1.1.1 опубликован по ссылкам ниже. Подписанный ключом выпуска Android APK пока не опубликован; [инструкция Android](ANDROID.md) описывает тестовые APK и локальную подпись владельцем.
 
 Скачайте и распакуйте архив из [последнего релиза](https://github.com/Lantsov/pocket-vault/releases/latest). Обе сборки рассчитаны на **Windows x64** и версию Windows, поддерживаемую .NET 10.
 
@@ -60,10 +66,11 @@ EXE **не подписан**. Windows SmartScreen может предупред
 
 ## Ограничения
 
-- Один обычный файл до **128 МиБ**; папки и пакетная обработка не поддерживаются.
+- Один обычный файл до **128 МиБ в Windows / 32 МиБ в Android**; папки и пакетная обработка не поддерживаются. Windows-контейнеры с данными свыше лимита Android на телефоне не восстановить.
 - ZIP и шифрование выполняются в памяти: потребление может достигать сотен МиБ, в отдельных операциях — приближаться к 1 ГиБ.
 - Нет восстановления пароля, отмены операции, безопасного стирания или независимого криптографического аудита.
-- При восстановлении открытые данные записываются во временный файл целевой папки. После аварии он может остаться на диске.
+- В Windows открытые данные записываются во временный файл целевой папки. После аварии он может остаться. Android пишет через выбранный DocumentsProvider; прерывание может оставить частичный файл.
+- Исходные и расшифрованные документы могут быть доступны другим приложениям, провайдерам и индексаторам. Android сохраняет исходники. Безопасное удаление не реализовано на обеих платформах.
 - Восстанавливаются имя и содержимое; права NTFS, альтернативные потоки и другие метаданные отдельно не сохраняются.
 
 ## Сборка из исходников
@@ -80,7 +87,7 @@ dotnet run --project PocketVault.Tests -c Release
 
 ## Документация
 
-[Использование](USAGE.md) · [Модель безопасности](SECURITY_MODEL.md) · [Формат контейнера](FORMAT.md) · [Сборка](BUILD.md) · [История изменений](../CHANGELOG.md) · [English](../README.md)
+[Использование](USAGE.md) · [Android](ANDROID.md) · [Модель безопасности](SECURITY_MODEL.md) · [Формат контейнера](FORMAT.md) · [Сборка](BUILD.md) · [История изменений](../CHANGELOG.md) · [English](../README.md)
 
 ## Участие
 

@@ -11,11 +11,15 @@ using PocketVault.Android.Diagnostics;
 namespace PocketVault.Android;
 
 [Activity(Name = "com.lantsov.pocketvault.MainActivity", Theme = "@style/Maui.SplashTheme", MainLauncher = true,
+    LaunchMode = LaunchMode.SingleTop,
     WindowSoftInputMode = SoftInput.AdjustResize,
     ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode |
         ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize | ConfigChanges.Density)]
+[IntentFilter([Intent.ActionView], Categories = [Intent.CategoryDefault],
+    DataScheme = "content", DataMimeType = "application/vnd.pocketvault")]
 public class MainActivity : MauiAppCompatActivity
 {
+    private string? pendingViewUri;
     private ActivityResultLauncher? documentLauncher;
     private TaskCompletionSource<string?>? documentRequest;
     private NavigationBackCallback? navigationBackCallback;
@@ -35,6 +39,7 @@ public class MainActivity : MauiAppCompatActivity
             SmokeTestRequest.DocumentRunId = documentRunId;
 #endif
         base.OnCreate(savedInstanceState);
+        CaptureViewIntent(Intent);
         if (Window is { } window)
         {
             window.SetSoftInputMode(SoftInput.AdjustResize);
@@ -54,6 +59,44 @@ public class MainActivity : MauiAppCompatActivity
             new DocumentResultCallback(this));
         navigationBackCallback = new NavigationBackCallback(this);
         OnBackPressedDispatcher.AddCallback(this, navigationBackCallback);
+    }
+
+    protected override void OnNewIntent(Intent? intent)
+    {
+        base.OnNewIntent(intent);
+        CaptureViewIntent(intent);
+        DispatchViewIntent();
+    }
+
+    protected override void OnResume()
+    {
+        base.OnResume();
+        DispatchViewIntent();
+    }
+
+    protected override void OnStop()
+    {
+        ClearSensitiveData();
+        base.OnStop();
+    }
+
+    private void CaptureViewIntent(Intent? intent)
+    {
+        if (intent?.Action == Intent.ActionView && intent.Data?.Scheme == "content")
+            pendingViewUri = intent.Data.ToString();
+    }
+
+    private void DispatchViewIntent()
+    {
+        if (pendingViewUri is not { } uri) return;
+        if (Microsoft.Maui.Controls.Application.Current?.Windows.FirstOrDefault()?.Page is not NavigationPage navigation ||
+            navigation.Navigation.NavigationStack.OfType<MainPage>().FirstOrDefault() is not { } main) return;
+        pendingViewUri = null; // Transient grant only; never persist a document URI.
+        MainThread.BeginInvokeOnMainThread(async () =>
+        {
+            if (navigation.Navigation.NavigationStack.Count > 1) await navigation.PopToRootAsync();
+            await main.OpenContainerAsync(uri);
+        });
     }
 
     protected override void OnSaveInstanceState(Bundle outState)

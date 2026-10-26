@@ -1,379 +1,205 @@
-# PocketVault Android — этап 3/4
+# PocketVault Android 1.0.0 — кандидат выпуска
 
-Android MVP 1.0.0: тёмный минималистичный мобильный интерфейс, выбор одного
-документа через Storage Access Framework, шифрование и расшифровка совместимых
-с Windows `.pvlt` v1, системное сохранение результата. Лимит исходного и
-восстановленного файла — 32 МиБ. Реализация интерфейса и проверки текущего
-этапа описаны в [отчёте этапа 3](ANDROID_STAGE3.md). Этап 4 и публикация не входят
-в текущую работу. Ниже сохранены инструкции сборки и исторические результаты
-этапов 1–2; они не заменяют проверки нового интерфейса.
+Windows **1.1.1** опубликован; Android **1.0.0 (1)** — кандидат выпуска;
+общий формат контейнера — **v1**. ApplicationId: `com.lantsov.pocketvault`.
+Минимум Android 10 / API 29; целевая архитектура выпуска — ARM64.
+Google Play, iOS, облако и изменение криптографического формата не входят в MVP.
 
-## Технологии и границы
+**Подписанного ключом владельца APK пока нет. Релиз не готов.**
+Сценарии сборки и подписи подготовлены; создание ключа с интерактивным паролем
+и проверка подписанного им APK требуют участия владельца. Debug-подпись
+используется только для проверки, неподписанный APK установить нельзя.
 
-- .NET 10, .NET MAUI 10, C#, XAML; единственный TargetFramework — `net10.0-android`.
-- Минимум Android 10 / API 29; compile/target SDK определяется установленным
-  .NET Android workload (при проверке использован API 36).
-- ApplicationId: `com.lantsov.pocketvault`; название: `PocketVault`;
-  ApplicationDisplayVersion: `1.0.0`; ApplicationVersion: `1`.
-- Единственная прямая NuGet-зависимость приложения — `Microsoft.Maui.Controls`,
-  версия берётся из установленного MAUI SDK (`$(MauiVersion)`).
-- `PocketVault.Core` подключён через ProjectReference. Приложение непосредственно
-  вызывает `VaultFormat.Encrypt/Decrypt`. В Core добавлена перегрузка `Decrypt`
-  с лимитом восстановленного файла, который проверяется до выделения массива.
-  Старый API и стандартный лимит Windows 128 МиБ сохранены.
-- Формат `.pvlt` v1, AES-256-GCM, PBKDF2-HMAC-SHA256 (600 000 итераций),
-  52-байтовый заголовок и его аутентификация как AAD сохранены.
-- Из `VaultFiles` используется только генератор нейтрального имени контейнера.
-  Windows handle, удаление исходника и файловые операции Windows на Android не вызываются.
-- Приложение не использует веб-технологии и не выполняет сетевых операций.
-  Исходный Android manifest не запрашивает разрешений на сеть и доступ к общему
-  хранилищу; резервное копирование отключено. Инструменты .NET Android добавляют
-  `INTERNET` в итоговый Debug manifest для отладки.
+## Использование и установка
 
-`PocketVault.Android.slnx` содержит только Android и Core. Исходный
-`PocketVault.slnx`, `PocketVault.App`, Windows-версия 1.1.1,
-`scripts/build.ps1` и `.github/workflows/build.yml` не изменены.
-Android SDK и MAUI workload не нужны для Windows solution.
-Android-релиз и GitHub Releases на этом этапе не создаются и не изменяются.
+1. После появления подписанного выпуска проверьте APK по `SHA256SUMS.txt` и
+   сертификат по доверенному SHA-256 владельца. Сам по себе хэш не подтверждает издателя.
+2. Передайте ARM64 APK на телефон Android 10+ и откройте его в файловом менеджере.
+   Разрешите установку из этого источника в системном диалоге.
+3. Нажмите «Обзор файлов», выберите документ до 32 МиБ, задайте и повторите пароль.
+4. Нажмите «Зашифровать» и сохраните предложенный `vault-*.pvlt` через системный диалог.
+5. Для восстановления выберите `.pvlt`, введите пароль, нажмите «Расшифровать».
+   Исходное имя предлагается только после аутентификации контейнера.
 
-## Инструменты
-
-Нужны .NET SDK 10 (учитывается корневой `global.json`), официальный workload
-`maui-android`, JDK 21 и Android SDK с platform API 36, build-tools 36.0.0,
-platform-tools (ADB). Для запуска нужен Android API 29+ с включённой USB-отладкой
-либо эмулятор с соответствующим system image и аппаратным ускорением.
-
-```powershell
-dotnet --info
-dotnet workload install maui-android
-dotnet workload list
-```
-
-При отсутствии Android SDK можно использовать официальный MSBuild target
-`InstallAndroidDependencies`, задав каталоги SDK/JDK и принятие лицензий:
-
-```powershell
-dotnet build PocketVault.Android/PocketVault.Android.csproj `
-  -t:InstallAndroidDependencies -f net10.0-android `
-  -p:AndroidSdkDirectory=C:\Android\Sdk `
-  -p:JavaSdkDirectory=C:\Android\jdk-21 `
-  -p:AcceptAndroidSDKLicenses=True
-```
-
-Существующие SDK и пользовательские настройки удалять не требуется.
-Официальные инструкции: [установка .NET MAUI](https://learn.microsoft.com/dotnet/maui/get-started/installation)
-и [изменения .NET MAUI 10 / Android](https://learn.microsoft.com/dotnet/maui/whats-new/dotnet-10).
-
-## Сборка
-
-Из корня репозитория, PowerShell:
-
-```powershell
-./scripts/build-android.ps1 `
-  -AndroidSdkDirectory "$env:LOCALAPPDATA\Android\Sdk" `
-  -JavaSdkDirectory 'C:\path\to\jdk-21'
-```
-
-По умолчанию создаётся Debug APK с отладочной подписью. Скрипт использует
-локальный `.tools/dotnet/dotnet.exe`, если он есть, иначе `dotnet` из PATH.
-Можно явно задать `-DotnetPath`. NuGet-кэш и CLI home находятся внутри `.tools`.
-`-PackageSource` позволяет использовать подготовленный локальный NuGet-источник.
-
-Эквивалент без скрипта:
-
-```powershell
-dotnet build PocketVault.Android.slnx -c Debug `
-  -p:AndroidSdkDirectory="$env:LOCALAPPDATA\Android\Sdk" `
-  -p:JavaSdkDirectory='C:\path\to\jdk-21' `
-  -p:AndroidPackageFormats=apk
-```
-
-APK: `PocketVault.Android/bin/Debug/net10.0-android/com.lantsov.pocketvault-Signed.apk`.
-Сборка включает managed assemblies в APK, поэтому обычный `adb install` работает
-без fast deployment из IDE. Для локальной Release-сборки есть
-`./scripts/build-android.ps1 -Configuration Release` с теми же SDK-параметрами;
-это не публикация и не Android-релиз. Для воспроизведения результата используйте
-версии инструментов из раздела проверки ниже.
-
-Проверка Windows отдельно, без Android SDK:
-
-```powershell
-./scripts/build.ps1
-```
-
-Скрипт собирает исходный Windows solution и запускает существующий исполняемый
-набор тестов; `dotnet test` не заменяет этот запуск.
-
-## Запуск приложения
-
-Запустите имеющийся AVD через Android Studio либо командой
-`emulator -avd <имя_AVD>`. Подключённое устройство должно появиться как `device`:
+Установка через USB с включённой USB-отладкой:
 
 ```powershell
 adb devices -l
-adb -s <serial> install -r ./PocketVault.Android/bin/Debug/net10.0-android/com.lantsov.pocketvault-Signed.apk
+adb -s <serial> install -r <путь-к-подписанному-ARM64.apk>
 adb -s <serial> shell am start -n com.lantsov.pocketvault/.MainActivity
 ```
 
-Нажмите «Обзор файлов» и выберите один документ в системном диалоге. Приложение
-покажет имя и доступный размер. Расширение `.pvlt` распознаётся без учёта регистра.
-Для шифрования введите пароль и подтверждение; для расшифровки — пароль.
-После обработки выберите место в системном диалоге «Сохранить».
+Debug APK допустим для собственного тестирования. Android откажет в обновлении
+поверх приложения с другой подписью. Перед переходом с Debug на выпуск сохраните
+нужные внешние документы; не удаляйте приложение автоматически ради обхода ошибки.
 
-Шифрование предлагает имя `vault-yyyyMMdd-xxxxxxxx.pvlt`; исходное имя находится
-только в зашифрованном ZIP. Расшифровка предлагает исходное имя только после
-успешной аутентификации и проверки ZIP. При неверном пароле, повреждении или
-превышении лимита диалог создания результата не открывается.
+Пароли восстановить нельзя. Независимый криптографический аудит не проводился.
+Исходники Android не удаляет; безопасное удаление не реализовано.
+Сохранённые и расшифрованные документы могут быть доступны другим приложениям,
+провайдерам и индексаторам. Выбранный системный провайдер сам может быть облачным.
 
-Кнопки и поля блокируются на время выбора, криптографии и сохранения. Индикатор
-не показывает выдуманный процент. Основное действие доступно только при выбранном
-файле, непустом пароле и совпавшем подтверждении для шифрования. Техническая
-кнопка проверки криптографии удалена из пользовательского интерфейса; входы
-проверок через ADB доступны только в Debug.
+## ACTION_VIEW и доступ к документам
 
-## Воспроизводимый smoke-test на Android runtime
+Приложение регистрирует только `ACTION_VIEW` + `content://` +
+`application/vnd.pocketvault`. При холодном запуске и `OnNewIntent` проверяются
+имя `.pvlt` без учёта регистра, размер и доступ на чтение. Пароль очищается;
+расшифровка сама не запускается. Входящий документ во время текущей операции
+игнорируется. Файл без правильного расширения отклоняется даже с этим MIME.
 
-После сборки Debug APK:
+`application/octet-stream`, `application/zip` и `*/*` намеренно не зарегистрированы:
+иначе приложение попадёт в действия для чужих документов. У DocumentsProvider
+имя часто отсутствует в URI: например, URI содержит числовой ID. Поэтому фильтр
+по расширению пути ненадёжен. Если файловый менеджер не передаёт специальный MIME,
+используйте «Обзор файлов» внутри PocketVault. `file://`, сетевые URI, ACTION_SEND
+и автоматическая расшифровка не поддерживаются.
 
-```powershell
-./scripts/test-android-crypto.ps1 `
-  -AdbPath "$env:LOCALAPPDATA\Android\Sdk\platform-tools\adb.exe" `
-  -Serial emulator-5556
-```
+Доступ выдаётся системным диалогом или отправителем Intent, общий доступ к диску
+не запрашивается. Приложение не сохраняет URI в настройках или собственном
+состоянии между запусками и не запрашивает persistable URI grants.
+При отозванном/истёкшем доступе документ нужно выбрать заново.
+См. [официальные правила фильтров Android](https://developer.android.com/guide/topics/manifest/data-element).
 
-`-Serial` можно опустить, если подключено ровно одно устройство.
-`-ApkPath` позволяет явно указать Debug APK. Скрипт устанавливает его с `adb install -r`,
-останавливает приложение и запускает Activity с уникальным `crypto_smoke_run_id`.
-Этот автоматический вход включён только в Debug; в текущем пользовательском
-интерфейсе отдельной кнопки проверки нет.
-Скрипт не удаляет установленное приложение; конфликт подписи приводит к ошибке.
+## Инструменты и воспроизводимая сборка
 
-Приложение само выполняет 11 проверок и записывает
-`files/crypto-smoke-result.json` в приватном каталоге. Скрипт читает файл через
-`adb shell run-as`, ждёт совпадения ID текущего запуска, проверяет Android runtime,
-API, количество пунктов и каждый результат. Отчёт сохраняется в
-`dist/android/crypto-smoke-<runId>.json`. Ошибка или таймаут завершают скрипт
-ошибкой; сообщение ADB об успешном старте Activity не считается прохождением теста.
-
-Проверки:
-
-1. AES-256-GCM: известные ciphertext/tag для нулевого 256-битного ключа,
-   96-битного IV и 16 нулевых байтов; расшифровка и отказ при изменении AAD.
-2. PBKDF2-HMAC-SHA256: фиксированный вектор из
-   [RFC 7914, раздел 11](https://www.rfc-editor.org/rfc/rfc7914.html#section-11).
-3. ZIP: сжатие/чтение Unicode-имени и точного бинарного содержимого.
-4. Создание `.pvlt` через Core с проверкой версии, алгоритмов, заголовка и 600 000 итераций.
-5. Расшифровка нового контейнера с точным сравнением имени и всех байтов.
-6. Исходный `v1-container.base64`: `наследие.txt`, UTF-8
-   `PocketVault v1 — совместимость формата.\n`, пароль `Пароль совместимости 2026`.
-7. Исходный `v1.1.0-container.base64`: `v1.1.0-example.txt`, UTF-8
-   `PocketVault 1.1.0 compatibility fixture.\n`, пароль `Public fixture password 1.1.0`.
-8. Неверный пароль отклоняется с ошибкой аутентификации.
-9. Изменённые шифротекст и тег отклоняются.
-10. Изменённые соль и nonce в заголовке отклоняются.
-11. Пустой файл восстанавливается с точным именем и нулевой длиной.
-
-`\n` выше означает один LF без BOM. Fixtures встроены ссылками на существующие
-файлы Windows-тестов, не копируются и не пересоздаются.
-Контейнерные проверки и оба fixtures используют настоящие 600 000 итераций.
-Отдельная реализация AES, PBKDF2 или ZIP не добавлена: используются API .NET.
-Прямой запуск smoke-test вне Android запрещён проверкой платформы.
-
-## Результат проверки этапа 1
-
-Локально, 26 октября 2026 года (Windows x64):
-
-| Компонент | Использованная версия |
-| --- | --- |
-| .NET SDK / MSBuild | 10.0.403 / 18.9.15 |
-| .NET runtime | 10.0.14 |
-| MAUI / workload | 10.0.0 / `maui-android 10.0.0/10.0.100` |
-| .NET Android SDK pack | `Microsoft.Android.Sdk.Windows 36.1.2` |
-| Android platform | API 36, revision 2 |
-| Android build-tools | 36.0.0 |
-| JDK | установленный JetBrains Runtime OpenJDK 21.0.11 |
-| Android Emulator | 36.2.12; WHPX |
-| AVD | `Medium_Phone_API_36.0`, Android 16 / API 36, x86_64, Google APIs Play Store |
-
-Существующие Android SDK и JDK использованы без удаления/замены. Workload добавлен
-только в локальный `.tools/dotnet`. Из-за зависания IPv6-соединений сетевого клиента
-.NET официальные NUPKG с `api.nuget.org/v3-flatcontainer` загружены через `curl`
-в `.tools/nuget-source`. Установка выполнена командой:
+Проверенная локальная конфигурация: Windows x64, .NET SDK 10.0.403,
+.NET runtime 10.0.14, MAUI 10.0.0 / `maui-android 10.0.0/10.0.100`,
+Android pack 36.1.2, Android platform 36 revision 2, build-tools 36.0.0,
+JDK 21.0.11. Скрипт требует стабильный .NET 10 согласно `global.json`, workload
+`maui-android`, JDK 21 и перечисленные Android SDK-файлы. Требуется PowerShell 7
+на Windows. Интернет нужен инструментам для загрузки зависимостей, не приложению.
 
 ```powershell
-./.tools/dotnet/dotnet.exe workload install maui-android `
-  --skip-manifest-update --source ./.tools/nuget-source
+dotnet workload install maui-android --skip-manifest-update
+$env:ANDROID_HOME = 'C:\Android\Sdk'
+$env:JAVA_HOME = 'C:\path\to\jdk-21'
+./scripts/build-android.ps1
 ```
 
-Android собран `scripts/build-android.ps1` с `-PackageSource .tools/nuget-source`
-и явными путями существующих SDK/JDK. Эти локальные кэши не входят в Git.
-В обычном окружении достаточно стандартного NuGet-источника и инструкции выше.
-В проекте отключён `UseDefaultPublishRuntimeIdentifier`: SDK 10.0.403 иначе
-добавляет RID настольного хоста `win-x64` к Android Release с trimming.
-Android solution собирается для `android-arm64` и `android-x64`.
+По умолчанию скрипт сначала собирает Windows Release и выполняет все консольные
+Core/WPF/общие Android-проверки. `dotnet test` их не запускает.
+`-SkipWindowsTests` предназначен для повторной сборки после отдельного успешного
+`./scripts/build.ps1`. Windows solution, workflow и опубликованный Windows 1.1.1
+остаются независимыми от Android workload.
 
-| Проверка | Результат |
-| --- | --- |
-| Windows solution Release | Успешно; 0 предупреждений, 0 ошибок |
-| Существующие Windows/Core/WPF-тесты | 43/43, 0 ошибок |
-| Windows без MAUI/Android workload | Сборка и тесты прошли до установки workload |
-| Android Debug APK | Успешно; 0 предупреждений, 0 ошибок |
-| Android Release APK, trimming и AOT для ARM64/x64 | Успешно; 0 предупреждений, 0 ошибок |
-| Установка и запуск Android Debug | Успешно на AVD API 36 через ADB |
-| Crypto smoke-test на Android runtime | 11/11, включая оба fixtures и точное восстановление имени/байтов |
-| Кнопка в Release-приложении после trimming/AOT | 11/11; подтверждено текстом экрана и новым `PASS` в logcat |
+Скрипт предпочитает `.tools/dotnet/dotnet.exe`, если он есть; доступен `-DotnetPath`.
+SDK/JDK можно передать параметрами `-AndroidSdkDirectory` / `-JavaSdkDirectory`.
+`-PackageSource .tools/nuget-source` использует локальный NuGet-кэш; кэши в Git не входят.
+Записываются версии инструментов в `BUILD.txt`. Сборка воспроизводима как процесс;
+побайтовая идентичность APK при разных workload/JDK/средах не гарантируется.
 
-Сохранён [отчёт Android runtime](verification/android-crypto-smoke-api36.json),
-полученный `scripts/test-android-crypto.ps1` с runId
-`d338dc60381445559ead4f8bb074923a`. Отчёт относится к запуску на Android,
-а не к результатам Windows-тестов.
-
-Release также установлен и запущен на том же эмуляторе. Проверка запущена
-нажатием реальной кнопки, runId `81a63996b2694336962c2ab9458c61d9`;
-все 11 результатов на экране — `OK`, ошибок AndroidRuntime не обнаружено.
-В Release manifest нет разрешения `INTERNET`.
-
-## Исторические ограничения этапа 1
-
-- Физическое Android-устройство не подключено.
-- Минимальный Android 10 / API 29 и ARM64 runtime отдельно не проверены.
-- Работа с документами и Storage Access Framework добавлена на этапе 2, см. ниже.
-- Проверки синтетические; большие пользовательские файлы и нагрузка на память
-  мобильного устройства не тестировались. Ограничения in-memory Core сохранены.
-- Подпись для распространения, Google Play и Android-релиз не настраивались.
-
-## Документы, память и безопасность этапа 2
-
-- `ACTION_OPEN_DOCUMENT`, `CATEGORY_OPENABLE`, MIME `*/*`: один документ,
-  включая изображения, ZIP, произвольные бинарные файлы и `.pvlt`.
-  Имя и необязательный размер берутся из `IOpenableColumns`.
-  Путь на накопителе не вычисляется; чтение и запись идут через `ContentResolver`.
-- `ACTION_CREATE_DOCUMENT` создаёт новый результат. По
-  [контракту Android SAF](https://developer.android.com/training/data-storage/shared/documents-files#create-file)
-  совпавшее имя получает суффикс, существующий файл не перезаписывается.
-  Ответ с URI исходного документа дополнительно отклоняется без записи/удаления.
-- Ни разрешения всего накопителя, ни `MANAGE_EXTERNAL_STORAGE`, ни доступ к
-  дереву каталогов не запрашиваются. URI-гранты не сохраняются между запусками;
-  после потери доступа документ нужно выбрать заново.
-- Имена проверяются `VaultFormat.ValidateFileName` для переносимости на Windows:
-  пути, зарезервированные имена устройств и недопустимые символы отклоняются.
-  Имя не исправляется молча. Unicode, кириллица и допустимые специальные символы
-  сохраняются точно.
-- Известный размер проверяется до чтения. Независимо от метаданных поток
-  читается с жёстким лимитом 32 МиБ плюс один байт для обнаружения превышения.
-  Для контейнера допускаются ещё 1 МиБ ZIP overhead и 68 байт заголовка/тега.
-  Windows-контейнер с большим содержимым может быть отклонён Android: это
-  ограничение приложения, а не новая версия формата.
-- После GCM-аутентификации Core проверяет `ZipArchiveEntry.Length` до создания
-  восстановленного массива. Фактический поток ZIP также проверяется на точную
-  длину. Маленький контейнер с распакованным файлом больше 32 МиБ отклоняется.
-- Чтение, ZIP, криптография, запись и очистка выполняются вне UI-потока.
-  Повторная операция блокируется как UI, так и сервисом. Отмена диалога
-  возвращает рабочее состояние. Пароль очищается из полей перед обработкой.
-- Открытый ZIP и восстановленный файл существуют только в памяти; временные
-  файлы в cache/files не создаются. Доступные буферы обнуляются, включая ошибку
-  и отмену сохранения. Это не гарантия стирания всех копий: .NET/Android могут
-  копировать данные; строки пароля в управляемой памяти нельзя гарантированно
-  стереть. Preferences, логи документов/паролей, сеть и облачные SDK не используются.
-- Ошибка открытия нового документа, записи, flush или close вызывает попытку
-  `DocumentsContract.DeleteDocument` только для созданного результата. При
-  отсутствии прав, неподдерживаемом удалении или ошибке провайдера пользователь
-  видит предупреждение о возможном пустом/частичном файле и необходимости
-  проверить его вручную. Общей атомарности для сторонних DocumentsProvider нет;
-  после успешного close приложение также не может гарантировать завершение
-  внутренней синхронизации удалённого провайдера.
-- Исходные документы никогда не удаляются. Этап 2 не включал финальный дизайн;
-  новый интерфейс описан в [этапе 3](ANDROID_STAGE3.md). Потоковое шифрование
-  и публикация в текущую работу не входят.
-
-## Воспроизводимые проверки этапа 2
-
-Windows: `./scripts/build.ps1` собирает Release и выполняет 74 проверки:
-43 существующие Core/Windows/WPF и 31 новую проверку сервиса Android.
-Новые проверки компилируют тот же `DocumentOperations.cs`, который использует
-Android, с имитацией интерфейса провайдера. Они проверяют точное имя/байты,
-пустой файл, Unicode, специальные символы, неверный пароль, повреждение,
-обрезание, лишние байты, безопасные имена, метаданные и жёсткие лимиты чтения,
-границу 32 МиБ, сжатый ZIP 32 МиБ + 1, отмены, отсутствие прав, ошибки записи,
-flush/close, успешное и запрещённое удаление частичного результата,
-защиту исходного URI, очистку выходных буферов и повторный запуск.
-
-Те же 31 проверки на настоящем Android runtime в Debug:
+Проверка Release без ключа владельца:
 
 ```powershell
-./scripts/test-android-documents.ps1 `
-  -AdbPath 'C:\Users\lants\AppData\Local\Android\Sdk\platform-tools\adb.exe' `
-  -Serial emulator-5554
+./scripts/build-android.ps1 -Configuration Release -Unsigned
 ```
 
-Скрипт устанавливает Debug APK, передаёт уникальный `document_smoke_run_id`,
-ждёт свежий `files/document-smoke-result.json`, проверяет Android runtime,
-API и все 31 результата; сохраняет отчёт в `dist/android/`. Этот вход и
-синтетические тесты провайдера исключены из Release.
-Он не заменяет проверку реальных системных диалогов и стороннего провайдера.
-Crypto smoke-test этапа 1 отдельно проверяет оба исходных legacy fixtures.
+Результаты разделены по режиму и RID:
 
-Для ручного обмена с Windows есть синтетический корпус:
+| Режим | APK | Назначение |
+| --- | --- | --- |
+| Debug | `dist/android/debug/android-arm64/PocketVault-1.0.0-android-arm64-debug.apk` | Устанавливаемая тестовая сборка с development key |
+| Release `-Unsigned` | `dist/android/unsigned/android-arm64/PocketVault-1.0.0-android-arm64-unsigned.apk` | Проверка компиляции/trimming/AOT, не устанавливается |
+| Release с ключом | `dist/android/release/android-arm64/PocketVault-1.0.0-android-arm64-release.apk` | Только после подписи и проверки сертификата владельца |
+
+Для x86_64 эмулятора укажите `-RuntimeIdentifier android-x64`.
+В каталоге артефакта создаются `SHA256SUMS.txt`, `SIGNATURE.txt`, `manifest.txt`,
+`BUILD.txt`. Скрипт проверяет архитектуру, версию, ApplicationId, min SDK,
+отключённый backup, отсутствие storage permissions, а в Release — отсутствие
+INTERNET и debuggable. Перед подписью выполняется zipalign; подпись проверяется
+через apksigner, затем формируется и повторно проверяется SHA-256.
+Неподписанный режим проверяет именно отсутствие действительной подписи.
+Промежуточные APK в `.tools`/`bin` нельзя выдавать за готовый выпуск.
+
+## Ключ выпуска: действие владельца
+
+Ключ сейчас не создавался. Выполните в своём интерактивном терминале, выбрав
+постоянное защищённое место **вне репозитория**. Каталог должен уже существовать:
 
 ```powershell
-./.tools/dotnet/dotnet.exe PocketVault.Tests/bin/Release/net10.0-windows/PocketVault.Tests.dll `
-  --android-interop-prepare ./dist/android/new-interop-directory
+& "$env:JAVA_HOME/bin/keytool.exe" -genkeypair -v `
+  -keystore 'D:\PrivateKeys\pocketvault-android.jks' -storetype JKS `
+  -alias pocketvault -keyalg RSA -keysize 3072 -validity 10000
 ```
 
-Команда требует новый каталог и создаёт Unicode-файл с бинарным содержимым и
-`windows.pvlt`. Публичный тестовый пароль — `Stage2-Test-2026`.
-Передайте оба файла на Android. Через UI зашифруйте исходник и расшифруйте
-`windows.pvlt`, проверив предложенное Unicode-имя. Скопируйте результаты в этот
-же каталог как `android.pvlt` и `android-restored.bin`, затем выполните:
+`keytool` интерактивно запросит пароль хранилища, сведения сертификата и пароль
+ключа. Не используйте демонстрационные пароли. Не передавайте пароль в аргументах
+и не присылайте его в чат. Сохраните keystore, alias и пароли в защищённой резервной
+копии: они потребуются для обновлений с тем же ApplicationId.
+[Официальная инструкция .NET MAUI](https://learn.microsoft.com/dotnet/maui/android/deployment/publish-cli?view=net-maui-10.0).
+
+Узнайте публичный SHA-256 сертификата (пароль вводится интерактивно):
 
 ```powershell
-./.tools/dotnet/dotnet.exe PocketVault.Tests/bin/Release/net10.0-windows/PocketVault.Tests.dll `
-  --android-interop-verify ./dist/android/new-interop-directory
+& "$env:JAVA_HOME/bin/keytool.exe" -list -v `
+  -keystore 'D:\PrivateKeys\pocketvault-android.jks' -alias pocketvault
 ```
 
-Проверка расшифровывает Android-контейнер настоящим Windows `VaultFiles.Decrypt`,
-сравнивает исходное имя и каждый байт в обоих направлениях, печатает SHA-256.
-Это публичные синтетические данные; пользовательские файлы не нужны.
+Задайте окружение **только текущего процесса**; секреты можно получить из менеджера
+паролей или ввести через скрытый запрос. Не сохраняйте их через `setx`, `.env`,
+исходники, CI secrets без отдельной настройки или историю команд:
 
-## Результат проверки этапа 2
+```powershell
+$env:POCKETVAULT_KEYSTORE = 'D:\PrivateKeys\pocketvault-android.jks'
+$env:POCKETVAULT_KEY_ALIAS = 'pocketvault'
+$env:POCKETVAULT_SIGNING_CERT_SHA256 = '<публичный SHA-256 сертификата>'
+$env:POCKETVAULT_STORE_PASS = [Net.NetworkCredential]::new('', (Read-Host 'Пароль хранилища' -AsSecureString)).Password
+$env:POCKETVAULT_KEY_PASS = [Net.NetworkCredential]::new('', (Read-Host 'Пароль ключа' -AsSecureString)).Password
+try {
+    ./scripts/build-android.ps1 -Configuration Release
+}
+finally {
+    Remove-Item Env:POCKETVAULT_STORE_PASS, Env:POCKETVAULT_KEY_PASS -ErrorAction SilentlyContinue
+}
+```
 
-26 октября 2026 года, Windows x64; те же .NET SDK 10.0.403, runtime 10.0.14,
-MAUI 10.0.0 и Android SDK pack 36.1.2, что на этапе 1.
-Для сборки использован JDK `C:\Users\lants\.jdks\jbr-21.0.11`.
-Проверки Android выполнялись на AVD `Medium_Phone_API_36.0`, Android 16 /
-API 36, x86_64, Google APIs Play Store, `emulator-5554`, Emulator 36.2.12/WHPX.
+Скрипт передаёт apksigner имена переменных `env:...`, не значения паролей в командной
+строке; не создаёт signing binlog и не принимает Debug-сертификат как выпуск.
+Окружение доступно дочерним процессам и владельцу сессии; используйте доверенный
+локальный компьютер и не включайте диагностическое журналирование секретов.
+Публичный сертификат должен совпасть с `POCKETVAULT_SIGNING_CERT_SHA256`.
+[Подпись и проверка APK](https://developer.android.com/tools/apksigner).
 
-| Проверка | Фактический результат |
-| --- | --- |
-| Windows solution Release | 0 предупреждений, 0 ошибок |
-| Windows/Core/WPF и общий сервис Android | 74/74, включая все 43 прежние проверки |
-| Android Debug APK | 0 предупреждений, 0 ошибок; установлен и запущен |
-| Android Release APK, trimming/AOT ARM64 и x64 | 0 предупреждений, 0 ошибок; x64 установлен и запущен |
-| Сервис документов на Android runtime, Debug | 31/31; [JSON-отчёт](verification/android-documents-api36.json), runId `e940ded91cab49efb6ba88303e1b2bde` |
-| Криптография и оба legacy fixtures на Android, Debug | 11/11; [JSON-отчёт](verification/android-stage2-crypto-api36.json), runId `672530df28d84b3ba91e61a3ca83c0c6` |
-| Android → Windows через реальные UI/SAF | Файл выбран в Downloads; нейтральный `vault-20261026-ee76c557.pvlt` сохранён Android; Windows `VaultFiles.Decrypt` восстановил точное имя и все байты |
-| Windows → Android через реальные UI/SAF | Windows `VaultFiles.Encrypt`; контейнер выбран Android; после проверки пароля системный диалог предложил точное имя; сохранённый файл побайтово совпал |
-| Неверный пароль в Android UI | Ошибка аутентификации; диалог создания результата не открыт |
-| Отмена выбора/сохранения в Android UI | Показан статус отмены; кнопки снова доступны; повторная операция успешна |
-| Release после trimming/AOT: SAF и расшифровка | Исходное Unicode-имя восстановлено, файл сохранён, все байты совпали |
-| Совпадение имени в системном сохранении | В Release создан `Обмен #1 (a+b) & тест (1).bin`; прежний файл сохранён |
-| Приватные `files/cache` после Debug-операций | Только `profileInstalled` и два JSON-отчёта; открытый ZIP/восстановленный файл отсутствуют |
-| Release manifest | Нет `INTERNET`, `READ/WRITE_EXTERNAL_STORAGE` и `MANAGE_EXTERNAL_STORAGE`; backup отключён |
+## Runtime-проверки
 
-Файл для межплатформенного обмена: `Обмен #1 (a+b) & тест.bin`, 320 байт,
-включая UTF-8 и все значения байта 0–255. SHA-256:
-`E42067911761887D497358D512D2B04A8472CBCCA7CA10038A445BF061728570`.
-Сохранено [описание фактического SAF-обмена](verification/android-stage2-saf-api36.json).
-Android UI проверялся через ADB/UI Automator; управление окном Windows через
-Computer Use завершилось таймаутом и для этих результатов не использовалось.
+Сначала `adb devices -l`: предпочтителен Poco X6 Pro, если подключён и авторизован;
+иначе доступный эмулятор. Команда для текущего x86_64 AVD:
 
-Ограничения проверки: физическое устройство не подключалось; API 29 и ARM64
-runtime не запускались. Сбои провайдера, отозванные права, неизвестный/ложный
-размер и удаления частичного результата проверены синтетической имитацией
-`IDocumentAccess` на обоих runtime, а не сбоями настоящего стороннего облачного
-DocumentsProvider. Реальный SAF проверен с системным Downloads на API 36.
-Предельные 32 МиБ проверены синтетическим потоком/сжатым контейнером; пик памяти
-для случайных несжимаемых 32 МиБ на слабом физическом устройстве не измерялся.
-Атомарность провайдеров и гарантированное стирание строк пароля не заявляются.
-На момент завершения этапа 2 этапы 3–4 ещё не начинались, публикация не выполнялась.
-Текущее состояние интерфейса и новые результаты проверки — в [этапе 3](ANDROID_STAGE3.md).
+```powershell
+./scripts/build-android.ps1 -RuntimeIdentifier android-x64 -DeviceSerial emulator-5554
+```
+
+Скрипт устанавливает Debug APK и запускает оба smoke-набора. Уникальный runId и
+чтение свежего JSON через `run-as` исключают принятие старого результата.
+Криптография: 11 проверок, включая AES-GCM/AAD, PBKDF2, ZIP, оба старых fixtures,
+пустой файл, неверный пароль и повреждение. Документы: 32 синтетические проверки
+того же `DocumentOperations.cs`, что выполняется в приложении: лимиты, 32 МиБ,
+отмены, ошибки доступа/записи/flush/close, удаление частичного результата,
+защита исходного URI, очистка буферов, исключение нехватки памяти и повторная операция.
+Это не проверка настоящего сбоя стороннего облачного провайдера или Android LMK.
+
+Для самостоятельного запуска `test-android-crypto.ps1` / `test-android-documents.ps1`
+обязательно передайте `-ApkPath` свежей Debug-сборки. Старый APK из `bin` не
+подставляется автоматически. Холодный/повторный ACTION_VIEW и фактический отзыв
+grant проверяются отдельным [тестовым sender/provider](../tests/AndroidIntentProbe/README.md).
+
+Реальные UI/SAF и двусторонний Windows-обмен проверяются отдельно на синтетическом
+корпусе. `PocketVault.Tests --android-interop-prepare <новый-каталог>` создаёт корпус,
+`--android-interop-verify <каталог>` проверяет точное имя и байты в обоих направлениях.
+Публичный тестовый пароль: `Stage2-Test-2026`; это не пароль keystore.
+Историческая проверка интерфейса и реальные снимки: [этап 3](ANDROID_STAGE3.md).
+Факты текущего этапа: [отчёт этапа 4](ANDROID_STAGE4.md).
+
+## CI и границы готовности
+
+[Android workflow](../.github/workflows/android.yml) независим от Windows workflow,
+подготавливает Android SDK/JDK/MAUI, запускает host-тесты, собирает Debug и
+неподписанный Release ARM64. Секреты и ключ выпуска не нужны, `pull_request_target`
+не используется, публикации GitHub Release нет. Разрешённый список диагностических
+отчётов хранится в GitHub Artifacts 14 дней; APK туда не загружаются.
+В CI эмулятор не запускается: компиляция не называется runtime-тестированием.
+
+До выпуска необходимы ключ владельца, сборка и проверка его подписи, установка
+полученного ARM64 APK и проверка на целевом устройстве. Пока проверка выполнена
+на эмуляторе x86_64, это нельзя считать проверкой Poco X6 Pro или ARM64 runtime.
+32 МиБ остаются пределом; гарантированного стирания строк пароля, потоковой
+криптографии, отмены обработки и атомарности сторонних провайдеров нет.

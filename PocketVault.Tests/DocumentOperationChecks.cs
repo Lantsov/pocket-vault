@@ -142,6 +142,15 @@ internal static class DocumentOperationChecks
             await Reject<UnauthorizedAccessException>(() => new DocumentOperations(fake).RunAsync(fake.Document, Password, ""));
             Require(fake.CreateCalls == 0 && fake.DeleteCalls == 0);
         });
+        await Check("Out of memory before output; operation gate recovers", async () =>
+        {
+            var fake = new FakeDocuments(valid) { ReadOutOfMemory = true };
+            var operations = new DocumentOperations(fake);
+            await Reject<OutOfMemoryException>(() => operations.RunAsync(fake.Document, Password, ""));
+            Require(fake.CreateCalls == 0 && fake.DeleteCalls == 0);
+            fake.ReadOutOfMemory = false;
+            Require(await operations.RunAsync(fake.Document, Password, ""));
+        });
         foreach (string failure in new[] { "open", "write", "flush", "close" })
             foreach (bool deleteFails in new[] { false, true })
                 await Check($"Provider {failure} failure; delete {(deleteFails ? "denied" : "succeeds")}", async () =>
@@ -191,6 +200,7 @@ internal static class DocumentOperationChecks
         internal byte[]? Written, CapturedWriteBuffer;
         internal int CreateCalls, ReadCalls, DeleteCalls;
         internal bool CancelSave, ReadDenied, DeleteFails, ReturnSource;
+        internal bool ReadOutOfMemory;
         internal string? WriteFailure, DeletedId;
         internal long? GeneratedLength;
         internal long BytesRead;
@@ -208,6 +218,7 @@ internal static class DocumentOperationChecks
         {
             ReadCalls++;
             if (ReadDenied) throw new UnauthorizedAccessException();
+            if (ReadOutOfMemory) throw new OutOfMemoryException();
             return GeneratedLength is long length ? new GeneratedStream(this, length) : new MemoryStream(input, false);
         }
         public Stream OpenWrite(VaultDocument document)

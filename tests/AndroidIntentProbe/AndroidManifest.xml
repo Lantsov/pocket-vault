@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.lantsov.pocketvault.intentprobe" android:versionCode="1" android:versionName="1">
+  <uses-sdk android:minSdkVersion="29" android:targetSdkVersion="36" />
+  <application android:label="PocketVault Intent Test Probe" android:allowBackup="false" android:debuggable="true">
+    <activity android:name=".IntentProbe" android:exported="true" />
+    <provider android:name=".IntentProbe$Provider"
+              android:authorities="com.lantsov.pocketvault.intentprobe.documents"
+              android:exported="false" android:grantUriPermissions="true" />
+  </application>
+</manifest>

@@ -7,7 +7,7 @@ param(
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
 if (!$ApkPath) {
-    $ApkPath = Join-Path $projectRoot 'PocketVault.Android\bin\Debug\net10.0-android\com.lantsov.pocketvault-Signed.apk'
+    throw 'Specify -ApkPath for the freshly built Debug APK (or use build-android.ps1 -DeviceSerial).'
 }
 $ApkPath = (Resolve-Path -LiteralPath $ApkPath).Path
 if ($AdbPath -eq 'adb') {
@@ -50,7 +50,7 @@ while ([DateTime]::UtcNow -lt $deadline) {
             Write-Host "Runtime: $($report.Runtime); API: $($report.AndroidApi)"
             Write-Host "Отчёт: $reportPath"
             if (!$report.Success -or $report.Runtime -notlike 'Android *' -or $report.AndroidApi -lt 29 -or
-                @($report.Checks).Count -ne 31 -or @($report.Checks | Where-Object { !$_.Success }).Count -gt 0) {
+                @($report.Checks).Count -ne 32 -or @($report.Checks | Where-Object { !$_.Success }).Count -gt 0) {
                 throw 'Android document operation checks не пройден.'
             }
             return

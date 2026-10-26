@@ -55,6 +55,15 @@ internal sealed class SafDocumentAccess : IDocumentAccess
         return document;
     }
 
+    internal static Task<VaultDocument> OpenContainerAsync(string id) => Task.Run(() =>
+    {
+        var document = ReadMetadata(id);
+        if (!document.IsContainer) throw new VaultException("Откройте контейнер с расширением .pvlt.");
+        // Validate the temporary read grant now; recheck it when the operation starts.
+        using var stream = new SafDocumentAccess().OpenRead(document);
+        return document;
+    });
+
     public Stream OpenRead(VaultDocument document)
     {
         using var uri = ContentUri(document.Id);
