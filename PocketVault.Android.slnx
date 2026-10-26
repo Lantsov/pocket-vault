@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="PocketVault.Core/PocketVault.Core.csproj" />
+  <Project Path="PocketVault.Android/PocketVault.Android.csproj" />
+</Solution>

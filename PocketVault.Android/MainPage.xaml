@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PocketVault.Android.MainPage"
+             Title="PocketVault">
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="20">
+            <Image Source="pocketvault_logo.png" WidthRequest="96" HeightRequest="96"
+                   SemanticProperties.Description="Логотип PocketVault" />
+            <Label Text="PocketVault" FontSize="32" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+            <Label Text="Android MVP — техническая сборка" HorizontalTextAlignment="Center" />
+            <Button x:Name="CheckButton" Text="Проверить криптографию" Clicked="OnCheckClicked" />
+            <ActivityIndicator x:Name="ProgressIndicator" IsVisible="False" />
+            <Label x:Name="ResultLabel" Text="Проверка ещё не запускалась." LineBreakMode="WordWrap" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
