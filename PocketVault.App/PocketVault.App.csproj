@@ -2,16 +2,18 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0-windows</TargetFramework>
-    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
     <AssemblyName>PocketVault</AssemblyName>
     <ApplicationIcon>../assets/pocketvault.ico</ApplicationIcon>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <PlatformTarget>x64</PlatformTarget>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <Company>PocketVault</Company>
     <Description>Локальное шифрование отдельных файлов</Description>
   </PropertyGroup>
   <ItemGroup>
+    <InternalsVisibleTo Include="PocketVault.Tests" />
     <ProjectReference Include="../PocketVault.Core/PocketVault.Core.csproj" />
     <EmbeddedResource Include="../assets/pocketvault-file.ico" LogicalName="PocketVault.FileIcon" />
     <EmbeddedResource Include="../assets/pocketvault.ico" LogicalName="PocketVault.AppIcon" />

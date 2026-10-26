@@ -58,11 +58,13 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-      - name: Сохранить отчёт тестов
+      - name: Сохранить отчёт тестов и снимки WPF
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: PocketVault-test-results
-          path: dist/test-results.txt
+          path: |
+            dist/test-results.txt
+            dist/interface*.png
           if-no-files-found: ignore
           retention-days: 14

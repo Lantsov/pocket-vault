@@ -1,7 +1,14 @@
 using System.Buffers.Binary;
 using System.IO.Compression;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using PocketVault.App;
 using PocketVault.Core;
 
@@ -18,6 +25,8 @@ internal static class Program
     [STAThread]
     private static int Main()
     {
+        var application = new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
+        SynchronizationContext.SetSynchronizationContext(new DispatcherSynchronizationContext(application.Dispatcher));
         Directory.CreateDirectory(Root);
         try
         {
@@ -142,9 +151,17 @@ internal static class Program
                 string a = VaultFiles.SuggestContainerName(), b = VaultFiles.SuggestContainerName();
                 Check(a.StartsWith("vault-", StringComparison.Ordinal) && a.EndsWith(".pvlt", StringComparison.Ordinal) && a != b);
             });
-            Run("GUI: иконка, запуск с .pvlt и размещение элементов", GuiSmoke);
+            Run("WPF: иконка, открытие .pvlt, режимы и очистка пароля", GuiSmoke);
+            Run("WPF: перетаскивание одного файла, отказ для папок и нескольких файлов", GuiDrop);
+            Run("WPF: проверка пароля, подтверждения и фокуса", GuiValidation);
+            Run("WPF: шифрование, занятость, защита закрытия и восстановление", GuiOperations);
+            Run("WPF: отмена диалога и подтверждение удаления", GuiDeletion);
+            Run("WPF: ошибки и восстановление состояния", GuiErrors);
+            Run("WPF: восстановление контейнера версии до миграции", GuiLegacyContainer);
+            Run("WPF: настройки и безопасная отмена предупреждения", GuiDialogs);
+            Run("WPF: размещение и снимки при 100, 125, 150 и 200%", GuiLayout);
         }
-        finally { Directory.Delete(Root, true); }
+        finally { application.Shutdown(); Directory.Delete(Root, true); }
         Console.WriteLine($"\nПройдено: {passed}; ошибок: {failed}. Временные файлы удалены.");
         return failed == 0 ? 0 : 1;
     }
@@ -165,33 +182,310 @@ internal static class Program
 
     private static void GuiSmoke()
     {
-        ApplicationConfiguration.Initialize();
-        using var form = new MainForm(Path.Combine(Root, "sample.pvlt"));
-        form.Show(); form.PerformLayout(); Application.DoEvents();
-        var controls = AllControls(form).ToArray();
-        Check(form.Icon is not null);
-        Check(controls.OfType<RadioButton>().Any(r => r.Text == "Расшифровать" && r.Checked));
-        Check(controls.OfType<TextBox>().Any(t => t.Text.EndsWith("sample.pvlt", StringComparison.Ordinal)));
-        var encryptButton = controls.OfType<RadioButton>().Single(r => r.Text == "Зашифровать");
-        encryptButton.Checked = true;
-        form.PerformLayout(); Application.DoEvents();
-        Check(controls.OfType<CheckBox>().Single(c => c.Text.StartsWith("Удалить", StringComparison.Ordinal)).Checked == false);
-        foreach (Control control in controls.Where(c => c.Visible && c.Parent is TableLayoutPanel && c.Dock != DockStyle.Fill))
-            Check(control.Bottom <= control.Parent!.ClientSize.Height + 1);
-        using var bitmap = new Bitmap(form.Width, form.Height);
-        form.DrawToBitmap(bitmap, new Rectangle(0, 0, form.Width, form.Height));
-        string? screenshot = Environment.GetEnvironmentVariable("PVLT_SCREENSHOT");
-        if (!string.IsNullOrEmpty(screenshot)) bitmap.Save(screenshot);
-        form.Close();
+        string container = Write("запуск из Проводника.PVLT", [0]);
+        var window = OpenWindow(container);
+        try
+        {
+            Check(window.Icon is not null && !window.IsEncryptMode && window.SelectedPath == container);
+            Check(window.ConfirmationPanel.Visibility == Visibility.Collapsed && window.DeleteOriginal.Visibility == Visibility.Collapsed);
+            Check(!window.EncryptButton.IsEnabled && !window.DecryptButton.IsEnabled);
+            window.Password.Password = Password;
+            Check(window.DecryptButton.IsEnabled);
+            Click(window.ShowPasswordButton);
+            Check(window.VisiblePassword.Text == Password && window.Password.Visibility == Visibility.Collapsed);
+            window.VisiblePassword.Text = "изменённый пароль";
+            Check(window.Password.Password == "изменённый пароль");
+            Click(window.ShowPasswordButton);
+            Check(window.VisiblePassword.Text.Length == 0 && window.Password.Password == "изменённый пароль");
+            window.SelectFile(Write("обычный файл.txt", Sample));
+            Check(window.IsEncryptMode && window.ConfirmationPanel.Visibility == Visibility.Visible);
+            Check(window.Password.Password.Length == 0 && window.Confirmation.Password.Length == 0);
+            window.DeleteOriginal.IsChecked = true;
+            window.SelectFile(container);
+            Check(window.DeleteOriginal.IsChecked == false);
+            Click(window.ClearButton);
+            Check(window.SelectedPath is null && !window.ClearButton.IsEnabled && window.IsEncryptMode);
+        }
+        finally { window.Close(); }
     }
 
-    private static IEnumerable<Control> AllControls(Control parent)
+    private static void GuiDrop()
     {
-        foreach (Control control in parent.Controls)
+        var window = OpenWindow();
+        try
         {
-            yield return control;
-            foreach (var child in AllControls(control)) yield return child;
+            string path = Write("drop.txt", Sample);
+            var data = new DataObject(DataFormats.FileDrop, new[] { path });
+            var drop = CreateDragEvent(data, window, DragDrop.PreviewDropEvent);
+            window.BrowseButton.RaiseEvent(drop);
+            Check(drop.Handled && window.SelectedPath == path);
+            var over = CreateDragEvent(data, window, DragDrop.PreviewDragOverEvent);
+            window.Password.RaiseEvent(over);
+            Check(over.Handled && over.Effects == DragDropEffects.Copy);
+            Check(!window.AcceptDrop([path, path]) && !window.AcceptDrop([Root]) && !window.AcceptDrop([]));
+            Check(window.SelectedPath == path);
+            Check(!window.SelectFile(Path.Combine(Root, "missing.txt")));
         }
+        finally { window.Close(); }
+    }
+
+    private static void GuiValidation()
+    {
+        var dialogs = new TestDialogs();
+        var window = OpenWindow(Write("validation.txt", Sample), dialogs);
+        try
+        {
+            Complete(window.RunOperationAsync());
+            Check(window.StatusText.Text == "Введите непустой пароль" && FocusManager.GetFocusedElement(window) == window.Password);
+            window.Password.Password = Password;
+            window.Confirmation.Password = "не совпадает";
+            Complete(window.RunOperationAsync());
+            Check(window.StatusText.Text == "Пароли не совпадают" && FocusManager.GetFocusedElement(window) == window.Confirmation);
+            Check(dialogs.DestinationCalls == 0 && !window.IsBusy);
+        }
+        finally { window.Close(); }
+    }
+
+    private static void GuiOperations()
+    {
+        string source = Write("gui-roundtrip.txt", Sample);
+        string destination = Path.Combine(Root, "gui-roundtrip.pvlt");
+        var dialogs = new TestDialogs { Destination = destination };
+        var window = OpenWindow(source, dialogs);
+        try
+        {
+            window.Password.Password = window.Confirmation.Password = Password;
+            Task operation = window.RunOperationAsync();
+            Check(window.IsBusy && !window.InputPanel.IsEnabled && !window.SettingsButton.IsEnabled);
+            Check(window.OperationProgress.Visibility == Visibility.Visible && window.OperationProgress.IsIndeterminate);
+            Check(window.Password.Password.Length == 0 && window.Confirmation.Password.Length == 0 && window.VisiblePassword.Text.Length == 0);
+            string? screenshot = Environment.GetEnvironmentVariable("PVLT_SCREENSHOT");
+            if (!string.IsNullOrEmpty(screenshot))
+            {
+                window.UpdateLayout();
+                SaveScreenshot(window, Path.ChangeExtension(screenshot, "busy.png"), 1);
+            }
+            Check(!window.AcceptDrop([source]));
+            Check(window.RunOperationAsync().IsCompleted);
+            Check(dialogs.DestinationCalls == 1);
+            window.Close();
+            Check(window.IsVisible && window.IsBusy);
+            Complete(operation);
+            Check(File.Exists(destination) && File.Exists(source) && !window.IsBusy && window.InputPanel.IsEnabled);
+            Check(window.OperationProgress.Visibility == Visibility.Collapsed && window.StatusText.Text.StartsWith("Готово", StringComparison.Ordinal));
+            window.SelectFile(destination);
+            string restored = Path.Combine(Root, "gui-restored");
+            Directory.CreateDirectory(restored);
+            dialogs.Destination = restored;
+            window.Password.Password = Password;
+            Complete(window.RunOperationAsync());
+            Check(File.ReadAllBytes(Path.Combine(restored, "gui-roundtrip.txt")).SequenceEqual(Sample));
+        }
+        finally { window.Close(); }
+    }
+
+    private static void GuiDeletion()
+    {
+        string source = Write("gui-delete.txt", Sample), destination = Path.Combine(Root, "gui-delete.pvlt");
+        var dialogs = new TestDialogs();
+        var window = OpenWindow(source, dialogs);
+        try
+        {
+            window.Password.Password = window.Confirmation.Password = Password;
+            window.DeleteOriginal.IsChecked = true;
+            Complete(window.RunOperationAsync());
+            Check(!window.IsBusy && File.Exists(source) && dialogs.ConfirmationCalls == 0);
+            dialogs.Destination = destination;
+            Complete(window.RunOperationAsync());
+            Check(!window.IsBusy && File.Exists(source) && !File.Exists(destination) && dialogs.ConfirmationCalls == 1);
+            dialogs.AllowDelete = true;
+            Complete(window.RunOperationAsync());
+            Check(!File.Exists(source) && File.Exists(destination) && window.SelectedPath is null);
+            Check(!window.ClearButton.IsEnabled && window.StatusText.Text.Contains("исходник удалён", StringComparison.Ordinal));
+            using var restored = VaultFormat.Decrypt(File.ReadAllBytes(destination), Password);
+            Check(restored.Data.SequenceEqual(Sample));
+        }
+        finally { window.Close(); }
+    }
+
+    private static void GuiErrors()
+    {
+        string destination = Path.Combine(Root, "gui-error-restored");
+        Directory.CreateDirectory(destination);
+        var window = OpenWindow(Write("gui-error.pvlt", VaultFormat.Encrypt("error.txt", Sample, Password)), new TestDialogs { Destination = destination });
+        try
+        {
+            window.Password.Password = "неверный пароль";
+            Complete(window.RunOperationAsync());
+            Check(!window.IsBusy && window.InputPanel.IsEnabled && !Directory.EnumerateFileSystemEntries(destination).Any());
+            Check(window.StatusText.Text == "Операция не завершена" && window.Password.Password.Length == 0);
+            Check(FocusManager.GetFocusedElement(window) == window.Password);
+            window.Password.Password = Password;
+            Complete(window.RunOperationAsync());
+            Check(File.ReadAllBytes(Path.Combine(destination, "error.txt")).SequenceEqual(Sample));
+            window.Password.Password = Password;
+            Complete(window.RunOperationAsync());
+            Check(window.StatusText.Text == "Операция не завершена" && window.StatusDetail.Text.Contains("уже существует", StringComparison.Ordinal));
+            Check(File.ReadAllBytes(Path.Combine(destination, "error.txt")).SequenceEqual(Sample));
+        }
+        finally { window.Close(); }
+    }
+
+    private static void GuiLayout()
+    {
+        var window = OpenWindow(Write("Личный документ с длинным именем для проверки размещения.txt", Sample));
+        try
+        {
+            window.Password.Password = window.Confirmation.Password = Password;
+            string? screenshot = Environment.GetEnvironmentVariable("PVLT_SCREENSHOT");
+            foreach (double scale in new[] { 1, 1.25, 1.5, 2 })
+            {
+                window.UpdateLayout();
+                CheckLayout(window);
+                if (!string.IsNullOrEmpty(screenshot))
+                {
+                    SaveScreenshot(window, Path.ChangeExtension(screenshot, $"{scale * 100:0}.png"), scale);
+                    if (scale == 1) SaveScreenshot(window, screenshot, scale);
+                }
+            }
+            window.Width = window.MinWidth;
+            window.Height = window.MinHeight;
+            window.UpdateLayout();
+            Check(window.EncryptButton.ActualWidth >= 200 && window.StatusText.ActualHeight > 0);
+            window.Width = 680; window.Height = 620;
+            window.SelectFile(Write("layout.pvlt", [0]));
+            window.UpdateLayout();
+            CheckLayout(window);
+            // At 200%, a 1920×1080 display has less than 540 DIPs of working height.
+            window.ApplyWorkArea(new Size(960, 500));
+            window.UpdateLayout();
+            Check(window.Height <= 500 && window.MaxHeight == 500 && window.MinHeight <= 500);
+            Check(window.Body.ActualHeight > 0);
+        }
+        finally { window.Close(); }
+    }
+
+    private static void GuiLegacyContainer()
+    {
+        using var fixture = typeof(Program).Assembly.GetManifestResourceStream("PocketVault.LegacyContainer")!;
+        using var reader = new StreamReader(fixture);
+        string path = Write("legacy-v1.pvlt", Convert.FromBase64String(reader.ReadToEnd()));
+        string destination = Path.Combine(Root, "legacy-restored");
+        Directory.CreateDirectory(destination);
+        var window = OpenWindow(path, new TestDialogs { Destination = destination });
+        try
+        {
+            window.Password.Password = "Пароль совместимости 2026";
+            Complete(window.RunOperationAsync());
+            Check(File.ReadAllText(Path.Combine(destination, "наследие.txt"), Encoding.UTF8) == "PocketVault v1 — совместимость формата.\n");
+        }
+        finally { window.Close(); }
+    }
+
+    private static void GuiDialogs()
+    {
+        var window = OpenWindow();
+        try
+        {
+            bool inspected = false;
+            Exception? inspectionError = null;
+            void InspectDialog()
+            {
+                var dialog = Application.Current.Windows.OfType<Window>().Single(w => w.Owner == window);
+                try
+                {
+                    Check(((SolidColorBrush)dialog.Background).Color == Color.FromRgb(0x14, 0x14, 0x14));
+                    Check(((SolidColorBrush)dialog.Foreground).Color == Color.FromRgb(0xF5, 0xF5, 0xF5));
+                    Check(dialog.ActualWidth > 0 && dialog.ActualHeight > 0);
+                    inspected = true;
+                }
+                catch (Exception ex) { inspectionError = ex; }
+                finally { dialog.Close(); }
+            }
+            Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(InspectDialog));
+            VaultDialogs.ShowSettings(window);
+            if (inspectionError is not null) throw inspectionError;
+            Check(inspected);
+            inspected = false;
+            Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, new Action(InspectDialog));
+            Check(!new VaultDialogs().ConfirmDeletion(window));
+            if (inspectionError is not null) throw inspectionError;
+            Check(inspected);
+        }
+        finally { window.Close(); }
+    }
+
+    private static void CheckLayout(MainWindow window)
+    {
+        FrameworkElement[] controls = [window.BrowseButton, window.FileCard, window.Password, window.EncryptButton, window.DecryptButton, window.StatusCard];
+        if (window.IsEncryptMode) controls = [.. controls, window.Confirmation, window.DeleteOriginal];
+        foreach (var control in controls)
+        {
+            var bounds = control.TransformToAncestor(window).TransformBounds(new Rect(control.RenderSize));
+            Check(bounds.Width > 0 && bounds.Height > 0 && bounds.Left >= 0 && bounds.Right <= window.ActualWidth + 1 && bounds.Bottom <= window.ActualHeight + 1);
+        }
+        Rect file = window.FileCard.TransformToAncestor(window).TransformBounds(new Rect(window.FileCard.RenderSize));
+        Rect password = window.Password.TransformToAncestor(window).TransformBounds(new Rect(window.Password.RenderSize));
+        Rect actions = window.EncryptButton.TransformToAncestor(window).TransformBounds(new Rect(window.EncryptButton.RenderSize));
+        Rect status = window.StatusCard.TransformToAncestor(window).TransformBounds(new Rect(window.StatusCard.RenderSize));
+        Check(file.Bottom < password.Top && password.Bottom < actions.Top && actions.Bottom < status.Top);
+    }
+
+    private static void SaveScreenshot(MainWindow window, string path, double scale)
+    {
+        var bitmap = new RenderTargetBitmap((int)Math.Ceiling(window.ActualWidth * scale), (int)Math.Ceiling(window.ActualHeight * scale), 96 * scale, 96 * scale, PixelFormats.Pbgra32);
+        bitmap.Render(window);
+        var encoder = new PngBitmapEncoder();
+        encoder.Frames.Add(BitmapFrame.Create(bitmap));
+        using var stream = File.Create(path);
+        encoder.Save(stream);
+    }
+
+    private static MainWindow OpenWindow(string? path = null, IVaultDialogs? dialogs = null)
+    {
+        var window = new MainWindow(path, dialogs ?? new TestDialogs());
+        window.Show();
+        PumpEvents();
+        window.UpdateLayout();
+        return window;
+    }
+
+    // WPF constructs OLE drag events internally; use its constructor to exercise the real routed handlers.
+    private static DragEventArgs CreateDragEvent(IDataObject data, Window window, RoutedEvent routedEvent)
+    {
+        var args = (DragEventArgs)Activator.CreateInstance(typeof(DragEventArgs),
+            System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic,
+            null, [data, DragDropKeyStates.None, DragDropEffects.Copy, window, new Point(100, 100)], null)!;
+        args.RoutedEvent = routedEvent;
+        return args;
+    }
+
+    private static void Click(Button button) => button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+    private static void PumpEvents()
+    {
+        var frame = new DispatcherFrame();
+        Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() => frame.Continue = false));
+        Dispatcher.PushFrame(frame);
+    }
+
+    private static void Complete(Task operation)
+    {
+        var deadline = DateTime.UtcNow.AddSeconds(30);
+        while (!operation.IsCompleted && DateTime.UtcNow < deadline) { PumpEvents(); Thread.Sleep(10); }
+        Check(operation.IsCompleted);
+        operation.GetAwaiter().GetResult();
+        PumpEvents();
+    }
+
+    private sealed class TestDialogs : IVaultDialogs
+    {
+        internal string? Destination { get; set; }
+        internal bool AllowDelete { get; set; }
+        internal int DestinationCalls { get; private set; }
+        internal int ConfirmationCalls { get; private set; }
+        public string? SelectFile(Window owner) => null;
+        public string? SelectDestination(Window owner, string input, bool encrypt) { DestinationCalls++; return Destination; }
+        public bool ConfirmDeletion(Window owner) { ConfirmationCalls++; return AllowDelete; }
     }
 
     private static byte[] SealZip(params string[] names)

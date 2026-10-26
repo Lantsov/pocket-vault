@@ -1,4 +1,7 @@
-param([string]$DotnetRoot = '')
+param(
+    [string]$DotnetRoot = '',
+    [string]$BundleExtractBaseDirectory = ''
+)
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
 if (-not ('PocketVaultPublishSmoke' -as [type])) {
@@ -37,6 +40,7 @@ foreach ($variant in $variants) {
     $start.Environment.Remove('DOTNET_ROOT') | Out-Null
     $start.Environment.Remove('DOTNET_ROOT_X64') | Out-Null
     $start.Environment['PATH'] = Join-Path $env:SystemRoot 'System32'
+    if ($BundleExtractBaseDirectory) { $start.Environment['DOTNET_BUNDLE_EXTRACT_BASE_DIR'] = $BundleExtractBaseDirectory }
     if ($variant -eq 'framework-dependent') { $start.Environment['DOTNET_ROOT'] = $DotnetRoot }
     $process = [Diagnostics.Process]::Start($start)
     try {
