@@ -120,6 +120,9 @@ try {
     if ($Unsigned) {
         if ($verified -or $signature -notmatch 'DOES NOT VERIFY') { throw 'Expected a genuinely unsigned validation APK.' }
         $signature = 'UNSIGNED VALIDATION BUILD: cannot be installed; not a distribution release.'
+        # apksigner must fail for this mode. PowerShell/Actions otherwise propagates
+        # its expected exit code even after every subsequent artifact check succeeds.
+        $global:LASTEXITCODE = 0
     }
     else {
         if (!$verified) { throw 'APK signature verification failed.' }
