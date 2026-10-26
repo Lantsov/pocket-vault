@@ -1,6 +1,12 @@
-param()
+param([string]$DotnetPath = 'dotnet')
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
+$env:DOTNET_CLI_HOME = Join-Path $projectRoot '.tools\cli-home'
+$env:DOTNET_CLI_TELEMETRY_OPTOUT = '1'
+$env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE = '1'
+if ($DotnetPath -eq 'dotnet' -and (Test-Path -LiteralPath (Join-Path $projectRoot '.tools\dotnet\dotnet.exe'))) {
+    $DotnetPath = Join-Path $projectRoot '.tools\dotnet\dotnet.exe'
+}
 [xml]$project = Get-Content -Raw -LiteralPath (Join-Path $projectRoot 'PocketVault.App\PocketVault.App.csproj')
 $version = [string]$project.Project.PropertyGroup.Version
 if ($version -notmatch '^\d+\.\d+\.\d+(?:-[A-Za-z0-9.-]+)?$') { throw 'Invalid project version.' }
@@ -32,6 +38,31 @@ foreach ($pack in @('Microsoft.NETCore.App.Runtime.win-x64', 'Microsoft.WindowsD
     }
     $runtimeFiles["$pack/$packVersion"] = @($license) + @($notices)
 }
+# Framework-dependent EXEs still redistribute the native .NET apphost. Resolve
+# its actual SDK pack and require matching runtime notices rather than guessing.
+$hostJson = & $DotnetPath msbuild (Join-Path $projectRoot 'PocketVault.App\PocketVault.App.csproj') `
+    -target:ResolveFrameworkReferences -p:PublishProfile=FrameworkDependent `
+    -getItem:ResolvedAppHostPack -getProperty:NetCoreRoot -nologo
+if ($LASTEXITCODE -ne 0) { throw 'Could not resolve the executable host pack.' }
+$hostInfo = ($hostJson -join "`n") | ConvertFrom-Json
+$hostPack = @($hostInfo.Items.ResolvedAppHostPack)
+if ($hostPack.Count -ne 1) { throw 'Expected one win-x64 executable host pack.' }
+$hostVersion = Split-Path -Leaf $hostPack[0].PackageDirectory
+$corePack = "Microsoft.NETCore.App.Runtime.win-x64/$hostVersion"
+if (-not $runtimeFiles.ContainsKey($corePack)) { throw 'Apphost/runtime versions differ; matching host notices are required.' }
+$dotnetRoot = $hostInfo.Properties.NetCoreRoot
+foreach ($framework in @('Microsoft.NETCore.App', 'Microsoft.WindowsDesktop.App')) {
+    $matchingPack = @($runtimeFiles.Keys | Where-Object { $_ -like "$framework.Runtime.win-x64/*" })[0]
+    $matchingVersion = $matchingPack.Split('/')[1]
+    if (-not (Test-Path -LiteralPath (Join-Path $dotnetRoot "shared\$framework\$matchingVersion"))) {
+        throw "SDK distribution does not match restored runtime: $matchingPack"
+    }
+}
+# The Windows SDK distribution also carries the .NET Library terms and runtime
+# third-party notices. Preserve these in addition to the runtime-pack MIT files.
+$distributionFiles = @('LICENSE.txt', 'ThirdPartyNotices.txt') | ForEach-Object {
+    Get-Item -LiteralPath (Join-Path $dotnetRoot $_)
+}
 $staging = Join-Path $projectRoot ('dist\release-staging-' + [Guid]::NewGuid().ToString('N'))
 foreach ($variant in $variants) {
     $published = Join-Path $projectRoot "dist\$variant"
@@ -44,12 +75,18 @@ foreach ($variant in $variants) {
     Get-ChildItem -LiteralPath $published | Copy-Item -Destination $folder -Recurse
     Copy-Item -LiteralPath (Join-Path $projectRoot 'LICENSE') -Destination $folder
     Copy-Item -LiteralPath (Join-Path $projectRoot 'docs\THIRD_PARTY_NOTICES.md') -Destination $folder
+    $selectedPacks = if ($variant -eq 'self-contained') { @($runtimeFiles.Keys) } else { @($corePack) }
+    foreach ($pack in $selectedPacks) {
+        $noticeFolder = Join-Path $folder ('runtime-notices\' + $pack.Replace('/', '-'))
+        New-Item -ItemType Directory -Path $noticeFolder -Force | Out-Null
+        foreach ($file in $runtimeFiles[$pack]) { Copy-Item -LiteralPath $file.FullName -Destination $noticeFolder }
+    }
+    $distributionFolder = Join-Path $folder "runtime-notices\Microsoft.NET-Windows-$hostVersion"
+    New-Item -ItemType Directory -Path $distributionFolder -Force | Out-Null
+    $distributionFiles | Copy-Item -Destination $distributionFolder
     if ($variant -eq 'self-contained') {
-        foreach ($pack in $runtimeFiles.Keys) {
-            $noticeFolder = Join-Path $folder ('runtime-notices\' + $pack.Replace('/', '-'))
-            New-Item -ItemType Directory -Path $noticeFolder -Force | Out-Null
-            foreach ($file in $runtimeFiles[$pack]) { Copy-Item -LiteralPath $file.FullName -Destination $noticeFolder }
-        }
+        # D3DCompiler_47_cor3.dll is licensed under the Windows SDK terms.
+        Copy-Item -LiteralPath (Join-Path $projectRoot 'docs\licenses\WINDOWS-SDK-LICENSE.html') -Destination $distributionFolder
     }
     $archive = Join-Path $output "PocketVault-$version-win-x64-$variant.zip"
     [IO.Compression.ZipFile]::CreateFromDirectory($folder, $archive, [IO.Compression.CompressionLevel]::Optimal, $false)

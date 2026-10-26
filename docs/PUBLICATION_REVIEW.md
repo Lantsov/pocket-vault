@@ -2,18 +2,33 @@
 
 Review date: **2026-10-26**. Repository: [Lantsov/pocket-vault](https://github.com/Lantsov/pocket-vault). Work branch: `prepare-public-release`.
 
-## Decision
+## v1.1.1 release decision
 
-**Keep the repository private until the owner completes the remaining decisions below.** The source/documentation preparation is implemented; this review is not an independent cryptographic audit, a legal opinion or a guarantee that no secret exists. Cryptographic code, public APIs and format v1 are unchanged.
+The owner has confirmed publication of existing Git author names/email and the MIT license, including commercial use, modification and redistribution. Keep the repository **private**. Preserve the existing `v1.1.0` tag, release and all three assets unchanged. Prepare `1.1.1` on `prepare-public-release`; merge and successful main CI must precede its tag and manual release. These decisions supersede the earlier audit's pending author/license questions.
 
-| Item | Evidence and action |
-| --- | --- |
-| Author privacy | Both original commits contain the author's name and email in Git metadata. Confirm that publishing these identifiers is intentional before changing visibility. A later commit cannot conceal them. History has not been rewritten. |
-| Open-source license | Standard MIT text is prepared for 2026 Lantsov. The owner must confirm the rights to publish the included work and accept the license choice. MIT allows commercial use, modification and redistribution by others, subject to its notice requirements. |
-| Existing runtime redistribution | The published self-contained 1.1.0 ZIP contains only `PocketVault.exe`; the compact ZIP contains five application files. Neither includes license notices. CI logs identify SDK 10.0.403/runtime 10.0.14, while the local verification uses 10.0.402/10.0.13. Resolve distribution of the **matching 10.0.14** runtime license and notices with the historical release before public promotion; do not silently substitute local runtime notices or replace its ZIPs. Future packaging now includes notices automatically. |
-| Changes on the default branch | Review and merge the preparation branch before expecting the default GitHub page to display these files. No new tag or release is required for documentation. |
-| Private reporting | The private-vulnerability-reporting API returned 404 while private. Enable the feature at publication and verify the report form. Until available, SECURITY.md only invites a detail-free request for a private channel. |
-| Final page inspection | GitHub Markdown API rendered both READMEs successfully. A real wide/narrow browser inspection could not be completed: localhost timed out and the browser policy rejected local file URLs. Inspect the branch/default README on GitHub before announcing the project. |
+This maintenance release corrects distribution attribution. No encryption, cryptographic parameters, format v1, UI or file-processing changes are made. The new fixture is generated from the unchanged Core source at tag v1.1.0; the earlier pre-WPF legacy fixture remains intact. There has been no independent cryptographic audit.
+
+The packaging script includes project MIT terms, original exact-version NETCore and WindowsDesktop runtime-pack licenses/notices, and the matching Windows .NET distribution's .NET Library terms and runtime third-party notices. The compact ZIP also carries notices for its native apphost without bundling a runtime. Sources and Windows binary licensing distinctions are documented in [third-party notices](THIRD_PARTY_NOTICES.md).
+
+### Current validation
+
+- Windows x64; official SDK **10.0.403**, NETCore/WindowsDesktop runtime packs **10.0.14**. SDK SHA-512 matched Microsoft's release metadata. Runtime packs were downloaded from the official NuGet flat-container endpoint; restored exact versions were checked. The online self-contained restore stalled and was cancelled; the successful complete pipeline used those downloaded packages as a local source without disabling package auditing. This is not a claim of a refreshed online vulnerability database.
+- Release build: zero errors/warnings. Standalone runner: **43 passed, 0 failed** (all 42 existing tests plus the v1.1.0-source fixture). Both the pre-WPF legacy fixture and the v1.1.0-source fixture recover successfully.
+- Core, format, cryptographic parameters, app behavior and association implementation compare byte-for-byte with tag v1.1.0. Only the App project version changes to 1.1.1; EXE file version is **1.1.1.0**. Both EXEs remain unsigned.
+- Both publish profiles and actual EXE window startup/normal exit passed. Both extracted ZIP builds passed the same smoke check. The compact build also passed with an isolated host/Core/Desktop **10.0.14** directory containing no SDK or ASP.NET runtime. The self-contained build started with SDK/runtime paths removed from PATH and DOTNET_ROOT; no system-wide .NET 10 installation was required.
+- The built assembly's existing association methods passed registration, repeated registration, quoted executable/`%1` command, icon bytes/decoding, unregister and previous-association restoration checks using a process-local isolated HKCU mapping. The real registration was not changed; any prior icon bytes were restored. WPF tests cover `.pvlt` selection and restoration. Interactive Explorer default-app selection was not changed or claimed as tested.
+- Both ZIPs include project MIT terms, exact upstream runtime-pack documents and matching Windows .NET Library terms/runtime third-party notices. The self-contained ZIP additionally includes the full Windows SDK license for WPF's D3DCompiler component. Upstream document bytes, ZIP CRC, exact manifests, published binary bytes and both SHA-256 sums passed `check-release.py`. No SDK binaries, source files, tests or PDBs are included. These local working-tree packages are validation outputs; publish only artifacts from the successful exact tagged main commit.
+- Documentation checker: 16 Markdown files and local destinations passed; final counts are printed by CI. External HTTP checks passed for public upstream/documentation targets. Private repository URLs return anonymous 404; authenticated GitHub API verified the repository, latest release, workflow and historical commit/compare targets. Dynamic private-repository badges remain unverifiable anonymously until a later public launch. No v1.1.1 download link is presented as already published.
+- `git diff --check` passed. No v1.1.1 tag/release was created, and repository visibility stays private. The v1.1.0 tag and release asset IDs/digests were checked before and after preparation.
+- CI retains manual release control and now verifies archive integrity, checksums, notices and extracted EXE startup before artifact upload. The current preparation commit's Windows CI result is available in the Actions run referenced in the handoff report; successful main CI is still required after merge.
+
+Historical results in the later audit sections refer to the previous preparation stage and are not new 1.1.1 CI evidence.
+
+### Remaining owner actions
+
+Follow [the exact release sequence](RELEASE_1.1.1.md): merge the branch, wait for successful CI on the resulting main commit, tag that verified commit, then manually create v1.1.1 with [the prepared English notes](RELEASE_NOTES_1.1.1.md) and the ZIPs/checksums from that exact main run. Do not reuse older working-branch outputs after source/configuration changes. Repository visibility remains private throughout this task.
+
+The following sections retain the earlier publication audit as historical evidence. Its local SDK/runtime versions and test counts are specific to that earlier stage.
 
 ## History and disclosure audit
 
@@ -26,7 +41,7 @@ All 42 unique historical file blobs were inspected/scanned, including removed so
 
 The two historical ICOs are the only tracked binary assets in the original history. Their pixels match `scripts/create-icons.py` at all seven embedded sizes. No historical user `.pvlt`, archive, EXE, log, private-key file or screenshot was tracked. No third-party source attribution or third-party NuGet package reference was found. This establishes consistency with the available history, not authorship outside it.
 
-Commit author/committer metadata in **both hashes above** contains personal identifiers. The relevant location is the commit object, not a working-tree file. Confirm consent or plan a separate, explicit history-cleaning operation before publication if those identifiers must remain private. No secret values or full email are repeated here.
+Commit author/committer metadata in **both hashes above** contains personal identifiers. The relevant location is the commit object, not a working-tree file. The owner has since confirmed that these identifiers may be published; no history-cleaning operation is requested. No secret values or full email are repeated here.
 
 Both available Actions runs were successful and their full logs were downloaded and scanned: `40316040168` and `40320455869`. No matching secrets/private endpoints/personal user paths were found. The repository Actions-secret list was empty; this does not inspect account/organization-level secrets or unavailable/deleted logs. GitHub runner paths are ordinary ephemeral CI paths. No history/log deletion or rewriting was performed. Raw downloaded logs and audit data remain in ignored `.tools/publication-audit/`.
 
@@ -79,9 +94,9 @@ Description and the following topics were applied through GitHub API, with visib
 
 The tags describe existing functionality or the prepared license; obsolete WinForms metadata was removed. They do not imply independent review or certification.
 
-Before publication, the owner should:
+For a later, separately controlled public launch (outside this release-preparation task), the owner should:
 
-1. Accept the author-metadata exposure and MIT choice, and resolve the historical runtime notices described above.
+1. Author-metadata exposure and the MIT choice are now approved. Preserve v1.1.0 unchanged and use the newly prepared v1.1.1 distributions with notices for the next release.
 2. Review the preparation branch and its CI result, merge it, and inspect both README languages on GitHub at desktop/mobile widths.
 3. Upload `docs/images/social-preview.png` under **Settings → General → Social preview**. Description/topics are already updated.
 4. Change Repository Visibility only after the preceding decisions. This operation remains entirely with the owner.

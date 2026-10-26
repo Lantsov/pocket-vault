@@ -164,6 +164,16 @@ internal static class Program
             Run("WPF: отмена диалога и подтверждение удаления", GuiDeletion);
             Run("WPF: ошибки и восстановление состояния", GuiErrors);
             Run("WPF: восстановление контейнера версии до миграции", GuiLegacyContainer);
+            Run("Совместимость с контейнером исходников v1.1.0", () =>
+            {
+                using var fixture = typeof(Program).Assembly.GetManifestResourceStream("PocketVault.V110Container")!;
+                using var reader = new StreamReader(fixture);
+                byte[] container = Convert.FromBase64String(reader.ReadToEnd());
+                Check(container[8] == 1);
+                using var restored = VaultFormat.Decrypt(container, "Public fixture password 1.1.0");
+                Check(restored.Name == "v1.1.0-example.txt");
+                Check(Encoding.UTF8.GetString(restored.Data) == "PocketVault 1.1.0 compatibility fixture.\n");
+            });
             Run("WPF: настройки и безопасная отмена предупреждения", GuiDialogs);
             Run("WPF: размещение и снимки при 100, 125, 150 и 200%", GuiLayout);
         }

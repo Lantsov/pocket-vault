@@ -6,13 +6,23 @@ The available history contains two original commits by the project owner. No ext
 
 The PocketVault source and original artwork are covered by the project's [MIT license](../LICENSE). This is a provenance check against available history, not proof of rights beyond that history. The owner remains responsible for confirming the right to publish contributions and assets.
 
-## Microsoft .NET runtime
+## Microsoft .NET distribution
 
-PocketVault uses .NET/WPF. Framework-dependent builds require a separately installed .NET Desktop Runtime. Self-contained builds redistribute Microsoft .NET runtime libraries, whose license and third-party notices must accompany redistribution.
+PocketVault 1.1.1 uses .NET 10/WPF. The PocketVault MIT license covers the project source and original artwork; Microsoft components retain their own terms.
 
-The packaging script copies upstream license files and available third-party notices from the exact restored `microsoft.netcore.app.runtime.win-x64` and `microsoft.windowsdesktop.app.runtime.win-x64` packs into each future self-contained ZIP under `runtime-notices/`. The checked .NET 10.0.13 packs contain `LICENSE.TXT` and `THIRD-PARTY-NOTICES.TXT` for NETCore, and `LICENSE` for WindowsDesktop. The script requires a license for both packs and third-party notices for NETCore. These upstream terms are separate from the PocketVault MIT grant; see the [.NET runtime license](https://github.com/dotnet/runtime/blob/main/LICENSE.TXT).
+Both ZIPs contain the project `LICENSE`, this notice and a `runtime-notices/` directory. Self-contained builds include the .NET runtime; framework-dependent builds include only the application and its native .NET executable host (apphost), and require a separately installed .NET Desktop Runtime 10 x64. Copying license text into the compact ZIP does not add the runtime.
 
-The existing 1.1.0 archives predate this packaging change. Their contents and any missing redistribution notices are recorded in [PUBLICATION_REVIEW.md](PUBLICATION_REVIEW.md); they are not silently replaced.
+The packaging script reads **exact restored versions** from `PocketVault.App/obj/project.assets.json`. It preserves, without editing:
+
+- `Microsoft.NETCore.App.Runtime.win-x64/<version>/LICENSE.TXT` and `THIRD-PARTY-NOTICES.TXT` in both ZIPs, covering the runtime or executable host as applicable.
+- `Microsoft.WindowsDesktop.App.Runtime.win-x64/<version>/LICENSE` and any third-party notices supplied by that pack in the self-contained ZIP. The inspected packs do not ship a separate WindowsDesktop notice file; the script copies one if supplied by a later pack.
+- The build's Windows .NET distribution `LICENSE.txt` (.NET Library terms) and `ThirdPartyNotices.txt`, in both ZIPs under `runtime-notices/Microsoft.NET-Windows-<version>/`. These supplement the runtime-pack MIT files. The script resolves the actual SDK apphost pack and requires its version and the SDK's installed runtime versions to match the restored packs; it fails rather than substituting unrelated notices.
+
+The self-contained build also contains WPF's `D3DCompiler_47_cor3.dll`. Microsoft's Windows licensing information assigns it the Windows SDK terms. The ZIP includes [WINDOWS-SDK-LICENSE.html](licenses/WINDOWS-SDK-LICENSE.html): the complete license content copied from [Microsoft Learn](https://learn.microsoft.com/en-us/legal/windows-sdk/license) on 2026-10-26, identified upstream as `EULAID:WIN10SDK.RTM.AUG_2018_en-US`. Only the surrounding site navigation/scripts were removed; the license body and links are unchanged. This is a supplemental Windows component license, not a replacement for the exact-version runtime-pack documents. It is omitted from the compact ZIP, which does not redistribute that DLL.
+
+See Microsoft's [asset licensing model](https://github.com/dotnet/runtime/blob/main/docs/project/licensing-assets.md), [redistribution information](https://github.com/dotnet/core/blob/main/license-information.md), [Windows component licensing](https://github.com/dotnet/core/blob/main/license-information-windows.md) and [.NET Library license](https://dotnet.microsoft.com/en-us/dotnet_library_license.htm). These distinguish source licensing from Windows binary licensing, including WPF/native components. The copied upstream documents remain the terms accompanying the actual build; this summary does not relicense Microsoft binaries under PocketVault's MIT grant.
+
+The 1.1.0 archives predate this packaging change and are retained unchanged by the owner's decision. Version 1.1.1 provides newly packaged distributions; it does not silently replace historical assets. See [the publication review](PUBLICATION_REVIEW.md) for the actual build/runtime versions and validation results.
 
 ## Development tools
 

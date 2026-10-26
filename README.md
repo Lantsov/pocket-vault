@@ -14,7 +14,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-555?style=flat" alt="MIT license"></a>
 </p>
 
-<p align="center"><a href="https://github.com/Lantsov/pocket-vault/releases/tag/v1.1.0"><strong>Download PocketVault 1.1.0</strong></a> · <a href="docs/SECURITY_MODEL.md">Security model</a> · <a href="docs/README.ru.md">По-русски</a></p>
+<p align="center"><a href="https://github.com/Lantsov/pocket-vault/releases/latest"><strong>Download PocketVault</strong></a> · <a href="docs/SECURITY_MODEL.md">Security model</a> · <a href="docs/README.ru.md">По-русски</a></p>
 
 ## Preview
 
@@ -32,14 +32,16 @@ The current application interface is in Russian. [Decryption](docs/images/pocket
 
 ## Download
 
+**1.1.1 is being prepared:** a maintenance update to distribution licenses and notices. Encryption, application behavior and format v1 remain unchanged and compatible with 1.1.0. Until publication, the links below point to the latest published release.
+
 Download and extract an archive from the [latest release](https://github.com/Lantsov/pocket-vault/releases/latest). Both builds target **Windows x64** on a Windows version supported by .NET 10.
 
 | Build | Choose this when… |
 | --- | --- |
-| [Self-contained ZIP](https://github.com/Lantsov/pocket-vault/releases/download/v1.1.0/PocketVault-1.1.0-win-x64-self-contained.zip) | You want a standalone EXE; no .NET installation is needed. Native runtime libraries extract on first launch. |
-| [Framework-dependent ZIP](https://github.com/Lantsov/pocket-vault/releases/download/v1.1.0/PocketVault-1.1.0-win-x64-framework-dependent.zip) | You already have [.NET Desktop Runtime 10 x64](https://dotnet.microsoft.com/en-us/download/dotnet/10.0). Keep the entire extracted folder. |
+| [Self-contained ZIP](https://github.com/Lantsov/pocket-vault/releases/latest) | You want a standalone EXE; no .NET installation is needed. Native runtime libraries extract on first launch. |
+| [Framework-dependent ZIP](https://github.com/Lantsov/pocket-vault/releases/latest) | You already have [.NET Desktop Runtime 10 x64](https://dotnet.microsoft.com/en-us/download/dotnet/10.0). Keep the entire extracted folder. |
 
-Compare the archive's `Get-FileHash -Algorithm SHA256` result with [SHA256SUMS.txt](https://github.com/Lantsov/pocket-vault/releases/download/v1.1.0/SHA256SUMS.txt). Checksums detect differing bytes; they do not establish publisher identity if the download source is compromised.
+Compare the archive's `Get-FileHash -Algorithm SHA256` result with [SHA256SUMS.txt](https://github.com/Lantsov/pocket-vault/releases/latest). Checksums detect differing bytes; they do not establish publisher identity if the download source is compromised.
 
 The EXE is **unsigned**. Windows SmartScreen may warn about an unknown publisher. Review the source and download origin before deciding whether to run it. There is no installer and normal use does not require administrator rights.
 

@@ -73,14 +73,20 @@ The script builds and runs the tests, maps an unused drive letter to a fresh ign
 
 Inspect every PNG for clipping, private paths and visible passwords before committing it. DPI renders do not replace manual checks across physical monitors. There is no mockup fallback when Windows/WPF is unavailable.
 
-## Future release archives
+## Release archives
 
 After a successful build, both publishes and smoke checks:
 
 ```powershell
 .\scripts\package-release.ps1
+python .\scripts\check-release.py
+.\scripts\smoke-publish.ps1 -DotnetRoot $env:DOTNET_ROOT -PublishRoot "$pwd/dist/verified-release"
 ```
 
-The script reads the project version, includes the project's MIT license and runtime notices, creates two versioned ZIPs and computes `SHA256SUMS.txt` in `dist/releases/`. It refuses existing outputs and does not create Git tags or upload a release. Review the artifacts before any manual upload. Do not replace historical release assets just for documentation changes.
+If the SDK is outside PATH, pass the same `-DotnetPath` used for the build to `package-release.ps1` and its directory as `-DotnetRoot` to the smoke check. `check-release.py` requires Python 3 and a fresh `dist/verified-release/` destination. Preserve any prior local outputs in a separate directory before rebuilding; the scripts refuse to mix or replace release outputs.
+
+The packaging script reads the project version, includes the project's MIT license and runtime notices, creates two versioned ZIPs and computes `SHA256SUMS.txt` in `dist/releases/`. It refuses existing outputs and does not create Git tags or upload a release. Review the artifacts before any manual upload. Do not replace historical release assets just for documentation changes.
 
 CI runs the Windows build, standalone tests, both publishes, EXE smoke checks, documentation-link checks and packaging. Permissions remain `contents: read`; it uploads build outputs, test diagnostics and a separate release-package artifact. Existing tags/releases are retained.
+
+For the controlled v1.1.1 merge, main CI, tag and manual upload sequence, see [release instructions](RELEASE_1.1.1.md) and [prepared English release notes](RELEASE_NOTES_1.1.1.md).

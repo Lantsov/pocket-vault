@@ -14,7 +14,7 @@
   <a href="../LICENSE"><img src="https://img.shields.io/badge/license-MIT-555?style=flat" alt="Лицензия MIT"></a>
 </p>
 
-<p align="center"><a href="https://github.com/Lantsov/pocket-vault/releases/tag/v1.1.0"><strong>Скачать PocketVault 1.1.0</strong></a> · <a href="SECURITY_MODEL.md">Модель безопасности</a> · <a href="../README.md">English</a></p>
+<p align="center"><a href="https://github.com/Lantsov/pocket-vault/releases/latest"><strong>Скачать PocketVault</strong></a> · <a href="SECURITY_MODEL.md">Модель безопасности</a> · <a href="../README.md">English</a></p>
 
 ## Интерфейс
 
@@ -32,14 +32,16 @@
 
 ## Скачать
 
+**Готовится версия 1.1.1:** техническое обновление лицензий и уведомлений в дистрибутивах. Шифрование, поведение приложения и формат v1 не изменены; совместимость с 1.1.0 сохранена. До публикации ссылки ниже ведут на последний опубликованный релиз.
+
 Скачайте и распакуйте архив из [последнего релиза](https://github.com/Lantsov/pocket-vault/releases/latest). Обе сборки рассчитаны на **Windows x64** и версию Windows, поддерживаемую .NET 10.
 
 | Сборка | Когда выбрать |
 | --- | --- |
-| [Автономный ZIP](https://github.com/Lantsov/pocket-vault/releases/download/v1.1.0/PocketVault-1.1.0-win-x64-self-contained.zip) | Нужен самостоятельный EXE без установки .NET. При первом запуске распаковываются нативные библиотеки среды. |
-| [Компактный ZIP](https://github.com/Lantsov/pocket-vault/releases/download/v1.1.0/PocketVault-1.1.0-win-x64-framework-dependent.zip) | Уже установлен [.NET Desktop Runtime 10 x64](https://dotnet.microsoft.com/ru-ru/download/dotnet/10.0). Переносите всю распакованную папку. |
+| [Автономный ZIP](https://github.com/Lantsov/pocket-vault/releases/latest) | Нужен самостоятельный EXE без установки .NET. При первом запуске распаковываются нативные библиотеки среды. |
+| [Компактный ZIP](https://github.com/Lantsov/pocket-vault/releases/latest) | Уже установлен [.NET Desktop Runtime 10 x64](https://dotnet.microsoft.com/ru-ru/download/dotnet/10.0). Переносите всю распакованную папку. |
 
-Сравните результат `Get-FileHash -Algorithm SHA256` для архива с [SHA256SUMS.txt](https://github.com/Lantsov/pocket-vault/releases/download/v1.1.0/SHA256SUMS.txt). Суммы выявляют различие байтов, но не подтверждают издателя при компрометации источника загрузки.
+Сравните результат `Get-FileHash -Algorithm SHA256` для архива с [SHA256SUMS.txt](https://github.com/Lantsov/pocket-vault/releases/latest). Суммы выявляют различие байтов, но не подтверждают издателя при компрометации источника загрузки.
 
 EXE **не подписан**. Windows SmartScreen может предупредить о неизвестном издателе. Перед запуском оцените исходники и источник загрузки. Установщика нет; обычная работа не требует прав администратора.
 

@@ -1,9 +1,11 @@
 param(
     [string]$DotnetRoot = '',
-    [string]$BundleExtractBaseDirectory = ''
+    [string]$BundleExtractBaseDirectory = '',
+    [string]$PublishRoot = ''
 )
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
+if (-not $PublishRoot) { $PublishRoot = Join-Path $projectRoot 'dist' }
 if (-not ('PocketVaultPublishSmoke' -as [type])) {
     Add-Type -TypeDefinition @'
 using System;
@@ -33,7 +35,7 @@ public static class PocketVaultPublishSmoke {
 $variants = @('self-contained')
 if ($DotnetRoot) { $variants += 'framework-dependent' }
 foreach ($variant in $variants) {
-    $exe = Join-Path $projectRoot "dist\$variant\PocketVault.exe"
+    $exe = Join-Path $PublishRoot "$variant\PocketVault.exe"
     $start = [Diagnostics.ProcessStartInfo]::new($exe)
     $start.UseShellExecute = $false
     $start.WindowStyle = [Diagnostics.ProcessWindowStyle]::Hidden

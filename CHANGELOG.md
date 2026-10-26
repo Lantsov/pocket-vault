@@ -2,7 +2,15 @@
 
 Notable changes based on the repository history and published releases. Dates use the release date where a release exists.
 
-## [Unreleased]
+## v1.1.1 — Maintenance release
+
+Prepared for release; not yet tagged or published.
+
+- Added required redistribution license notices for packaged .NET runtime components.
+- Improved release packaging and third-party attribution, including the framework-dependent executable host.
+- No changes to encryption, file format or application functionality. Containers remain format v1 and compatible with v1.1.0.
+
+## Public-release documentation preparation
 
 ### Added
 
@@ -34,5 +42,4 @@ The release contains self-contained and framework-dependent Windows x64 ZIPs and
 
 Commit [`661c57c`](https://github.com/Lantsov/pocket-vault/commit/661c57c65ada7af8b13ddd4e17c0aadb75c4d372) introduced the WinForms application, AES-256-GCM/PBKDF2 v1 format, in-memory ZIP, verified optional deletion, Explorer association, tests, icons and Windows build workflow. This snapshot has no separate release or version tag in the available history.
 
-[Unreleased]: https://github.com/Lantsov/pocket-vault/compare/v1.1.0...HEAD
 [1.1.0]: https://github.com/Lantsov/pocket-vault/releases/tag/v1.1.0
