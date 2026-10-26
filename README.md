@@ -32,8 +32,6 @@ The current application interface is in Russian. [Decryption](docs/images/pocket
 
 ## Download
 
-**1.1.1 is being prepared:** a maintenance update to distribution licenses and notices. Encryption, application behavior and format v1 remain unchanged and compatible with 1.1.0. Until publication, the links below point to the latest published release.
-
 Download and extract an archive from the [latest release](https://github.com/Lantsov/pocket-vault/releases/latest). Both builds target **Windows x64** on a Windows version supported by .NET 10.
 
 | Build | Choose this when… |
