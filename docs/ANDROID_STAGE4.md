@@ -68,7 +68,7 @@ Android Release создал `vault-20261026-a983a3f6.pvlt`.
 | --- | --- | --- |
 | Debug ARM64 | 46 282 569 байт | Устанавливаемая тестовая сборка; на ARM64 runtime не запускалась |
 | Debug x64 | 46 016 159 байт | Установлен на эмулятор; development signature |
-| Release ARM64, unsigned | 17 761 112 байт | Не устанавливается, не является выпуском |
+| Release ARM64, unsigned | 17 451 905 байт | Не устанавливается, не является выпуском |
 | Release x64, unsigned | 18 211 709 байт | Проверочная компиляция, не является выпуском |
 
 Файлы находятся в `dist/android/<debug или unsigned>/<android-arm64 или android-x64>/`.

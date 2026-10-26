@@ -89,9 +89,9 @@ try {
     $kind = if ($Configuration -eq 'Debug') { 'debug' } elseif ($Unsigned) { 'unsigned' } else { 'release' }
     $output = Join-Path $projectRoot "dist/android/$kind/$RuntimeIdentifier"
     New-Item -ItemType Directory -Path $output -Force | Out-Null
-    $apk = Join-Path $output "PocketVault-1.0.0-$RuntimeIdentifier-$kind.apk"
+    $artifact = Join-Path $output "PocketVault-1.0.0-$RuntimeIdentifier-$kind.apk"
+    $apk = Join-Path $stage ([IO.Path]::GetFileName($artifact))
     $sums = Join-Path $output 'SHA256SUMS.txt'
-    if (Test-Path -LiteralPath $sums) { Remove-Item -LiteralPath $sums }
     if ($kind -eq 'release') {
         try {
             foreach ($name in $savedSigningPasswords.Keys) { [Environment]::SetEnvironmentVariable($name, $savedSigningPasswords[$name]) }
@@ -126,12 +126,18 @@ try {
         if ($kind -eq 'release' -and ($signature -match 'CN=Android Debug' -or
             $signature -notmatch "certificate SHA-256 digest: $expectedCert")) { throw 'APK signer does not match the expected owner certificate.' }
     }
+    # Only a fully verified candidate can enter the distributable directory.
+    # In particular, a wrong/debug signing certificate must leave no release APK there.
+    $hash = (Get-FileHash -LiteralPath $apk -Algorithm SHA256).Hash.ToLowerInvariant()
+    if (Test-Path -LiteralPath $sums) { Remove-Item -LiteralPath $sums }
+    Copy-Item -LiteralPath $apk -Destination $artifact -Force
+    $apk = $artifact
+    if ((Get-FileHash -LiteralPath $apk -Algorithm SHA256).Hash.ToLowerInvariant() -ne $hash) { throw 'APK copy checksum mismatch.' }
     $signature | Set-Content -LiteralPath (Join-Path $output 'SIGNATURE.txt') -Encoding utf8
     $manifest | Set-Content -LiteralPath (Join-Path $output 'manifest.txt') -Encoding utf8
     @("SDK: $sdkVersion", "JDK: $javaVersion", "Workloads: $workloads", "Kind: $kind", "RID: $RuntimeIdentifier",
         "Host checks skipped: $SkipWindowsTests", "Device serial: $DeviceSerial") |
         Set-Content -LiteralPath (Join-Path $output 'BUILD.txt') -Encoding utf8
-    $hash = (Get-FileHash -LiteralPath $apk -Algorithm SHA256).Hash.ToLowerInvariant()
     "$hash  $([IO.Path]::GetFileName($apk))" | Set-Content -LiteralPath $sums -Encoding ascii
     if ((Get-FileHash -LiteralPath $apk -Algorithm SHA256).Hash.ToLowerInvariant() -ne $hash) { throw 'APK checksum mismatch.' }
     Write-Host "APK ($kind): $apk ($((Get-Item -LiteralPath $apk).Length) bytes); SHA256: $hash"
