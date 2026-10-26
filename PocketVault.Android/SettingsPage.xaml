@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PocketVault.Android.SettingsPage"
+             Title="Настройки"
+             BackgroundColor="#141414"
+             SafeAreaEdges="Container"
+             NavigationPage.HasNavigationBar="False">
+    <ContentPage.Resources>
+        <Style TargetType="Label">
+            <Setter Property="TextColor" Value="#F5F5F5" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="LineBreakMode" Value="WordWrap" />
+        </Style>
+        <Style x:Key="Caption" TargetType="Label">
+            <Setter Property="TextColor" Value="#A0A0A0" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="LineBreakMode" Value="WordWrap" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="TextTransform" Value="None" />
+            <Setter Property="BackgroundColor" Value="#1E1E1E" />
+            <Setter Property="TextColor" Value="#F5F5F5" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="BorderColor" Value="#353535" />
+            <Setter Property="BorderWidth" Value="1" />
+            <Setter Property="MinimumHeightRequest" Value="48" />
+            <Setter Property="Padding" Value="16,12" />
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Pressed">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="#353535" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Disabled">
+                            <VisualState.Setters>
+                                <Setter Property="Opacity" Value="0.45" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+        <Style TargetType="Border">
+            <Setter Property="BackgroundColor" Value="#1E1E1E" />
+            <Setter Property="Stroke" Value="#353535" />
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+            <Setter Property="Padding" Value="20" />
+        </Style>
+    </ContentPage.Resources>
+    <Grid IsClippedToBounds="True">
+        <ScrollView>
+            <VerticalStackLayout x:Name="SettingsContent" Padding="24,16,24,32" Spacing="24"
+                                 MaximumWidthRequest="560" HorizontalOptions="Center">
+                <Grid ColumnDefinitions="48,*" ColumnSpacing="16">
+                    <Button Text="‹" FontSize="30" Padding="0" Clicked="OnBackClicked"
+                            AutomationId="SettingsBack"
+                            SemanticProperties.Description="Назад к файлу" />
+                    <Label Grid.Column="1" Text="Настройки" FontSize="24" FontAttributes="Bold"
+                           VerticalOptions="Center" SemanticProperties.HeadingLevel="Level1" />
+                </Grid>
+
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="PocketVault" FontFamily="monospace" FontSize="24" />
+                    <Label Text="Личное пространство для ваших файлов." Style="{StaticResource Caption}" />
+                </VerticalStackLayout>
+
+                <Border>
+                    <VerticalStackLayout Spacing="16">
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="ПРИЛОЖЕНИЕ" Style="{StaticResource Caption}" FontFamily="monospace" FontSize="11" CharacterSpacing="1.5" />
+                            <Label x:Name="VersionLabel" AutomationId="AppVersion" />
+                        </VerticalStackLayout>
+                        <BoxView Color="#353535" HeightRequest="1" />
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Формат контейнера" Style="{StaticResource Caption}" />
+                            <Label Text=".pvlt v1" FontFamily="monospace" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Размер исходного файла" Style="{StaticResource Caption}" />
+                            <Label Text="До 32 МиБ" />
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border>
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Только на вашем устройстве" FontSize="18" FontAttributes="Bold"
+                               SemanticProperties.HeadingLevel="Level2" />
+                        <Label Text="Без аккаунтов, облака и истории операций. Файлы обрабатываются локально; для шифрования интернет не нужен."
+                               Style="{StaticResource Caption}" />
+                        <Label Text="Восстановления пароля нет. Сохраните пароль в надёжном месте: без него расшифровать файл не получится."
+                               Style="{StaticResource Caption}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <VerticalStackLayout Spacing="8">
+                    <Button x:Name="GitHubButton" Text="Проект на GitHub ↗" Clicked="OnGitHubClicked"
+                            AutomationId="OpenGitHub" SemanticProperties.Hint="Откроется системный браузер; потребуется интернет" />
+                    <Label x:Name="LinkErrorLabel" IsVisible="False" Style="{StaticResource Caption}"
+                           AutomationId="SettingsLinkError" />
+                    <Button x:Name="LicenseButton" Text="Лицензия MIT" Clicked="OnLicenseClicked"
+                            AutomationId="ShowLicense" SemanticProperties.Hint="Показать полный текст лицензии на этом экране" />
+                    <Border x:Name="LicensePanel" IsVisible="False" Margin="0,8,0,0">
+                        <Label x:Name="LicenseLabel" FontSize="12" TextColor="#A0A0A0" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Без гарантий" FontSize="16" FontAttributes="Bold" />
+                    <Label Text="Приложение предоставляется «как есть», без гарантий. Авторы не несут ответственности за утрату данных и другие убытки. Храните резервные копии важных файлов и проверяйте восстановление перед удалением оригинала."
+                           Style="{StaticResource Caption}" />
+                    <Label Text="© 2026 Lantsov" Style="{StaticResource Caption}" FontFamily="monospace" FontSize="12" Margin="0,8,0,0" />
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

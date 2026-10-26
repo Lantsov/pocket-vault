@@ -1,25 +1,107 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PocketVault.Android.MainPage"
-             Title="PocketVault">
-    <ScrollView>
-        <VerticalStackLayout Padding="24" Spacing="12">
-            <Image Source="pocketvault_logo.png" WidthRequest="64" HeightRequest="64"
-                   SemanticProperties.Description="Логотип PocketVault" />
-            <Label Text="PocketVault" FontSize="32" FontAttributes="Bold" HorizontalTextAlignment="Center" />
-            <Label Text="Android MVP • файлы до 32 МиБ" HorizontalTextAlignment="Center" />
-            <Button x:Name="PickButton" Text="Выбрать файл" Clicked="OnPickClicked" />
-            <Label x:Name="FileLabel" Text="Файл не выбран." LineBreakMode="CharacterWrap" />
-            <Label x:Name="ModeLabel" Text="Документы, изображения, архивы и другие файлы" />
-            <Entry x:Name="PasswordEntry" Placeholder="Пароль" IsPassword="True"
-                   IsTextPredictionEnabled="False" IsSpellCheckEnabled="False" AutomationId="Password" />
-            <Entry x:Name="ConfirmationEntry" Placeholder="Повторите пароль" IsPassword="True"
-                   IsTextPredictionEnabled="False" IsSpellCheckEnabled="False" AutomationId="Confirmation" />
-            <Button x:Name="OperationButton" Text="Зашифровать" IsEnabled="False" Clicked="OnOperationClicked" />
-            <ActivityIndicator x:Name="ProgressIndicator" IsVisible="False" />
-            <Label x:Name="ResultLabel" Text="Выберите один файл через системный диалог." LineBreakMode="WordWrap" />
-            <Button x:Name="CheckButton" Text="Проверить криптографию" Clicked="OnCheckClicked" />
-        </VerticalStackLayout>
-    </ScrollView>
+             x:Class="PocketVault.Android.MainPage" Title="PocketVault"
+             BackgroundColor="{StaticResource PageBackground}" SafeAreaEdges="All"
+             NavigationPage.HasNavigationBar="False" HideSoftInputOnTapped="True">
+    <Grid IsClippedToBounds="True">
+        <ScrollView x:Name="FormScroll" VerticalScrollBarVisibility="Never">
+            <VerticalStackLayout x:Name="Form" Padding="24,16,24,24" Spacing="24"
+                                 MaximumWidthRequest="560" HorizontalOptions="Center">
+                <VerticalStackLayout Spacing="16">
+                    <Grid ColumnDefinitions="40,*,48" ColumnSpacing="12">
+                        <Image Source="pv_lock.png" WidthRequest="32" HeightRequest="32" VerticalOptions="Center"
+                               SemanticProperties.Description="Логотип PocketVault" />
+                        <Label Grid.Column="1" Text="PocketVault" FontFamily="monospace" FontSize="22"
+                               FontAttributes="Bold" VerticalOptions="Center" />
+                        <ImageButton x:Name="SettingsButton" Grid.Column="2" Source="pv_settings.png"
+                                     Clicked="OnSettingsClicked" AutomationId="Settings"
+                                     SemanticProperties.Description="Настройки" />
+                    </Grid>
+                    <Label Text="Your files. Your password. Your control." FontSize="14"
+                           TextColor="{StaticResource SecondaryText}" LineHeight="1.2" />
+                </VerticalStackLayout>
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="ФАЙЛ" FontFamily="monospace" FontSize="11" CharacterSpacing="1.5"
+                           TextColor="{StaticResource SecondaryText}" />
+                    <Border x:Name="PickerCard" Padding="24">
+                        <VerticalStackLayout Spacing="16">
+                            <Image Source="pv_document.png" WidthRequest="40" HeightRequest="40"
+                                   HorizontalOptions="Center" InputTransparent="True" />
+                            <VerticalStackLayout Spacing="4" InputTransparent="True">
+                                <Label Text="Выберите файл" FontSize="20" HorizontalTextAlignment="Center" />
+                                <Label Text="Из памяти устройства" TextColor="{StaticResource SecondaryText}"
+                                       HorizontalTextAlignment="Center" />
+                            </VerticalStackLayout>
+                            <Button x:Name="PickButton" Text="Обзор файлов" Clicked="OnPickClicked" AutomationId="PickFile" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border x:Name="SelectedCard" IsVisible="False" Padding="16,12,4,12">
+                        <Grid ColumnDefinitions="32,*,48" ColumnSpacing="12">
+                            <Image Source="pv_document.png" WidthRequest="28" HeightRequest="32" VerticalOptions="Center" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                <Label x:Name="FileLabel" FontSize="16" LineBreakMode="CharacterWrap" AutomationId="SelectedFile" />
+                                <Label x:Name="FileSizeLabel" FontSize="12" TextColor="{StaticResource SecondaryText}" />
+                            </VerticalStackLayout>
+                            <ImageButton x:Name="ClearButton" Grid.Column="2" Source="pv_close.png" Clicked="OnClearClicked"
+                                         VerticalOptions="Center" AutomationId="ClearFile" SemanticProperties.Description="Убрать выбранный файл" />
+                        </Grid>
+                    </Border>
+                    <Button x:Name="PickAnotherButton" Text="Выбрать другой файл" IsVisible="False"
+                            Clicked="OnPickClicked" AutomationId="PickAnotherFile" />
+                    <Label x:Name="ModeLabel" Text="Один файл · до 32 МиБ" FontSize="12"
+                           TextColor="{StaticResource SecondaryText}" />
+                </VerticalStackLayout>
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Пароль" />
+                    <Border x:Name="PasswordBorder" Padding="12,0,0,0">
+                        <Grid ColumnDefinitions="24,*,48" ColumnSpacing="8">
+                            <Image Source="pv_lock.png" WidthRequest="20" HeightRequest="20" VerticalOptions="Center" Opacity="0.6" />
+                            <Entry x:Name="PasswordEntry" Grid.Column="1" Placeholder="Введите пароль" IsPassword="True"
+                                   IsTextPredictionEnabled="False" IsSpellCheckEnabled="False" AutomationId="Password"
+                                   ReturnType="Next" TextChanged="OnPasswordChanged" Completed="OnPasswordCompleted"
+                                   Focused="OnEntryFocused" Unfocused="OnEntryUnfocused" />
+                            <ImageButton x:Name="PasswordVisibilityButton" Grid.Column="2" Source="pv_eye.png"
+                                         Clicked="OnTogglePassword" SemanticProperties.Description="Показать пароль" AutomationId="TogglePassword" />
+                        </Grid>
+                    </Border>
+                    <VerticalStackLayout x:Name="ConfirmationGroup" Spacing="12">
+                        <Label Text="Повторите пароль" />
+                        <Border x:Name="ConfirmationBorder" Padding="12,0,0,0">
+                            <Grid ColumnDefinitions="24,*,48" ColumnSpacing="8">
+                                <Image Source="pv_lock.png" WidthRequest="20" HeightRequest="20" VerticalOptions="Center" Opacity="0.6" />
+                                <Entry x:Name="ConfirmationEntry" Grid.Column="1" Placeholder="Ещё раз" IsPassword="True"
+                                       IsTextPredictionEnabled="False" IsSpellCheckEnabled="False" AutomationId="Confirmation"
+                                       ReturnType="Done" TextChanged="OnPasswordChanged" Completed="OnConfirmationCompleted"
+                                       Focused="OnEntryFocused" Unfocused="OnEntryUnfocused" />
+                                <ImageButton x:Name="ConfirmationVisibilityButton" Grid.Column="2" Source="pv_eye.png"
+                                             Clicked="OnToggleConfirmation" SemanticProperties.Description="Показать повтор пароля" />
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+                    <Label x:Name="ValidationLabel" Text="Введите пароль и повторите его." FontSize="12"
+                           TextColor="{StaticResource SecondaryText}" AutomationId="Validation" />
+                </VerticalStackLayout>
+                <Button x:Name="OperationButton" Text="Зашифровать" IsEnabled="False" Clicked="OnOperationClicked"
+                        AutomationId="RunOperation" BackgroundColor="#F4F4F4" TextColor="#151515"
+                        FontAttributes="Bold" FontSize="16" MinimumHeightRequest="56" />
+                <Border x:Name="StatusCard" Padding="16">
+                    <Grid ColumnDefinitions="24,*" ColumnSpacing="12">
+                        <Grid VerticalOptions="Start" Margin="0,2,0,0">
+                            <Image x:Name="StatusIcon" Source="pv_info.png" WidthRequest="20" HeightRequest="20" />
+                            <ActivityIndicator x:Name="ProgressIndicator" IsVisible="False" IsRunning="False"
+                                               Color="#F5F5F5" WidthRequest="24" HeightRequest="24" />
+                        </Grid>
+                        <VerticalStackLayout Grid.Column="1" Spacing="4">
+                            <Label x:Name="StatusTitle" Text="Только на вашем устройстве" FontSize="14" />
+                            <Label x:Name="ResultLabel" Text="Без облака и аккаунтов. Пароль знаете только вы."
+                                   TextColor="{StaticResource SecondaryText}" FontSize="12" LineHeight="1.2" AutomationId="OperationResult" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+                <Label Text="Offline · AES-256-GCM · .pvlt" FontFamily="monospace" FontSize="11"
+                       TextColor="{StaticResource SecondaryText}" HorizontalTextAlignment="Center" Margin="0,0,0,8" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>

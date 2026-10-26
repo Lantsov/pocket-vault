@@ -18,8 +18,9 @@
     <Compile Include="../PocketVault.Tests/DocumentOperationChecks.cs" Link="Diagnostics/DocumentOperationChecks.cs" Condition="'$(Configuration)' == 'Debug'" />
     <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
     <ProjectReference Include="../PocketVault.Core/PocketVault.Core.csproj" />
-    <MauiIcon Include="Resources/AppIcon/appicon.svg" />
-    <MauiSplashScreen Include="Resources/AppIcon/appicon.svg" Color="#274A7A" BaseSize="128,128" />
+    <MauiIcon Include="Resources/AppIcon/appicon.svg" ForegroundFile="Resources/AppIcon/appiconfg.svg" Color="#141414" ForegroundScale="0.65" />
+    <MauiSplashScreen Include="Resources/AppIcon/appiconfg.svg" Color="#141414" BaseSize="128,128" />
+    <MauiImage Include="Resources/Images/*.svg" />
     <MauiImage Include="../docs/images/pocketvault-logo.png" Link="Resources/Images/pocketvault_logo.png" />
     <EmbeddedResource Include="../PocketVault.Tests/Fixtures/v1-container.base64" LogicalName="PocketVault.Android.Fixtures.V1" />
     <EmbeddedResource Include="../PocketVault.Tests/Fixtures/v1.1.0-container.base64" LogicalName="PocketVault.Android.Fixtures.V110" />
