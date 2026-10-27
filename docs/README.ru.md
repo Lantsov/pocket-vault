@@ -55,7 +55,7 @@
 
 1. Выберите **один файл**.
 2. Введите надёжный пароль (при шифровании — дважды).
-3. Зашифруйте файл и сохраните контейнер \`.pvlt\`.
+3. Зашифруйте файл и сохраните контейнер `.pvlt`.
 4. Для восстановления откройте контейнер, введите тот же пароль и сохраните исходный файл.
 
 Восстановить забытый пароль нельзя. Храните резервные копии и проверяйте расшифровку до удаления оригиналов. Подробности: [Windows](USAGE.md) · [Android](ANDROID.md).
@@ -77,13 +77,13 @@
 
 Windows (стабильный .NET 10 SDK):
 
-\`\`\`powershell
+```powershell
 dotnet build PocketVault.slnx -c Release
 dotnet run --project PocketVault.Tests -c Release
 .\scripts\build.ps1 -Publish
-\`\`\`
+```
 
-Для Android нужны .NET MAUI, Android SDK и JDK 21. Инструкция по сборке и подписи — в [ANDROID.md](ANDROID.md). Проверки Windows запускаются отдельной программой, **не** через \`dotnet test\`.
+Для Android нужны .NET MAUI, Android SDK и JDK 21. Инструкция по сборке и подписи — в [ANDROID.md](ANDROID.md). Проверки Windows запускаются отдельной программой, **не** через `dotnet test`.
 
 ## Проект
 
