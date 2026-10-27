@@ -89,4 +89,4 @@ The packaging script reads the project version, includes the project's MIT licen
 
 CI runs the Windows build, standalone tests, both publishes, EXE smoke checks, documentation-link checks and packaging. Permissions remain `contents: read`; it uploads build outputs, test diagnostics and a separate release-package artifact. Existing tags/releases are retained.
 
-For the controlled v1.1.1 merge, main CI, tag and manual upload sequence, see [release instructions](RELEASE_1.1.1.md) and [prepared English release notes](RELEASE_NOTES_1.1.1.md).
+Windows 1.1.1 is already [published](https://github.com/Lantsov/pocket-vault/releases/tag/v1.1.1). The archived [release notes](RELEASE_NOTES_1.1.1.md) describe its distribution changes. Android build and signing instructions are in [ANDROID.md](ANDROID.md).

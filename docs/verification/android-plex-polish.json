@@ -289,7 +289,7 @@
     "owner_signing_key_accessed": false
   },
   "limitations": [
-    "New UI was not installed on physical Poco.",
+    "At this UI-only validation stage, the new UI had not yet been tested on the physical Android device.",
     "New UI requires an owner-signed ARM64 rebuild before distribution.",
     "No additional long cryptographic/provider tests run.",
     "No PR merge or GitHub Release publication."
