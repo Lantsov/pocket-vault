@@ -1,0 +1,64 @@
+{
+  "RunId": "4a5e0e8b5beb4afbb15a6b0603423369",
+  "CompletedAt": "2026-10-27T16:11:34.1120471+03:00",
+  "Runtime": "Android 10; .NET 10.0.14; X64",
+  "AndroidApi": 29,
+  "Success": true,
+  "Checks": [
+    {
+      "Name": "AES-256-GCM: известный вектор и AAD",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "PBKDF2-HMAC-SHA256: RFC 7914",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "ZIP: точные имя и байты",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Создание .pvlt v1: заголовок 52 байта, 600 000 итераций",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Расшифровка созданного .pvlt: точные имя и байты",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Fixture v1: наследие.txt",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Fixture v1.1.0: v1.1.0-example.txt",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Неверный пароль отклоняется",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Повреждённые шифротекст и тег отклоняются",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Изменённый заголовок AAD отклоняется",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Пустой файл: точные имя и нулевая длина",
+      "Success": true,
+      "Detail": "OK"
+    }
+  ]
+}

@@ -24,7 +24,7 @@ The current application interface is in Russian. [Decryption](docs/images/pocket
 
 <p align="center"><img src="docs/images/android-stage4-main.png" width="250" alt="PocketVault Android running on the API 36 emulator: offline document selection and password form"> <img src="docs/images/android-stage4-decrypt.png" width="250" alt="PocketVault Android on the emulator with a pvlt container selected for decryption"></p>
 
-These are actual Android emulator screenshots with synthetic data. **Windows: 1.1.1; Android: 1.0.0 release candidate; container format: v1.** Android distribution is pending the owner's release signing key. [Android build, installation and verified testing scope](docs/ANDROID.md).
+These are actual Android emulator screenshots with synthetic data. **Windows: 1.1.1; Android: 1.0.0 release candidate; container format: v1.** An owner-signed ARM64 APK has been verified on Poco X6 Pro; Android publication is a separate step. [Android build, installation and verified testing scope](docs/ANDROID.md).
 
 ## Why PocketVault
 
@@ -36,7 +36,7 @@ These are actual Android emulator screenshots with synthetic data. **Windows: 1.
 
 ## Download
 
-Windows 1.1.1 is published below. Android 1.0.0 has no published production-signed APK yet; follow the [Android guide](docs/ANDROID.md) for clearly labelled development builds and local release signing.
+Windows 1.1.1 is published below. The Android 1.0.0 owner-signed APK is prepared locally and has not been published to GitHub Releases. See the [Android guide](docs/ANDROID.md) for its SHA-256, certificate fingerprint, installation and local signing instructions.
 
 Download and extract an archive from the [latest release](https://github.com/Lantsov/pocket-vault/releases/latest). Both builds target **Windows x64** on a Windows version supported by .NET 10.
 

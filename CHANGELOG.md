@@ -9,7 +9,8 @@ Notable changes based on the repository history and published releases. Dates us
 - Dark mobile interface, password clearing, protected recent-app snapshots and disabled backup.
 - Narrow `ACTION_VIEW` support for `content://` with `application/vnd.pocketvault`; generic MIME files use the in-app picker.
 - ARM64 APK build, explicit unsigned validation mode, owner-keystore signing with environment passwords, signature/manifest/SHA-256 checks and independent Android CI.
-- Release signing and physical ARM64/Poco validation remain pending. See the [Android guide](docs/ANDROID.md).
+- Owner-signed ARM64 APK verified on physical Poco X6 Pro (Android 16 / API 36): real SAF encryption/decryption, exact Windows interop, wrong-password/corruption rejection and incompressible 32 MiB roundtrip.
+- Android 10 / API 29 x64 emulator: crypto 11/11, document checks 32/32, and development-signed Release trimming/AOT plus real SAF legacy-fixture restoration. See the [release readiness report](docs/ANDROID_RELEASE_1.0.0.md). Android publication remains separate.
 
 ## [Windows 1.1.1](https://github.com/Lantsov/pocket-vault/releases/tag/v1.1.1) — Maintenance release
 

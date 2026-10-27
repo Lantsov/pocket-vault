@@ -150,7 +150,7 @@ try {
         & (Join-Path $PSScriptRoot 'test-android-documents.ps1') -AdbPath $adb -Serial $DeviceSerial -ApkPath $apk
     }
     else { Write-Host 'No device runtime tests requested. Compilation is not a device test.' }
-    if ($kind -ne 'release') { Write-Host 'Android 1.0.0 distribution release is NOT ready: owner-key signing is still required.' }
+    if ($kind -ne 'release') { Write-Host "This $kind APK is for validation only; it is not the owner-signed ARM64 distribution APK." }
 }
 finally {
     foreach ($name in $savedSigningPasswords.Keys) { [Environment]::SetEnvironmentVariable($name, $savedSigningPasswords[$name]) }

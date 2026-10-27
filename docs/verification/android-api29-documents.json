@@ -1,0 +1,169 @@
+{
+  "RunId": "c959e94d8f934d3cacda77d71881da58",
+  "CompletedAt": "2026-10-27T16:13:57.6063086+03:00",
+  "Runtime": "Android 10; .NET 10.0.14",
+  "AndroidApi": 29,
+  "Success": true,
+  "Checks": [
+    {
+      "Name": "Roundtrip: пустой.txt",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Roundtrip: Кириллица 日本語 🗝.txt",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Roundtrip: report #1 (a+b) & 'test'.bin",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Roundtrip: archive.zip",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Roundtrip: image.png",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "No output: wrong password",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "No output: corrupt",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "No output: truncated",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "No output: header",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "No output: trailing",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Password validation before read/create",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Unsafe name rejected before read",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Known oversize rejected before read",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Unknown/false size: hard read limit null",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Unknown/false size: hard read limit 1",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Container read limit with missing metadata",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "32 MiB accepted; compressed 32 MiB + 1 rejected before restored allocation; Windows default retained",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Core custom limits (zero, exact, invalid)",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Cancel picker",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Cancel save clears plaintext",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Revoked read permission",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Out of memory before output; operation gate recovers",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Provider open failure; delete succeeds",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Provider open failure; delete denied",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Provider write failure; delete succeeds",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Provider write failure; delete denied",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Provider flush failure; delete succeeds",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Provider flush failure; delete denied",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Provider close failure; delete succeeds",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Provider close failure; delete denied",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Provider must not return original URI",
+      "Success": true,
+      "Detail": "OK"
+    },
+    {
+      "Name": "Duplicate operation blocked; gate recovers after cancellation",
+      "Success": true,
+      "Detail": "OK"
+    }
+  ]
+}
