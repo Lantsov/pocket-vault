@@ -1,126 +1,48 @@
-# PocketVault Android 1.0.0 — готовность к выпуску
+# PocketVault Android 1.0.0 — release verification
 
-> Этот отчёт относится к указанному ниже APK с прежним интерфейсом. Последующие
-> [UI polish и RU/EN](ANDROID_UI_POLISH.md) проверяются отдельно; перед выпуском
-> обновлённого интерфейса требуется пересборка с тем же ключом владельца.
+**Published 2026-10-27:** [Android 1.0.0](https://github.com/Lantsov/pocket-vault/releases/tag/android-v1.0.0), commit [`7a1d450`](https://github.com/Lantsov/pocket-vault/commit/7a1d45046b9bfa90110e69ac5f6fbd9d588b482a). This document distinguishes the **published IBM Plex Mono build** from earlier functional tests; do not apply results for an older APK to the final one.
 
-27 октября 2026 года. Обязательные проверки подписанного Release ARM64 APK
-пройдены на физическом Poco X6 Pro 5G. Техническая готовность к review и выпуску
-подтверждена с ограничениями ниже. Слияние PR и публикация GitHub Release
-выполняются отдельно; в рамках этой проверки они не выполнялись.
+## Published artifact
 
-Windows остаётся **1.1.1**, Android — **1.0.0 (1)**, контейнер — **v1**.
-Опубликованный Windows Release, код Windows-приложения и Windows workflow не изменены.
-
-## Проверенный артефакт
-
-| Поле | Значение |
+| Property | Value |
 | --- | --- |
-| Файл | `dist/android/release/android-arm64/PocketVault-1.0.0-android-arm64-release.apk` |
-| Размер | 17 545 722 байта |
+| APK | `PocketVault-1.0.0-android-arm64-release.apk` |
+| Size | 18,180,100 bytes |
+| Version | 1.0.0 (versionCode 1) |
 | ApplicationId | `com.lantsov.pocketvault` |
-| Версия | `1.0.0`, versionCode `1` |
-| ABI | только `arm64-v8a` |
-| Android SDK | min 29, target 36 |
-| Подпись | собственный сертификат владельца; APK Signature Scheme v3, RSA 3072 |
-| Выравнивание | `zipalign -c -P 16 4`: PASS |
+| Architecture | `arm64-v8a` |
+| Android SDK | min 29 (Android 10), target 36 |
+| Signature | Owner certificate, APK Signature Scheme v3, RSA 3072 |
+| Release format | `.pvlt` v1, compatible with Windows 1.1.1 |
 
-SHA-256 APK:
+APK SHA-256:
 
 ```text
-5c8847c713c268e01eec28800fae490b4d6b809b6ab52509e2c32708fdbe4970
+3e2806cbe697ae7a29d75a12b1105e9460581f175fe1c332c3ea17a86f3f0ab0
 ```
 
-Публичный SHA-256 сертификата владельца:
+Public signing certificate SHA-256:
 
 ```text
 0e0efeb236a16ea25a4c52835d22bcafc37cbb8687a915da4a211d4c28567bb0
 ```
 
-Подпись независимо проверена `apksigner verify --verbose --print-certs`,
-SHA-256 совпал с соседним `SHA256SUMS.txt`. Установленный на Poco `base.apk`
-скопирован обратно и имеет тот же SHA-256: проверялся именно этот подписанный
-артефакт. Manifest не содержит INTERNET или широких storage permissions,
-`allowBackup=false`, приложение не debuggable.
+GitHub release assets include `SHA256SUMS.txt`, `CERTIFICATE-SHA256.txt` and `VERIFICATION.json`. Verification covered signing, alignment, package identity, ARM64 architecture, manifest permissions and IBM Plex Mono resources. No keystore, passwords or release-signing secrets are in the repository.
 
-Ключ создан владельцем вне репозитория; пароли он вводил самостоятельно в
-интерактивном терминале. В документацию и JSON не включены пароли, содержимое
-keystore, его локальный путь, subject сертификата или серийный номер телефона.
-Владельцу необходимо сохранить защищённую резервную копию keystore, alias и
-паролей: для обновлений с тем же ApplicationId потребуется прежняя подпись.
+## Runtime testing scope
 
-APK собран из исходников приложения на коммите `b46cab0`. Последующая
-финализация отчёта меняет документацию и поясняющее сообщение build-скрипта;
-код Android, Core и Windows не меняется. SDK/JDK и команды подписи — в
-[ANDROID.md](ANDROID.md).
+**Earlier owner-signed functional build, physical Android 16 ARM64 device:** actual SAF selection and saving, Windows ↔ Android file transfer with matching names/bytes, invalid password, damaged container, background/launch handling, screenshot protection and an incompressible 32 MiB roundtrip. These results establish the underlying workflow on a physical device, **not** the final Plex interface on that device.
 
-## Физический Poco X6 Pro
+**Final IBM Plex Mono interface:** real Android 10/API 29 x86_64 emulator screenshots and interface checks, Russian/English switching, system language, font coverage, 100%/200% text, compact/landscape layouts, document selection and a brief encryption flow. See [Android UI verification](ANDROID_PLEX_POLISH.md). The published owner-signed ARM64 APK was verified for signing and package contents, but was not re-run on the physical device in this validation.
 
-Poco X6 Pro 5G, модель `2311DRK48G`, `duchamp`, Android 16 / API 36,
-`arm64-v8a`. Проверки выполнены через ADB/UI Automator после разрешения
-владельцем управления по USB. Использовалась отдельная папка с синтетическими
-данными; личные документы для тестов не открывались.
+**Additional checks:** Windows host tests and independent CI builds completed; legacy `.pvlt` fixtures were recovered by Android runtime tests. Host-only GitHub Actions do not run Android emulator tests.
 
-| Проверка | Фактический результат |
-| --- | --- |
-| Установка, первый запуск | PASS: owner-signed Release ARM64 |
-| Настоящий SAF | Выбор, создание и сохранение через системный ExternalStorageProvider |
-| Windows → Poco | Контейнер Windows расшифрован, восстановлены точное Unicode-имя и все 320 байт |
-| Poco → Windows | Контейнер создан подписанным Android Release; Windows `VaultFiles.Decrypt` подтвердил точное имя и все 320 байт |
-| Неверный пароль | Ошибка аутентификации до открытия диалога сохранения |
-| Повреждённый контейнер | Отказ до создания результата |
-| Несжимаемые 32 МиБ | Файл выбран через SAF, зашифрован и сохранён; Windows Core подтвердил исходное имя и каждый байт |
-| Восстановление 32 МиБ на Poco | Расшифрован через SAF в отдельную папку, все 33 554 432 байта совпали с оригиналом |
-| Пароль и клавиатура | Маскирование, ввод и закрытие клавиатуры при операциях работают |
-| Фон и перезапуск | После подтверждённого перехода в Home и возврата пароль очищен и замаскирован; force-stop/relaunch успешен |
-| Защита окна | FLAG_SECURE включён в подписанном Release |
+## Known limitations
 
-Малый корпус: `Обмен #1 (a+b) & тест.bin`, 320 байт, SHA-256
-`e42067911761887d497358d512d2b04a8472cbcca7ca10038a445bf061728570`.
-Большой корпус: `random-32MiB.bin`, 33 554 432 случайных байта, SHA-256
-`509efa84cd26cd3e5f0329c36e80cd4dd4fa1579f0638ddd4f4b3f4adffa233e`.
-Проверка Windows `--android-interop-verify` завершилась PASS в обоих направлениях.
+- One file, maximum **32 MiB** on Android (Windows supports 128 MiB).
+- In-memory crypto, no operation cancellation, password recovery or secure erasure.
+- No independent cryptographic audit.
+- Android document providers can leave partially saved files if interrupted. Other applications/providers may retain plaintext copies or metadata.
+- Physical ARM64 Android 10 and every third-party document provider were not individually tested.
 
-## Минимальный Android API 29
-
-Проверен отдельный AVD с Android 10 / API 29, x86_64, официальным AOSP image
-`system-images;android-29;default;x86_64`, revision 8, Emulator 36.2.12 / WHPX.
-Образ получен из [официального каталога Google](https://dl.google.com/android/repository/sys-img/android/sys-img2-3.xml),
-целостность ZIP проверена по checksum каталога. Имеющийся AVD API 36 не изменялся.
-
-| Проверка API 29 | Результат |
-| --- | --- |
-| Debug: криптография и оба legacy fixtures | 11/11; [свежий JSON](verification/android-api29-crypto.json) |
-| Debug: общий сервис документов | 32/32; [свежий JSON](verification/android-api29-documents.json) |
-| Release x64 после trimming/AOT | Установлен и запущен |
-| Реальный ACTION_VIEW grant | Контейнер с непрозрачным URI выбран через отдельный тестовый provider |
-| Неверный пароль в Release | Отказ без диалога создания результата |
-| Legacy fixture v1.1.0 и реальный SAF | Точное имя `v1.1.0-example.txt`, сохранение и побайтовое сравнение содержимого: PASS |
-
-API 29 проверялся на эмуляторе с development-signed x64 сборками. Это не подпись
-владельца и не ARM64 APK для распространения. На физическом Poco проверен
-owner-signed ARM64 APK на API 36. Физический ARM64 Android 10 отдельно не проверялся.
-
-## Остальные проверки и границы
-
-Сборка владельца выполнила Windows Release и 75/75 консольных Core/WPF/документных
-тестов без ошибок. Эмулятор API 36 ранее прошёл 11/11 crypto и 32/32 document
-checks; [исторический отчёт](ANDROID_STAGE4.md) сохраняет прежние результаты и
-границы. Актуальные GitHub Actions для окончательного коммита видны в
-[проверках PR #3](https://github.com/Lantsov/pocket-vault/pull/3/checks).
-CI не использует ключ владельца и не выдаёт компиляцию за тестирование устройства.
-
-Сводное публичное доказательство: [JSON проверки выпуска](verification/android-1.0.0-release-validation.json).
-Все обязательные runtime-проверки финализации пройдены. Готовность к Ready for
-review дополнительно требует зелёного CI последнего коммита.
-
-Остаются ограничения продукта: один файл до 32 МиБ, обработка в памяти, отсутствие
-восстановления пароля, отмены криптографии, безопасного стирания и независимого
-криптографического аудита. Исходные и расшифрованные документы могут быть доступны другим
-приложениям и индексаторам. Провайдер может оставить частичный файл при сбое;
-общая атомарность сторонних DocumentsProvider не гарантируется. Все облачные
-провайдеры, физический ARM64 API 29 и принудительный Android low-memory kill
-не проверены; синтетический OOM не равнозначен OS low-memory kill.
-
-Установка проверенного APK и будущие обновления описаны в [ANDROID.md](ANDROID.md).
-Новый GitHub Release и слияние PR этим отчётом не выполняются.
+See [installation/build/signing instructions](ANDROID.md), [security model](SECURITY_MODEL.md) and the [release page](https://github.com/Lantsov/pocket-vault/releases/tag/android-v1.0.0) for download details.
