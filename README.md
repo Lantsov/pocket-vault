@@ -45,7 +45,7 @@ Verify downloads against the **SHA256SUMS.txt** attached to the corresponding [W
 ## Features
 
 - **Private by design:** local file processing, no account, telemetry or server-side encryption.
-- **Compatible files:** encrypt on Windows, decrypt on Android — or the reverse — using the same \`.pvlt\` v1 format.
+- **Compatible files:** encrypt on Windows, decrypt on Android — or the reverse — using the same `.pvlt` v1 format.
 - **Authenticated encryption:** AES-256-GCM; PBKDF2-HMAC-SHA256 (600,000 iterations) derives a key from your password.
 - **File name protection:** the original file name and contents are kept inside an encrypted ZIP.
 - **Minimal interfaces:** dark WPF desktop app; mobile UI with English/Russian localization, system-language selection and IBM Plex Mono.
@@ -55,7 +55,7 @@ Verify downloads against the **SHA256SUMS.txt** attached to the corresponding [W
 
 1. Choose **one file**.
 2. Enter a strong password (and confirm it when encrypting).
-3. Encrypt and save the \`.pvlt\` container.
+3. Encrypt and save the `.pvlt` container.
 4. To restore, choose the container, enter the same password and save the decrypted file.
 
 The password cannot be recovered. Keep reliable backups and test restoration before removing any original file. See the [Windows usage guide](docs/USAGE.md) and [Android guide](docs/ANDROID.md).
@@ -77,13 +77,13 @@ Use a long, unique passphrase. Read the [security model](docs/SECURITY_MODEL.md)
 
 Windows (stable .NET 10 SDK):
 
-\`\`\`powershell
+```powershell
 dotnet build PocketVault.slnx -c Release
 dotnet run --project PocketVault.Tests -c Release
 .\scripts\build.ps1 -Publish
-\`\`\`
+```
 
-Android requires .NET MAUI, Android SDK and JDK 21. Follow [docs/ANDROID.md](docs/ANDROID.md) for debug/release build and signing instructions. The standalone Windows test runner is **not** invoked by \`dotnet test\`.
+Android requires .NET MAUI, Android SDK and JDK 21. Follow [docs/ANDROID.md](docs/ANDROID.md) for debug/release build and signing instructions. The standalone Windows test runner is **not** invoked by `dotnet test`.
 
 ## Project
 
