@@ -1,180 +1,96 @@
-# PocketVault Android 1.0.0 — кандидат выпуска
+# PocketVault for Android
 
-Windows **1.1.1** опубликован; Android **1.0.0 (1)** — кандидат выпуска;
-общий формат контейнера — **v1**. ApplicationId: `com.lantsov.pocketvault`.
-Минимум Android 10 / API 29; целевая архитектура выпуска — ARM64.
-Google Play, iOS, облако и изменение криптографического формата не входят в MVP.
+**Android 1.0.0** is [published on GitHub](https://github.com/Lantsov/pocket-vault/releases/tag/android-v1.0.0). It uses the same `.pvlt` v1 container format as [PocketVault for Windows 1.1.1](https://github.com/Lantsov/pocket-vault/releases/tag/v1.1.1).
 
-**Подписанный владельцем Release ARM64 APK подготовлен и проверен 27 октября 2026 года.**
-Установка, SAF, шифрование, расшифровка и точный обмен с Windows прошли на
-физическом Poco X6 Pro 5G (2311DRK48G), Android 16 / API 36, ARM64, включая
-несжимаемые 32 МиБ. Android 10 / API 29 дополнительно проверен на x86_64 эмуляторе.
-GitHub Release не публиковался. Полные факты и границы — в
-[отчёте готовности](ANDROID_RELEASE_1.0.0.md).
+- **Requirements:** Android 10+ (API 29), ARM64 (`arm64-v8a`).
+- **Interface:** Russian and English, automatic system-language detection and instant manual switching.
+- **Privacy:** local file handling through Android's system document picker (SAF); no account, tracking or app network requests.
+- **Limit:** a single file up to **32 MiB**. Windows can handle files up to 128 MiB, so not all Windows containers can be opened on Android.
+- **Identifier:** `com.lantsov.pocketvault`, version `1.0.0 (1)`.
 
-Текущий интерфейс: [IBM Plex Mono, компактная компоновка и реальные снимки](ANDROID_PLEX_POLISH.md).
-Предыдущий этап: [Iosevka Slab и RU/EN](ANDROID_UI_POLISH.md) — исторический отчёт.
-Подписанные APK предыдущих этапов содержат прежний интерфейс;
-новый UI требует новой сборки с тем же ключом владельца перед распространением.
+## Download and install
 
-Исторический кандидат, прошедший полную проверку на Poco: 17 545 722 байта,
-SHA-256 APK:
-`5c8847c713c268e01eec28800fae490b4d6b809b6ab52509e2c32708fdbe4970`.
-Публичный SHA-256 сертификата владельца:
-`0e0efeb236a16ea25a4c52835d22bcafc37cbb8687a915da4a211d4c28567bb0`.
-Подпись v3 / RSA 3072 проверена apksigner; установленный на Poco `base.apk`
-побайтово совпадал с этим APK во время того прогона.
+Get **PocketVault-1.0.0-android-arm64-release.apk** from the [Android release page](https://github.com/Lantsov/pocket-vault/releases/tag/android-v1.0.0). This is the owner-signed release APK, not an unsigned test build. Allow installation from your chosen source when Android asks. PocketVault is not on Google Play.
 
-Текущий локальный файл `dist/android/release/android-arm64/PocketVault-1.0.0-android-arm64-release.apk`
-— последующая подписанная сборка с Iosevka/RU–EN: 27 860 070 байт, SHA-256
-`08c43b6e19ac54d8d8f2a671845b34f4b183f56b05df917e7d3d92d8d1d11e81`.
-При полировке IBM Plex Mono этот файл сохранён без изменений. Результаты новой
-неподписанной сборки и визуальных проверок приведены в [актуальном UI-отчёте](ANDROID_PLEX_POLISH.md).
-Debug-подпись используется только для тестов;
-неподписанный APK установить нельзя.
+Published APK SHA-256:
 
-## Использование и установка
-
-1. После появления подписанного выпуска проверьте APK по `SHA256SUMS.txt` и
-   сертификат по доверенному SHA-256 владельца. Сам по себе хэш не подтверждает издателя.
-2. Передайте ARM64 APK на телефон Android 10+ и откройте его в файловом менеджере.
-   Разрешите установку из этого источника в системном диалоге.
-3. Нажмите «Обзор файлов», выберите документ до 32 МиБ, задайте и повторите пароль.
-4. Нажмите «Зашифровать» и сохраните предложенный `vault-*.pvlt` через системный диалог.
-5. Для восстановления выберите `.pvlt`, введите пароль, нажмите «Расшифровать».
-   Исходное имя предлагается только после аутентификации контейнера.
-
-Установка через USB с включённой USB-отладкой:
-
-```powershell
-adb devices -l
-adb -s <serial> install -r <путь-к-подписанному-ARM64.apk>
-adb -s <serial> shell am start -n com.lantsov.pocketvault/.MainActivity
+```text
+3e2806cbe697ae7a29d75a12b1105e9460581f175fe1c332c3ea17a86f3f0ab0
 ```
 
-Debug APK допустим для собственного тестирования. Android откажет в обновлении
-поверх приложения с другой подписью. Перед переходом с Debug на выпуск сохраните
-нужные внешние документы; не удаляйте приложение автоматически ради обхода ошибки.
+Public SHA-256 fingerprint of the signing certificate:
 
-Пароли восстановить нельзя. Независимый криптографический аудит не проводился.
-Исходники Android не удаляет; безопасное удаление не реализовано.
-Сохранённые и расшифрованные документы могут быть доступны другим приложениям,
-провайдерам и индексаторам. Выбранный системный провайдер сам может быть облачным.
+```text
+0e0efeb236a16ea25a4c52835d22bcafc37cbb8687a915da4a211d4c28567bb0
+```
 
-## ACTION_VIEW и доступ к документам
+Check `SHA256SUMS.txt` and `CERTIFICATE-SHA256.txt` in that release. A checksum confirms bytes, not the identity of the publisher by itself. Keep a trusted copy of the signing fingerprint.
 
-Приложение регистрирует только `ACTION_VIEW` + `content://` +
-`application/vnd.pocketvault`. При холодном запуске и `OnNewIntent` проверяются
-имя `.pvlt` без учёта регистра, размер и доступ на чтение. Пароль очищается;
-расшифровка сама не запускается. Входящий документ во время текущей операции
-игнорируется. Файл без правильного расширения отклоняется даже с этим MIME.
+An APK signed with a different key cannot normally update an existing installation with the same ApplicationId. Back up important external files before removing a test installation signed with a debug key.
 
-`application/octet-stream`, `application/zip` и `*/*` намеренно не зарегистрированы:
-иначе приложение попадёт в действия для чужих документов. У DocumentsProvider
-имя часто отсутствует в URI: например, URI содержит числовой ID. Поэтому фильтр
-по расширению пути ненадёжен. Если файловый менеджер не передаёт специальный MIME,
-используйте «Обзор файлов» внутри PocketVault. `file://`, сетевые URI, ACTION_SEND
-и автоматическая расшифровка не поддерживаются.
+## Use
 
-Доступ выдаётся системным диалогом или отправителем Intent, общий доступ к диску
-не запрашивается. Приложение не сохраняет URI в настройках или собственном
-состоянии между запусками и не запрашивает persistable URI grants.
-При отозванном/истёкшем доступе документ нужно выбрать заново.
-См. [официальные правила фильтров Android](https://developer.android.com/guide/topics/manifest/data-element).
+1. Tap **Browse files / Обзор файлов** and select a document.
+2. Enter and confirm a password; tap **Encrypt / Зашифровать**.
+3. Choose the destination in Android's system save dialog. PocketVault suggests a neutral `vault-*.pvlt` name.
+4. To restore, open a `.pvlt` with PocketVault, enter its password and select a destination for the recovered file.
 
-## Инструменты и воспроизводимая сборка
+You can also open supported containers from a file manager using `ACTION_VIEW` when the manager provides `application/vnd.pocketvault`. For generic MIME types, use **Browse files** inside the app.
 
-Проверенная локальная конфигурация: Windows x64, .NET SDK 10.0.403,
-.NET runtime 10.0.14, MAUI 10.0.0 / `maui-android 10.0.0/10.0.100`,
-Android pack 36.1.2, Android platform 36 revision 2, build-tools 36.0.0,
-JDK 21.0.11. Скрипт требует стабильный .NET 10 согласно `global.json`, workload
-`maui-android`, JDK 21 и перечисленные Android SDK-файлы. Требуется PowerShell 7
-на Windows. Интернет нужен инструментам для загрузки зависимостей, не приложению.
+**Important:** there is no password recovery. The original document is not deleted. A system document provider may be a cloud provider even though PocketVault itself does not make network requests. If saving is interrupted, the provider may leave a partial file; check the destination before retrying.
+
+## Supported format and security
+
+PocketVault uses AES-256-GCM and PBKDF2-HMAC-SHA256 with 600,000 iterations. The encrypted payload is a ZIP containing one file and its original name. Salt, nonce and authenticated header semantics are identical on Windows and Android. Passwords are never stored in app preferences.
+
+Files are processed in memory; encryption cannot be cancelled midway. There is no secure erasure, guaranteed wiping of managed password strings or independent cryptographic audit. See the [security model](SECURITY_MODEL.md), [format specification](FORMAT.md) and [disclaimer](DISCLAIMER.md).
+
+## Build from source
+
+Requirements: Windows x64, PowerShell 7, stable .NET 10 SDK (see [global.json](../global.json)), `maui-android` workload, Android SDK including API 36/build-tools 36.0.0, and JDK 21. This is a developer toolchain requirement, not the minimum Android device version.
 
 ```powershell
 dotnet workload install maui-android --skip-manifest-update
-$env:ANDROID_HOME = 'C:\Android\Sdk'
-$env:JAVA_HOME = 'C:\path\to\jdk-21'
-./scripts/build-android.ps1
-```
-
-По умолчанию скрипт сначала собирает Windows Release и выполняет все консольные
-Core/WPF/общие Android-проверки. `dotnet test` их не запускает.
-`-SkipWindowsTests` предназначен для повторной сборки после отдельного успешного
-`./scripts/build.ps1`. Windows solution, workflow и опубликованный Windows 1.1.1
-остаются независимыми от Android workload.
-
-Скрипт предпочитает `.tools/dotnet/dotnet.exe`, если он есть; доступен `-DotnetPath`.
-SDK/JDK можно передать параметрами `-AndroidSdkDirectory` / `-JavaSdkDirectory`.
-`-PackageSource .tools/nuget-source` использует локальный NuGet-кэш; кэши в Git не входят.
-Записываются версии инструментов в `BUILD.txt`. Сборка воспроизводима как процесс;
-побайтовая идентичность APK при разных workload/JDK/средах не гарантируется.
-
-Проверка Release без ключа владельца:
-
-```powershell
+# Set ANDROID_HOME and JAVA_HOME for the installed toolchains.
+./scripts/build-android.ps1 -Configuration Debug
 ./scripts/build-android.ps1 -Configuration Release -Unsigned
 ```
 
-Результаты разделены по режиму и RID:
+Run commands from the repository root. The script also runs Windows/Core tests by default. Use `-SkipWindowsTests` only when those checks have already succeeded. To target the x86_64 emulator, add `-RuntimeIdentifier android-x64`.
 
-| Режим | APK | Назначение |
+Build output locations:
+
+| Configuration | Location | Status |
 | --- | --- | --- |
-| Debug | `dist/android/debug/android-arm64/PocketVault-1.0.0-android-arm64-debug.apk` | Устанавливаемая тестовая сборка с development key |
-| Release `-Unsigned` | `dist/android/unsigned/android-arm64/PocketVault-1.0.0-android-arm64-unsigned.apk` | Проверка компиляции/trimming/AOT, не устанавливается |
-| Release с ключом | `dist/android/release/android-arm64/PocketVault-1.0.0-android-arm64-release.apk` | Только после подписи и проверки сертификата владельца |
+| Debug ARM64 | `dist/android/debug/android-arm64/` | Development-signed, for testing |
+| Release ARM64, unsigned | `dist/android/unsigned/android-arm64/` | **Cannot be installed** |
+| Release ARM64, owner-signed | `dist/android/release/android-arm64/` | Distribution build after verified signing |
 
-Для x86_64 эмулятора укажите `-RuntimeIdentifier android-x64`.
-В каталоге артефакта создаются `SHA256SUMS.txt`, `SIGNATURE.txt`, `manifest.txt`,
-`BUILD.txt`. Скрипт проверяет архитектуру, версию, ApplicationId, min SDK,
-отключённый backup, отсутствие storage permissions, а в Release — отсутствие
-INTERNET и debuggable. Перед подписью выполняется zipalign; подпись проверяется
-через apksigner, затем формируется и повторно проверяется SHA-256.
-Неподписанный режим проверяет именно отсутствие действительной подписи.
-В итоговый каталог APK копируется только после всех проверок: отказ из-за
-неверного или Debug-сертификата не оставляет новый файл с именем release в `dist`.
-Промежуточные APK в `.tools`/`bin` нельзя выдавать за готовый выпуск.
+The script verifies APK identity, architecture, manifest, `zipalign`, signature and SHA-256. Build outputs, signing keys and passwords must not be committed. The Android GitHub Actions workflow compiles Android and runs host checks **without owner signing keys or Android runtime/device execution**.
 
-## Ключ выпуска: действие владельца
-
-Постоянный ключ уже создан владельцем вне репозитория; пароли введены им
-интерактивно. В Git сохраняется только публичный отпечаток сертификата,
-указанный выше. Для обновлений этого ApplicationId используйте тот же ключ.
-Сохраните защищённую резервную копию keystore, alias и паролей.
-
-Следующий пример относится только к первому созданию ключа, если его ещё нет;
-существующий ключ выпуска не заменяйте. Запускайте в собственном интерактивном
-терминале, выбрав постоянное защищённое место **вне репозитория**. Каталог должен существовать:
+### Local developer tests
 
 ```powershell
-& "$env:JAVA_HOME/bin/keytool.exe" -genkeypair -v `
-  -keystore 'D:\PrivateKeys\pocketvault-android.jks' -storetype JKS `
-  -alias pocketvault -keyalg RSA -keysize 3072 -validity 10000
+adb devices -l
+./scripts/build-android.ps1 -RuntimeIdentifier android-x64 -DeviceSerial emulator-5554
 ```
 
-`keytool` интерактивно запросит пароль хранилища, сведения сертификата и пароль
-ключа. Не используйте демонстрационные пароли. Не передавайте пароль в аргументах
-и не присылайте его в чат. Сохраните keystore, alias и пароли в защищённой резервной
-копии: они потребуются для обновлений с тем же ApplicationId.
-[Официальная инструкция .NET MAUI](https://learn.microsoft.com/dotnet/maui/android/deployment/publish-cli?view=net-maui-10.0).
+Use the actual connected device serial, or omit `-DeviceSerial` for a build without runtime tests. The smoke scripts in `scripts/` test Android crypto and document logic. Physical device tests and SAF interop require a connected, authorized device; build success alone is not a device test.
 
-Узнайте публичный SHA-256 сертификата (пароль вводится интерактивно):
+The current UI and localized screenshots are documented in [Android UI verification](ANDROID_PLEX_POLISH.md). The signed release artifact and the distinction between current UI checks and earlier physical-device tests are documented in [release verification](ANDROID_RELEASE_1.0.0.md).
 
-```powershell
-& "$env:JAVA_HOME/bin/keytool.exe" -list -v `
-  -keystore 'D:\PrivateKeys\pocketvault-android.jks' -alias pocketvault
-```
+## Signing future updates
 
-Задайте окружение **только текущего процесса**; секреты можно получить из менеджера
-паролей или ввести через скрытый запрос. Не сохраняйте их через `setx`, `.env`,
-исходники, CI secrets без отдельной настройки или историю команд:
+**The permanent owner key already exists. Do not create a replacement key for updates to this ApplicationId.** Store the keystore, alias and passwords outside the repository with protected backups; never copy them into GitHub, build logs or chat.
+
+On a trusted development computer, point the existing build script to that key using environment variables. The public certificate fingerprint must match the value published above.
 
 ```powershell
-$env:POCKETVAULT_KEYSTORE = 'D:\PrivateKeys\pocketvault-android.jks'
+$env:POCKETVAULT_KEYSTORE = '<path-to-your-existing-keystore-outside-the-repo>'
 $env:POCKETVAULT_KEY_ALIAS = 'pocketvault'
-$env:POCKETVAULT_SIGNING_CERT_SHA256 = '<публичный SHA-256 сертификата>'
-$env:POCKETVAULT_STORE_PASS = [Net.NetworkCredential]::new('', (Read-Host 'Пароль хранилища' -AsSecureString)).Password
-$env:POCKETVAULT_KEY_PASS = [Net.NetworkCredential]::new('', (Read-Host 'Пароль ключа' -AsSecureString)).Password
+$env:POCKETVAULT_SIGNING_CERT_SHA256 = '0e0efeb236a16ea25a4c52835d22bcafc37cbb8687a915da4a211d4c28567bb0'
+$env:POCKETVAULT_STORE_PASS = [Net.NetworkCredential]::new('', (Read-Host 'Keystore password' -AsSecureString)).Password
+$env:POCKETVAULT_KEY_PASS = [Net.NetworkCredential]::new('', (Read-Host 'Key password' -AsSecureString)).Password
 try {
     ./scripts/build-android.ps1 -Configuration Release
 }
@@ -183,62 +99,10 @@ finally {
 }
 ```
 
-Скрипт передаёт apksigner имена переменных `env:...`, не значения паролей в командной
-строке; не создаёт signing binlog и не принимает Debug-сертификат как выпуск.
-Окружение доступно дочерним процессам и владельцу сессии; используйте доверенный
-локальный компьютер и не включайте диагностическое журналирование секретов.
-Публичный сертификат должен совпасть с `POCKETVAULT_SIGNING_CERT_SHA256`.
-[Подпись и проверка APK](https://developer.android.com/tools/apksigner).
+The script supplies passwords to `apksigner` via environment-variable references rather than direct arguments, verifies the expected certificate and writes an APK and checksum into `dist/android/release/android-arm64/`. Secrets are briefly accessible to child processes of the trusted local session. Avoid persistent environment variables, shell history containing passwords, and diagnostic logging of secrets.
 
-## Runtime-проверки
+## Platform details
 
-Сначала `adb devices -l`: предпочтителен Poco X6 Pro, если подключён и авторизован;
-иначе доступный эмулятор. Команда для текущего x86_64 AVD:
+`ACTION_VIEW` accepts `content://` URIs with the PocketVault MIME type; it does not automatically decrypt or retain document URI permissions. If an external provider revokes access, select the document again. Broad external-storage permissions are not requested. The normal Release manifest does not request `INTERNET`, disables app data backup and uses `FLAG_SECURE` for the protected interface.
 
-```powershell
-./scripts/build-android.ps1 -RuntimeIdentifier android-x64 -DeviceSerial emulator-5554
-```
-
-Скрипт устанавливает Debug APK и запускает оба smoke-набора. Уникальный runId и
-чтение свежего JSON через `run-as` исключают принятие старого результата.
-Криптография: 11 проверок, включая AES-GCM/AAD, PBKDF2, ZIP, оба старых fixtures,
-пустой файл, неверный пароль и повреждение. Документы: 32 синтетические проверки
-того же `DocumentOperations.cs`, что выполняется в приложении: лимиты, 32 МиБ,
-отмены, ошибки доступа/записи/flush/close, удаление частичного результата,
-защита исходного URI, очистка буферов, исключение нехватки памяти и повторная операция.
-Это не проверка настоящего сбоя стороннего облачного провайдера или Android LMK.
-
-Для самостоятельного запуска `test-android-crypto.ps1` / `test-android-documents.ps1`
-обязательно передайте `-ApkPath` свежей Debug-сборки. Старый APK из `bin` не
-подставляется автоматически. Холодный/повторный ACTION_VIEW и фактический отзыв
-grant проверяются отдельным [тестовым sender/provider](../tests/AndroidIntentProbe/README.md).
-
-Реальные UI/SAF и двусторонний Windows-обмен проверяются отдельно на синтетическом
-корпусе. `PocketVault.Tests --android-interop-prepare <новый-каталог>` создаёт корпус,
-`--android-interop-verify <каталог>` проверяет точное имя и байты в обоих направлениях.
-Публичный тестовый пароль: `Stage2-Test-2026`; это не пароль keystore.
-Историческая проверка интерфейса и реальные снимки: [этап 3](ANDROID_STAGE3.md).
-Исторические факты этапа 4: [отчёт 26 октября](ANDROID_STAGE4.md).
-Подписанный выпуск и проверки 27 октября: [отчёт готовности 1.0.0](ANDROID_RELEASE_1.0.0.md).
-
-## CI и границы готовности
-
-[Android workflow](../.github/workflows/android.yml) независим от Windows workflow,
-подготавливает Android SDK/JDK/MAUI, запускает host-тесты, собирает Debug и
-неподписанный Release ARM64. Секреты и ключ выпуска не нужны, `pull_request_target`
-не используется, публикации GitHub Release нет. Разрешённый список диагностических
-отчётов хранится в GitHub Artifacts 14 дней; APK туда не загружаются.
-В CI эмулятор не запускается: компиляция не называется runtime-тестированием.
-
-Обязательные проверки подписанного Release на Poco завершены. Состояние CI
-последнего коммита и готовность к review доступны в [PR #3](https://github.com/Lantsov/pocket-vault/pull/3).
-Публикация GitHub Release и слияние выполняются отдельно владельцем.
-
-API 29 проверен на x86_64: 11 криптографических и 32 синтетические документные
-проверки в Debug, затем запуск Release после trimming/AOT, неверный пароль,
-ACTION_VIEW и точное восстановление старого fixture через настоящий SAF.
-Этот Release x64 подписан development key исключительно для тестового эмулятора;
-ARM64 APK владельца проверен непосредственно на физическом Poco API 36.
-Физический ARM64 API 29 и все сторонние облачные DocumentsProvider не проверялись.
-32 МиБ остаются пределом; гарантированного стирания строк пароля, потоковой
-криптографии, отмены обработки, безопасного удаления и атомарности провайдеров нет.
+API 29 was tested on an x86_64 emulator, including legacy containers. An ARM64 physical device was tested with an earlier signed UI build; the current IBM Plex Mono UI was verified on the emulator. The published ARM64 APK was separately checked for integrity, signing, manifest and its font resources. That is not a claim that the final UI was retested on a physical device.
