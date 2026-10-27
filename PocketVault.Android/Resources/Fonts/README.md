@@ -16,6 +16,6 @@ advance width, and every character used by the RU/EN UI resources. MAUI aliases:
 No synthetic bold is used. Platform password masking is unchanged.
 
 License: [SIL Open Font License 1.1](OFL.txt), copied from the same IBM commit;
-the complete text is also available offline in Settings. Iosevka files are removed
-from the current app resources. The previous font is documented in the historical
-[UI report](../../../docs/ANDROID_UI_POLISH.md).
+the complete text is also available offline in Settings. Only IBM Plex Mono is
+included in the current Android application; earlier experimental fonts and
+obsolete design screenshots are not included.
