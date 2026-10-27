@@ -4,6 +4,10 @@ public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
     {
+        Microsoft.Maui.Handlers.LabelHandler.Mapper.AppendToMapping("PlexTypography", (handler, _) =>
+        {
+            handler.PlatformView.SetIncludeFontPadding(false);
+        });
         Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("PocketVaultEntry", (handler, _) =>
         {
             // Passwords belong to this view's lifetime, never Android's saved view state/autofill.
@@ -24,9 +28,9 @@ public static class MauiProgram
             .UseMauiApp<App>()
             .ConfigureFonts(fonts =>
             {
-                fonts.AddFont("IosevkaSlab-Regular.ttf", "IosevkaSlab");
-                fonts.AddFont("IosevkaSlab-Medium.ttf", "IosevkaSlabMedium");
-                fonts.AddFont("IosevkaSlab-Bold.ttf", "IosevkaSlabBold");
+                fonts.AddFont("IBMPlexMono-Regular.ttf", "IBMPlexMonoRegular");
+                fonts.AddFont("IBMPlexMono-Medium.ttf", "IBMPlexMonoMedium");
+                fonts.AddFont("IBMPlexMono-SemiBold.ttf", "IBMPlexMonoSemiBold");
             })
             .Build();
     }

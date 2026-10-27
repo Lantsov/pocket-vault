@@ -280,13 +280,13 @@
     <value>Hide the full license text.</value>
   </data>
   <data xml:space="preserve" name="FontLicense">
-    <value>Iosevka Slab · OFL 1.1</value>
+    <value>IBM Plex Mono · OFL 1.1</value>
   </data>
   <data xml:space="preserve" name="HideFontLicense">
     <value>Hide font license</value>
   </data>
   <data xml:space="preserve" name="FontLicenseDetail">
-    <value>Bundled font by the Iosevka project authors. Original license below.</value>
+    <value>Bundled font by IBM. Original license below.</value>
   </data>
   <data xml:space="preserve" name="NoWarranty">
     <value>No warranty</value>

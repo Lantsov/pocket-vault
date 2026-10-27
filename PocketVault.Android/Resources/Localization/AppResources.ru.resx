@@ -280,13 +280,13 @@
     <value>Скрыть полный текст лицензии.</value>
   </data>
   <data xml:space="preserve" name="FontLicense">
-    <value>Iosevka Slab · OFL 1.1</value>
+    <value>IBM Plex Mono · OFL 1.1</value>
   </data>
   <data xml:space="preserve" name="HideFontLicense">
     <value>Скрыть лицензию шрифта</value>
   </data>
   <data xml:space="preserve" name="FontLicenseDetail">
-    <value>Встроенный шрифт авторов проекта Iosevka. Оригинал лицензии ниже.</value>
+    <value>Встроенный шрифт IBM. Оригинал лицензии ниже.</value>
   </data>
   <data xml:space="preserve" name="NoWarranty">
     <value>Без гарантий</value>

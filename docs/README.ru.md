@@ -22,9 +22,9 @@
 
 Интерфейс Windows — на русском языке. [Расшифровка](images/pocketvault-decrypt.png) · [Обработка файла](images/pocketvault-processing.png).
 
-<p align="center"><img src="images/android-ui-main-ru.png" width="250" alt="PocketVault Android на эмуляторе API 29: русский интерфейс со шрифтом Iosevka Slab"> <img src="images/android-ui-settings-ru.png" width="250" alt="Настройки PocketVault Android: системный язык, русский и English"></p>
+<p align="center"><img src="images/android-plex-main-ru.png" width="250" alt="PocketVault Android на эмуляторе API 29: русский интерфейс со шрифтом IBM Plex Mono"> <img src="images/android-plex-settings-ru.png" width="250" alt="Настройки PocketVault Android: системный язык, русский и English"></p>
 
-Это реальные снимки Android-эмулятора с синтетическими данными. Android поддерживает русский и английский с мгновенным переключением. [Полировка UI, все шесть снимков и границы проверки](ANDROID_UI_POLISH.md). **Windows: 1.1.1; Android: кандидат 1.0.0; формат контейнера: v1.** Предыдущий ARM64-кандидат подписан владельцем и проверен на Poco X6 Pro; обновлённый UI перед распространением требует новой сборки с тем же ключом. [Инструкция Android](ANDROID.md).
+Это реальные снимки Android-эмулятора с синтетическими данными. Android поддерживает русский и английский с мгновенным переключением. [Компактный UI, снимки RU/EN и границы проверки](ANDROID_PLEX_POLISH.md). **Windows: 1.1.1; Android: кандидат 1.0.0; формат контейнера: v1.** Предыдущий ARM64-кандидат подписан владельцем и проверен на Poco X6 Pro; обновлённый UI перед распространением требует новой сборки с тем же ключом. [Инструкция Android](ANDROID.md).
 
 ## Почему PocketVault
 

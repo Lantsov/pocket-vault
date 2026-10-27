@@ -1,18 +1,21 @@
-# Iosevka Slab
+# IBM Plex Mono
 
-Official, unmodified Iosevka Slab **34.9.1**, Regular (400), Medium (500), Bold (700).
-All three are fixed-pitch slab-serif fonts, with complete Russian and English alphabets.
+Official, unmodified full static TTF files from [IBM/plex](https://github.com/IBM/plex),
+package `@ibm/plex-mono` 2.5.0, pinned commit `71f558992315a12ca1f06a2215d57962a1992162`.
+Source directory: `packages/plex-mono/fonts/complete/ttf` (not a web subset).
 
-- Project: <https://github.com/be5invis/Iosevka>
-- Package: <https://github.com/be5invis/Iosevka/releases/download/v34.9.1/PkgTTF-IosevkaSlab-34.9.1.zip>
-- Original license: <https://github.com/be5invis/Iosevka/blob/v34.9.1/LICENSE.md>
-- Bundled license: [OFL.txt](OFL.txt), SIL Open Font License 1.1. Also available offline in Settings.
+| File | Weight | SHA-256 |
+| --- | --- | --- |
+| IBMPlexMono-Medium.ttf | 500 | `98fbd727aae340b236955879dabed4d991aac9e8e90b3b2a67ce4a59221cc97c` |
+| IBMPlexMono-Regular.ttf | 400 | `7c6fbddca4b700be918f5f6183d9bd4464fa427fe435f0b480d77fe2bb8c5a43` |
+| IBMPlexMono-SemiBold.ttf | 600 | `f04d7c488ddf7d1fa99f2574efc3406ea4cbe17bb1af3a1ab960f84d0c96a172` |
 
-| File | SHA-256 |
-| --- | --- |
-| IosevkaSlab-Regular.ttf | `6d41ab04ee57447b63c57282ddfc167b1dcee14d176c82c5dd597e35bf334524` |
-| IosevkaSlab-Medium.ttf | `1b1e7bb00cced36b4d409c3b91e3bffdf8af76ed857f431a84816af8d30be4bf` |
-| IosevkaSlab-Bold.ttf | `fc8acaa7a5c984f3670d3121daa9c93e88336973b8b7006b97a8ca2a1f4eeaa6` |
+All three files have complete English and Russian alphabets, including Ё/ё, fixed
+advance width, and every character used by the RU/EN UI resources. MAUI aliases:
+`IBMPlexMonoRegular`, `IBMPlexMonoMedium`, `IBMPlexMonoSemiBold`.
+No synthetic bold is used. Platform password masking is unchanged.
 
-MAUI aliases: `IosevkaSlab`, `IosevkaSlabMedium`, `IosevkaSlabBold`.
-No system monospace or separate Cyrillic font is used. The platform continues to mask password fields.
+License: [SIL Open Font License 1.1](OFL.txt), copied from the same IBM commit;
+the complete text is also available offline in Settings. Iosevka files are removed
+from the current app resources. The previous font is documented in the historical
+[UI report](../../../docs/ANDROID_UI_POLISH.md).

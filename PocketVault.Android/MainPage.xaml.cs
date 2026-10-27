@@ -13,6 +13,7 @@ public partial class MainPage : ContentPage
     private bool statusSuccess;
     private string renderedLanguage = L.Culture.Name;
     private UI.KeyboardViewport? keyboardViewport;
+    private UI.SystemBarInsets? systemBarInsets;
     private bool isRunning;
     private bool initialized;
     private readonly IDocumentAccess documents = new SafDocumentAccess();
@@ -290,8 +291,10 @@ public partial class MainPage : ContentPage
         Form.WidthRequest = Math.Min(width, 560);
         // Preserve the full brand at large system text sizes, without shrinking text.
         double fontScale = global::Android.App.Application.Context.Resources?.Configuration?.FontScale ?? 1;
-        bool stackedHeader = Math.Min(width, 560) - 144 < 11 * 12 * fontScale;
-        Grid.SetColumnSpan(BrandLabel, stackedHeader ? 2 : 1);
+        bool stackedHeader = Math.Min(width, 560) - 144 < "PocketVault".Length * BrandLabel.FontSize * 0.6 * fontScale;
+        Grid.SetColumn(BrandLabel, stackedHeader ? 0 : 1);
+        Grid.SetColumnSpan(BrandLabel, stackedHeader ? 3 : 1);
+        Grid.SetRow(BrandIcon, stackedHeader ? 1 : 0);
         Grid.SetRow(SettingsButton, stackedHeader ? 1 : 0);
     }
 
@@ -330,6 +333,8 @@ public partial class MainPage : ContentPage
 
     private void AttachKeyboardViewport()
     {
+        if (systemBarInsets is null && Handler?.PlatformView is global::Android.Views.View)
+            systemBarInsets = new UI.SystemBarInsets(this, PageLayout);
         if (keyboardViewport is null && FormScroll.Handler?.PlatformView is global::Android.Views.View)
             keyboardViewport = new UI.KeyboardViewport(this, FormScroll,
                 () => PasswordEntry.IsFocused ? PasswordEntry : ConfirmationEntry.IsFocused ? ConfirmationEntry : null);
@@ -337,6 +342,8 @@ public partial class MainPage : ContentPage
 
     private void DetachKeyboardViewport()
     {
+        systemBarInsets?.Detach();
+        systemBarInsets = null;
         keyboardViewport?.Detach();
         keyboardViewport = null;
     }

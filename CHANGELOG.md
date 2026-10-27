@@ -7,7 +7,7 @@ Notable changes based on the repository history and published releases. Dates us
 - Native offline .NET MAUI app for Android 10+, system document selection and saving, 32 MiB limit.
 - Common Windows/Android `.pvlt` v1 format; legacy fixtures and bidirectional interop checks.
 - Dark mobile interface, password clearing, protected recent-app snapshots and disabled backup.
-- Android UI polish: bundled Iosevka Slab Regular/Medium/Bold under OFL 1.1, shared typography and spacing, wrapping buttons and accessible large-text layouts. Full RU/EN resources, immediate System/Russian/English selection saved in Preferences, localized statuses and accessibility text. [Real emulator screenshots and UI verification](docs/ANDROID_UI_POLISH.md).
+- Android UI polish: official IBM Plex Mono Regular/Medium/SemiBold under OFL 1.1, compact shared typography, adaptive language buttons and paired settings values. Full RU/EN resources, immediate System/Russian/English selection saved in Preferences, localized statuses and accessibility text. [Current screenshots and UI verification](docs/ANDROID_PLEX_POLISH.md); the [earlier Iosevka report](docs/ANDROID_UI_POLISH.md) remains historical.
 - Narrow `ACTION_VIEW` support for `content://` with `application/vnd.pocketvault`; generic MIME files use the in-app picker.
 - ARM64 APK build, explicit unsigned validation mode, owner-keystore signing with environment passwords, signature/manifest/SHA-256 checks and independent Android CI.
 - Owner-signed ARM64 APK verified on physical Poco X6 Pro (Android 16 / API 36): real SAF encryption/decryption, exact Windows interop, wrong-password/corruption rejection and incompressible 32 MiB roundtrip.

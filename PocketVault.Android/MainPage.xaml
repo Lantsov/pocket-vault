@@ -3,23 +3,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:loc="clr-namespace:PocketVault.Android.Localization"
              x:Class="PocketVault.Android.MainPage" Title="PocketVault"
-             BackgroundColor="{StaticResource PageBackground}" SafeAreaEdges="All"
+             BackgroundColor="{StaticResource PageBackground}" SafeAreaEdges="None"
              NavigationPage.HasNavigationBar="False" HideSoftInputOnTapped="True">
-    <Grid IsClippedToBounds="True">
+    <Grid x:Name="PageLayout" IsClippedToBounds="True" SafeAreaEdges="None">
         <ScrollView x:Name="FormScroll" VerticalScrollBarVisibility="Never">
-            <VerticalStackLayout x:Name="Form" Padding="24,16,24,24" Spacing="24"
+            <VerticalStackLayout x:Name="Form" Padding="24,12,24,24" Spacing="20"
                                  MaximumWidthRequest="560" HorizontalOptions="Center">
-                <VerticalStackLayout Spacing="16">
+                <VerticalStackLayout Spacing="8">
                     <Grid x:Name="HeaderGrid" ColumnDefinitions="32,*,48" RowDefinitions="Auto,Auto" ColumnSpacing="8">
-                        <Image Source="pv_lock.png" WidthRequest="32" HeightRequest="32" VerticalOptions="Center"
+                        <Image x:Name="BrandIcon" Source="pv_lock.png" WidthRequest="32" HeightRequest="32" VerticalOptions="Center"
                                SemanticProperties.Description="{loc:Translate LogoDescription}" />
                         <Label x:Name="BrandLabel" Grid.Column="1" Text="PocketVault" Style="{StaticResource Brand}" VerticalOptions="Center" />
                         <ImageButton x:Name="SettingsButton" Grid.Column="2" Source="pv_settings.png"
                                      Clicked="OnSettingsClicked" AutomationId="Settings"
                                      SemanticProperties.Description="{loc:Translate Settings}" />
                     </Grid>
-                    <Label Text="{loc:Translate Tagline}" FontSize="14"
-                           TextColor="{StaticResource SecondaryText}" LineHeight="1.2" />
+                    <Label Text="{loc:Translate Tagline}" Style="{StaticResource Tagline}" />
                 </VerticalStackLayout>
                 <VerticalStackLayout Spacing="12">
                     <Label Text="{loc:Translate FileSection}" Style="{StaticResource Technical}"
@@ -30,7 +29,7 @@
                                    HorizontalOptions="Center" InputTransparent="True" />
                             <VerticalStackLayout Spacing="4" InputTransparent="True">
                                 <Label Text="{loc:Translate SelectFile}" Style="{StaticResource Section}" HorizontalTextAlignment="Center" />
-                                <Label Text="{loc:Translate FromDevice}" TextColor="{StaticResource SecondaryText}"
+                                <Label Text="{loc:Translate FromDevice}" Style="{StaticResource Caption}"
                                        HorizontalTextAlignment="Center" />
                             </VerticalStackLayout>
                             <Button x:Name="PickButton" Text="{loc:Translate BrowseFiles}" Clicked="OnPickClicked" AutomationId="PickFile" />
@@ -52,7 +51,7 @@
                     <Label x:Name="ModeLabel" Text="{loc:Translate FileLimit}" Style="{StaticResource Caption}"
                            TextColor="{StaticResource SecondaryText}" />
                 </VerticalStackLayout>
-                <VerticalStackLayout Spacing="12">
+                <VerticalStackLayout Spacing="8">
                     <Label Text="{loc:Translate Password}" />
                     <Border x:Name="PasswordBorder" Padding="12,0,0,0">
                         <Grid ColumnDefinitions="24,*,48" ColumnSpacing="8">
@@ -66,7 +65,7 @@
                                          Clicked="OnTogglePassword" SemanticProperties.Description="{loc:Translate ShowPassword}" AutomationId="TogglePassword" />
                         </Grid>
                     </Border>
-                    <VerticalStackLayout x:Name="ConfirmationGroup" Spacing="12">
+                    <VerticalStackLayout x:Name="ConfirmationGroup" Spacing="8">
                         <Label Text="{loc:Translate ConfirmPassword}" />
                         <Border x:Name="ConfirmationBorder" Padding="12,0,0,0">
                             <Grid ColumnDefinitions="24,*,48" ColumnSpacing="8">
@@ -97,7 +96,7 @@
                         <VerticalStackLayout Grid.Column="1" Spacing="4">
                             <Label x:Name="StatusTitle" Text="{loc:Translate LocalOnly}" FontSize="14" />
                             <Label x:Name="ResultLabel" Text="{loc:Translate LocalOnlyDetail}"
-                                   TextColor="{StaticResource SecondaryText}" Style="{StaticResource Caption}" LineHeight="1.2" AutomationId="OperationResult" />
+                                   TextColor="{StaticResource SecondaryText}" Style="{StaticResource Caption}" AutomationId="OperationResult" />
                         </VerticalStackLayout>
                     </Grid>
                 </Border>
