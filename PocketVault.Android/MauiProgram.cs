@@ -13,8 +13,21 @@ public static class MauiProgram
             handler.PlatformView.BackgroundTintList = global::Android.Content.Res.ColorStateList.ValueOf(
                 global::Android.Graphics.Color.Transparent);
         });
+        // Let large RU/EN labels wrap instead of Android's default one-line button.
+        Microsoft.Maui.Handlers.ButtonHandler.Mapper.AppendToMapping("PocketVaultButton", (handler, _) =>
+        {
+            handler.PlatformView.SetSingleLine(false);
+            handler.PlatformView.SetHorizontallyScrolling(false);
+            handler.PlatformView.Ellipsize = null;
+        });
         return MauiApp.CreateBuilder()
             .UseMauiApp<App>()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("IosevkaSlab-Regular.ttf", "IosevkaSlab");
+                fonts.AddFont("IosevkaSlab-Medium.ttf", "IosevkaSlabMedium");
+                fonts.AddFont("IosevkaSlab-Bold.ttf", "IosevkaSlabBold");
+            })
             .Build();
     }
 }

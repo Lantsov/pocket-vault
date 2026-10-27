@@ -4,6 +4,7 @@ public partial class App : Application
 {
     public App()
     {
+        _ = Localization.LocalizationManager.Current;
         InitializeComponent();
         UserAppTheme = AppTheme.Dark;
     }

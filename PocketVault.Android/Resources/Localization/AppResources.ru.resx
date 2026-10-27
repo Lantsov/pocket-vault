@@ -1,0 +1,315 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <data xml:space="preserve" name="CheckCount">
+    <value>{0:N0}/{1:N0}</value>
+  </data>
+  <data xml:space="preserve" name="Tagline">
+    <value>Ваши файлы. Ваш пароль. Ваш контроль.</value>
+  </data>
+  <data xml:space="preserve" name="LogoDescription">
+    <value>Логотип PocketVault</value>
+  </data>
+  <data xml:space="preserve" name="Settings">
+    <value>Настройки</value>
+  </data>
+  <data xml:space="preserve" name="FileSection">
+    <value>ФАЙЛ</value>
+  </data>
+  <data xml:space="preserve" name="SelectFile">
+    <value>Выберите файл</value>
+  </data>
+  <data xml:space="preserve" name="FromDevice">
+    <value>Из памяти устройства</value>
+  </data>
+  <data xml:space="preserve" name="BrowseFiles">
+    <value>Обзор файлов</value>
+  </data>
+  <data xml:space="preserve" name="RemoveFile">
+    <value>Убрать выбранный файл</value>
+  </data>
+  <data xml:space="preserve" name="ChooseAnother">
+    <value>Выбрать другой файл</value>
+  </data>
+  <data xml:space="preserve" name="FileLimit">
+    <value>Один файл · до 32 МиБ</value>
+  </data>
+  <data xml:space="preserve" name="Password">
+    <value>Пароль</value>
+  </data>
+  <data xml:space="preserve" name="EnterPassword">
+    <value>Пароль</value>
+  </data>
+  <data xml:space="preserve" name="ConfirmPassword">
+    <value>Повторите пароль</value>
+  </data>
+  <data xml:space="preserve" name="EnterAgain">
+    <value>Ещё раз</value>
+  </data>
+  <data xml:space="preserve" name="ShowPassword">
+    <value>Показать пароль</value>
+  </data>
+  <data xml:space="preserve" name="HidePassword">
+    <value>Скрыть пароль</value>
+  </data>
+  <data xml:space="preserve" name="ShowConfirmation">
+    <value>Показать повтор пароля</value>
+  </data>
+  <data xml:space="preserve" name="HideConfirmation">
+    <value>Скрыть повтор пароля</value>
+  </data>
+  <data xml:space="preserve" name="PasswordHint">
+    <value>Пароль нигде не сохраняется.</value>
+  </data>
+  <data xml:space="preserve" name="ConfirmationHint">
+    <value>Введите тот же пароль ещё раз.</value>
+  </data>
+  <data xml:space="preserve" name="Encrypt">
+    <value>Зашифровать</value>
+  </data>
+  <data xml:space="preserve" name="Decrypt">
+    <value>Расшифровать</value>
+  </data>
+  <data xml:space="preserve" name="LocalOnly">
+    <value>Только на вашем устройстве</value>
+  </data>
+  <data xml:space="preserve" name="LocalOnlyDetail">
+    <value>Без облака и аккаунтов. Пароль знаете только вы.</value>
+  </data>
+  <data xml:space="preserve" name="TechnicalFooter">
+    <value>Без сети · AES-256-GCM · .pvlt</value>
+  </data>
+  <data xml:space="preserve" name="ContainerSelected">
+    <value>Контейнер выбран</value>
+  </data>
+  <data xml:space="preserve" name="ContainerPrivacy">
+    <value>Имя и содержимое скрыты до проверки пароля.</value>
+  </data>
+  <data xml:space="preserve" name="ContainerOpenFailed">
+    <value>Не удалось открыть контейнер</value>
+  </data>
+  <data xml:space="preserve" name="ChoosingFile">
+    <value>Выбор файла</value>
+  </data>
+  <data xml:space="preserve" name="ChoosingFileDetail">
+    <value>Откройте документ в системном диалоге.</value>
+  </data>
+  <data xml:space="preserve" name="SelectionCancelled">
+    <value>Выбор отменён</value>
+  </data>
+  <data xml:space="preserve" name="NoFileRetry">
+    <value>Файл не выбран. Можно попробовать снова.</value>
+  </data>
+  <data xml:space="preserve" name="PreviousFileKept">
+    <value>Предыдущий файл остаётся выбранным.</value>
+  </data>
+  <data xml:space="preserve" name="ReadyToEncrypt">
+    <value>Файл готов к шифрованию</value>
+  </data>
+  <data xml:space="preserve" name="SetPasswordWarning">
+    <value>Задайте пароль. Восстановить его не получится.</value>
+  </data>
+  <data xml:space="preserve" name="SelectionFailed">
+    <value>Не удалось выбрать файл</value>
+  </data>
+  <data xml:space="preserve" name="NoFile">
+    <value>Файл не выбран</value>
+  </data>
+  <data xml:space="preserve" name="SelectOneDocument">
+    <value>Выберите один документ из памяти устройства.</value>
+  </data>
+  <data xml:space="preserve" name="UnknownSize">
+    <value>Размер неизвестен · проверим при чтении</value>
+  </data>
+  <data xml:space="preserve" name="DecryptMode">
+    <value>Расшифровка · .pvlt v1</value>
+  </data>
+  <data xml:space="preserve" name="EncryptMode">
+    <value>Шифрование · до 32 МиБ</value>
+  </data>
+  <data xml:space="preserve" name="SizeMiB">
+    <value>{0:0.##} МиБ</value>
+  </data>
+  <data xml:space="preserve" name="SizeKiB">
+    <value>{0:0.##} КиБ</value>
+  </data>
+  <data xml:space="preserve" name="SizeBytes">
+    <value>{0:N0} Б</value>
+  </data>
+  <data xml:space="preserve" name="PasswordsCleared">
+    <value>Пароли очищены из полей.</value>
+  </data>
+  <data xml:space="preserve" name="EnterContainerPassword">
+    <value>Введите пароль от контейнера.</value>
+  </data>
+  <data xml:space="preserve" name="EnterAndConfirm">
+    <value>Введите пароль и повторите его.</value>
+  </data>
+  <data xml:space="preserve" name="PasswordMismatch">
+    <value>Пароли не совпадают.</value>
+  </data>
+  <data xml:space="preserve" name="RepeatPassword">
+    <value>Повторите пароль.</value>
+  </data>
+  <data xml:space="preserve" name="NowSelectFile">
+    <value>Теперь выберите файл.</value>
+  </data>
+  <data xml:space="preserve" name="ReadyToContinue">
+    <value>Всё готово. Можно продолжить.</value>
+  </data>
+  <data xml:space="preserve" name="Decrypting">
+    <value>Расшифровка…</value>
+  </data>
+  <data xml:space="preserve" name="Encrypting">
+    <value>Шифрование…</value>
+  </data>
+  <data xml:space="preserve" name="ChooseSaveAfterProcessing">
+    <value>После обработки выберите, куда сохранить результат.</value>
+  </data>
+  <data xml:space="preserve" name="FileSaved">
+    <value>Готово. Файл сохранён</value>
+  </data>
+  <data xml:space="preserve" name="SaveCancelled">
+    <value>Сохранение отменено</value>
+  </data>
+  <data xml:space="preserve" name="OriginalUnchanged">
+    <value>Исходный документ остался без изменений.</value>
+  </data>
+  <data xml:space="preserve" name="NotSavedRetry">
+    <value>Результат не записан. Для повтора введите пароль заново.</value>
+  </data>
+  <data xml:space="preserve" name="OperationFailed">
+    <value>Не удалось завершить операцию</value>
+  </data>
+  <data xml:space="preserve" name="IncorrectPassword">
+    <value>Неверный пароль или файл повреждён.</value>
+  </data>
+  <data xml:space="preserve" name="InvalidContainer">
+    <value>Повреждённый или неподдерживаемый контейнер. Проверьте файл и лимит 32 МиБ.</value>
+  </data>
+  <data xml:space="preserve" name="InvalidInput">
+    <value>Проверьте имя файла, пароль и размер (до 32 МиБ).</value>
+  </data>
+  <data xml:space="preserve" name="WriteFailed">
+    <value>Не удалось сохранить. Исходный файл не изменён. Проверьте место сохранения и удалите неполный файл, если он остался.</value>
+  </data>
+  <data xml:space="preserve" name="DialogCancelled">
+    <value>Системный диалог закрыт. Операция отменена.</value>
+  </data>
+  <data xml:space="preserve" name="AccessDenied">
+    <value>Нет доступа к документу. Выберите файл заново и проверьте место сохранения.</value>
+  </data>
+  <data xml:space="preserve" name="ReadFailed">
+    <value>Не удалось прочитать файл. Проверьте его доступность и выберите заново.</value>
+  </data>
+  <data xml:space="preserve" name="NotEnoughMemory">
+    <value>Недостаточно памяти. Выберите файл меньше или закройте другие приложения.</value>
+  </data>
+  <data xml:space="preserve" name="DocumentFailed">
+    <value>Не удалось обработать документ. Проверьте доступ к файлу и месту сохранения, затем повторите.</value>
+  </data>
+  <data xml:space="preserve" name="BackToFile">
+    <value>Назад к файлу</value>
+  </data>
+  <data xml:space="preserve" name="PersonalSpace">
+    <value>Личное пространство для ваших файлов.</value>
+  </data>
+  <data xml:space="preserve" name="Language">
+    <value>Язык</value>
+  </data>
+  <data xml:space="preserve" name="LanguageHint">
+    <value>Язык меняется сразу. Поля пароля очищаются.</value>
+  </data>
+  <data xml:space="preserve" name="SystemLanguage">
+    <value>Системный</value>
+  </data>
+  <data xml:space="preserve" name="RussianLanguage">
+    <value>Русский</value>
+  </data>
+  <data xml:space="preserve" name="EnglishLanguage">
+    <value>English</value>
+  </data>
+  <data xml:space="preserve" name="LanguageSelected">
+    <value>Выбранный язык</value>
+  </data>
+  <data xml:space="preserve" name="ApplicationSection">
+    <value>ПРИЛОЖЕНИЕ</value>
+  </data>
+  <data xml:space="preserve" name="VersionFormat">
+    <value>Версия {0} ({1})</value>
+  </data>
+  <data xml:space="preserve" name="ContainerFormat">
+    <value>Формат контейнера</value>
+  </data>
+  <data xml:space="preserve" name="SourceFileSize">
+    <value>Размер исходного файла</value>
+  </data>
+  <data xml:space="preserve" name="UpTo32MiB">
+    <value>До 32 МиБ</value>
+  </data>
+  <data xml:space="preserve" name="OfflineExplanation">
+    <value>Без аккаунтов, облака и истории операций. Файлы обрабатываются локально; для шифрования интернет не нужен.</value>
+  </data>
+  <data xml:space="preserve" name="NoRecovery">
+    <value>Восстановления пароля нет. Сохраните пароль в надёжном месте: без него расшифровать файл не получится.</value>
+  </data>
+  <data xml:space="preserve" name="GitHubProject">
+    <value>Проект на GitHub ↗</value>
+  </data>
+  <data xml:space="preserve" name="BrowserHint">
+    <value>Откроется браузер; потребуется интернет.</value>
+  </data>
+  <data xml:space="preserve" name="BrowserFailed">
+    <value>Не удалось открыть браузер. Проект: github.com/Lantsov/pocket-vault</value>
+  </data>
+  <data xml:space="preserve" name="MitLicense">
+    <value>Лицензия MIT</value>
+  </data>
+  <data xml:space="preserve" name="HideMitLicense">
+    <value>Скрыть лицензию MIT</value>
+  </data>
+  <data xml:space="preserve" name="ShowLicenseHint">
+    <value>Показать полный текст лицензии на этом экране.</value>
+  </data>
+  <data xml:space="preserve" name="HideLicenseHint">
+    <value>Скрыть полный текст лицензии.</value>
+  </data>
+  <data xml:space="preserve" name="FontLicense">
+    <value>Iosevka Slab · OFL 1.1</value>
+  </data>
+  <data xml:space="preserve" name="HideFontLicense">
+    <value>Скрыть лицензию шрифта</value>
+  </data>
+  <data xml:space="preserve" name="FontLicenseDetail">
+    <value>Встроенный шрифт авторов проекта Iosevka. Оригинал лицензии ниже.</value>
+  </data>
+  <data xml:space="preserve" name="NoWarranty">
+    <value>Без гарантий</value>
+  </data>
+  <data xml:space="preserve" name="WarrantyDetail">
+    <value>Приложение предоставляется «как есть», без гарантий. Авторы не несут ответственности за утрату данных и другие убытки. Храните резервные копии важных файлов и проверяйте восстановление перед удалением оригинала.</value>
+  </data>
+  <data xml:space="preserve" name="DebugCheck">
+    <value>Проверка Debug</value>
+  </data>
+  <data xml:space="preserve" name="DebugDocuments">
+    <value>Синтетические проверки файловых операций…</value>
+  </data>
+  <data xml:space="preserve" name="DocumentChecks">
+    <value>Проверки документов</value>
+  </data>
+  <data xml:space="preserve" name="CheckFailed">
+    <value>Ошибка проверки</value>
+  </data>
+  <data xml:space="preserve" name="DebugRuntime">
+    <value>Проверка на Android runtime…</value>
+  </data>
+  <data xml:space="preserve" name="CryptoChecks">
+    <value>Проверка криптографии</value>
+  </data>
+</root>

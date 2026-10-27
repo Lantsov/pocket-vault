@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:loc="clr-namespace:PocketVault.Android.Localization"
              x:Class="PocketVault.Android.MainPage" Title="PocketVault"
              BackgroundColor="{StaticResource PageBackground}" SafeAreaEdges="All"
              NavigationPage.HasNavigationBar="False" HideSoftInputOnTapped="True">
@@ -9,82 +10,83 @@
             <VerticalStackLayout x:Name="Form" Padding="24,16,24,24" Spacing="24"
                                  MaximumWidthRequest="560" HorizontalOptions="Center">
                 <VerticalStackLayout Spacing="16">
-                    <Grid ColumnDefinitions="40,*,48" ColumnSpacing="12">
+                    <Grid x:Name="HeaderGrid" ColumnDefinitions="32,*,48" RowDefinitions="Auto,Auto" ColumnSpacing="8">
                         <Image Source="pv_lock.png" WidthRequest="32" HeightRequest="32" VerticalOptions="Center"
-                               SemanticProperties.Description="Логотип PocketVault" />
-                        <Label Grid.Column="1" Text="PocketVault" FontFamily="monospace" FontSize="22"
-                               FontAttributes="Bold" VerticalOptions="Center" />
+                               SemanticProperties.Description="{loc:Translate LogoDescription}" />
+                        <Label x:Name="BrandLabel" Grid.Column="1" Text="PocketVault" Style="{StaticResource Brand}" VerticalOptions="Center" />
                         <ImageButton x:Name="SettingsButton" Grid.Column="2" Source="pv_settings.png"
                                      Clicked="OnSettingsClicked" AutomationId="Settings"
-                                     SemanticProperties.Description="Настройки" />
+                                     SemanticProperties.Description="{loc:Translate Settings}" />
                     </Grid>
-                    <Label Text="Your files. Your password. Your control." FontSize="14"
+                    <Label Text="{loc:Translate Tagline}" FontSize="14"
                            TextColor="{StaticResource SecondaryText}" LineHeight="1.2" />
                 </VerticalStackLayout>
                 <VerticalStackLayout Spacing="12">
-                    <Label Text="ФАЙЛ" FontFamily="monospace" FontSize="11" CharacterSpacing="1.5"
+                    <Label Text="{loc:Translate FileSection}" Style="{StaticResource Technical}"
                            TextColor="{StaticResource SecondaryText}" />
-                    <Border x:Name="PickerCard" Padding="24">
-                        <VerticalStackLayout Spacing="16">
-                            <Image Source="pv_document.png" WidthRequest="40" HeightRequest="40"
+                    <Border x:Name="PickerCard" Padding="16">
+                        <VerticalStackLayout Spacing="12">
+                            <Image Source="pv_document.png" WidthRequest="32" HeightRequest="32"
                                    HorizontalOptions="Center" InputTransparent="True" />
                             <VerticalStackLayout Spacing="4" InputTransparent="True">
-                                <Label Text="Выберите файл" FontSize="20" HorizontalTextAlignment="Center" />
-                                <Label Text="Из памяти устройства" TextColor="{StaticResource SecondaryText}"
+                                <Label Text="{loc:Translate SelectFile}" Style="{StaticResource Section}" HorizontalTextAlignment="Center" />
+                                <Label Text="{loc:Translate FromDevice}" TextColor="{StaticResource SecondaryText}"
                                        HorizontalTextAlignment="Center" />
                             </VerticalStackLayout>
-                            <Button x:Name="PickButton" Text="Обзор файлов" Clicked="OnPickClicked" AutomationId="PickFile" />
+                            <Button x:Name="PickButton" Text="{loc:Translate BrowseFiles}" Clicked="OnPickClicked" AutomationId="PickFile" />
                         </VerticalStackLayout>
                     </Border>
-                    <Border x:Name="SelectedCard" IsVisible="False" Padding="16,12,4,12">
+                    <Border x:Name="SelectedCard" IsVisible="False" Padding="16">
                         <Grid ColumnDefinitions="32,*,48" ColumnSpacing="12">
                             <Image Source="pv_document.png" WidthRequest="28" HeightRequest="32" VerticalOptions="Center" />
                             <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
-                                <Label x:Name="FileLabel" FontSize="16" LineBreakMode="CharacterWrap" AutomationId="SelectedFile" />
-                                <Label x:Name="FileSizeLabel" FontSize="12" TextColor="{StaticResource SecondaryText}" />
+                                <Label x:Name="FileLabel" Style="{StaticResource FileName}" LineBreakMode="TailTruncation" MaxLines="2" AutomationId="SelectedFile" />
+                                <Label x:Name="FileSizeLabel" Style="{StaticResource Caption}" TextColor="{StaticResource SecondaryText}" />
                             </VerticalStackLayout>
                             <ImageButton x:Name="ClearButton" Grid.Column="2" Source="pv_close.png" Clicked="OnClearClicked"
-                                         VerticalOptions="Center" AutomationId="ClearFile" SemanticProperties.Description="Убрать выбранный файл" />
+                                         VerticalOptions="Center" AutomationId="ClearFile" SemanticProperties.Description="{loc:Translate RemoveFile}" />
                         </Grid>
                     </Border>
-                    <Button x:Name="PickAnotherButton" Text="Выбрать другой файл" IsVisible="False"
+                    <Button x:Name="PickAnotherButton" Text="{loc:Translate ChooseAnother}" IsVisible="False"
                             Clicked="OnPickClicked" AutomationId="PickAnotherFile" />
-                    <Label x:Name="ModeLabel" Text="Один файл · до 32 МиБ" FontSize="12"
+                    <Label x:Name="ModeLabel" Text="{loc:Translate FileLimit}" Style="{StaticResource Caption}"
                            TextColor="{StaticResource SecondaryText}" />
                 </VerticalStackLayout>
                 <VerticalStackLayout Spacing="12">
-                    <Label Text="Пароль" />
+                    <Label Text="{loc:Translate Password}" />
                     <Border x:Name="PasswordBorder" Padding="12,0,0,0">
                         <Grid ColumnDefinitions="24,*,48" ColumnSpacing="8">
                             <Image Source="pv_lock.png" WidthRequest="20" HeightRequest="20" VerticalOptions="Center" Opacity="0.6" />
-                            <Entry x:Name="PasswordEntry" Grid.Column="1" Placeholder="Введите пароль" IsPassword="True"
+                            <Entry x:Name="PasswordEntry" Grid.Column="1" Placeholder="{loc:Translate EnterPassword}" IsPassword="True"
                                    IsTextPredictionEnabled="False" IsSpellCheckEnabled="False" AutomationId="Password"
+                                   SemanticProperties.Hint="{loc:Translate PasswordHint}"
                                    ReturnType="Next" TextChanged="OnPasswordChanged" Completed="OnPasswordCompleted"
                                    Focused="OnEntryFocused" Unfocused="OnEntryUnfocused" />
                             <ImageButton x:Name="PasswordVisibilityButton" Grid.Column="2" Source="pv_eye.png"
-                                         Clicked="OnTogglePassword" SemanticProperties.Description="Показать пароль" AutomationId="TogglePassword" />
+                                         Clicked="OnTogglePassword" SemanticProperties.Description="{loc:Translate ShowPassword}" AutomationId="TogglePassword" />
                         </Grid>
                     </Border>
                     <VerticalStackLayout x:Name="ConfirmationGroup" Spacing="12">
-                        <Label Text="Повторите пароль" />
+                        <Label Text="{loc:Translate ConfirmPassword}" />
                         <Border x:Name="ConfirmationBorder" Padding="12,0,0,0">
                             <Grid ColumnDefinitions="24,*,48" ColumnSpacing="8">
                                 <Image Source="pv_lock.png" WidthRequest="20" HeightRequest="20" VerticalOptions="Center" Opacity="0.6" />
-                                <Entry x:Name="ConfirmationEntry" Grid.Column="1" Placeholder="Ещё раз" IsPassword="True"
+                                <Entry x:Name="ConfirmationEntry" Grid.Column="1" Placeholder="{loc:Translate EnterAgain}" IsPassword="True"
                                        IsTextPredictionEnabled="False" IsSpellCheckEnabled="False" AutomationId="Confirmation"
+                                       SemanticProperties.Hint="{loc:Translate ConfirmationHint}"
                                        ReturnType="Done" TextChanged="OnPasswordChanged" Completed="OnConfirmationCompleted"
                                        Focused="OnEntryFocused" Unfocused="OnEntryUnfocused" />
                                 <ImageButton x:Name="ConfirmationVisibilityButton" Grid.Column="2" Source="pv_eye.png"
-                                             Clicked="OnToggleConfirmation" SemanticProperties.Description="Показать повтор пароля" />
+                                             Clicked="OnToggleConfirmation" SemanticProperties.Description="{loc:Translate ShowConfirmation}" />
                             </Grid>
                         </Border>
                     </VerticalStackLayout>
-                    <Label x:Name="ValidationLabel" Text="Введите пароль и повторите его." FontSize="12"
+                    <Label x:Name="ValidationLabel" Text="{loc:Translate EnterAndConfirm}" Style="{StaticResource Caption}"
                            TextColor="{StaticResource SecondaryText}" AutomationId="Validation" />
                 </VerticalStackLayout>
-                <Button x:Name="OperationButton" Text="Зашифровать" IsEnabled="False" Clicked="OnOperationClicked"
+                <Button x:Name="OperationButton" Text="{loc:Translate Encrypt}" IsEnabled="False" Clicked="OnOperationClicked"
                         AutomationId="RunOperation" BackgroundColor="#F4F4F4" TextColor="#151515"
-                        FontAttributes="Bold" FontSize="16" MinimumHeightRequest="56" />
+                        Style="{StaticResource PrimaryAction}" />
                 <Border x:Name="StatusCard" Padding="16">
                     <Grid ColumnDefinitions="24,*" ColumnSpacing="12">
                         <Grid VerticalOptions="Start" Margin="0,2,0,0">
@@ -93,13 +95,13 @@
                                                Color="#F5F5F5" WidthRequest="24" HeightRequest="24" />
                         </Grid>
                         <VerticalStackLayout Grid.Column="1" Spacing="4">
-                            <Label x:Name="StatusTitle" Text="Только на вашем устройстве" FontSize="14" />
-                            <Label x:Name="ResultLabel" Text="Без облака и аккаунтов. Пароль знаете только вы."
-                                   TextColor="{StaticResource SecondaryText}" FontSize="12" LineHeight="1.2" AutomationId="OperationResult" />
+                            <Label x:Name="StatusTitle" Text="{loc:Translate LocalOnly}" FontSize="14" />
+                            <Label x:Name="ResultLabel" Text="{loc:Translate LocalOnlyDetail}"
+                                   TextColor="{StaticResource SecondaryText}" Style="{StaticResource Caption}" LineHeight="1.2" AutomationId="OperationResult" />
                         </VerticalStackLayout>
                     </Grid>
                 </Border>
-                <Label Text="Offline · AES-256-GCM · .pvlt" FontFamily="monospace" FontSize="11"
+                <Label Text="{loc:Translate TechnicalFooter}" Style="{StaticResource Technical}"
                        TextColor="{StaticResource SecondaryText}" HorizontalTextAlignment="Center" Margin="0,0,0,8" />
             </VerticalStackLayout>
         </ScrollView>

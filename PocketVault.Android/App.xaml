@@ -8,9 +8,11 @@
         <Color x:Key="BorderColor">#353535</Color>
         <Color x:Key="PrimaryText">#F5F5F5</Color>
         <Color x:Key="SecondaryText">#A0A0A0</Color>
-        <Style TargetType="Label">
+        <Style x:Key="BaseLabel" TargetType="Label">
+            <Setter Property="LineBreakMode" Value="WordWrap" />
             <Setter Property="TextColor" Value="{StaticResource PrimaryText}" />
-            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontFamily" Value="IosevkaSlab" />
         </Style>
         <Style TargetType="Border">
             <Setter Property="BackgroundColor" Value="{StaticResource CardBackground}" />
@@ -18,7 +20,7 @@
             <Setter Property="StrokeShape" Value="RoundRectangle 12" />
             <Setter Property="StrokeThickness" Value="1" />
         </Style>
-        <Style TargetType="Button">
+        <Style x:Key="BaseButton" TargetType="Button">
             <Setter Property="BackgroundColor" Value="{StaticResource CardBackground}" />
             <Setter Property="TextColor" Value="{StaticResource PrimaryText}" />
             <Setter Property="BorderColor" Value="{StaticResource BorderColor}" />
@@ -26,7 +28,8 @@
             <Setter Property="CornerRadius" Value="12" />
             <Setter Property="MinimumHeightRequest" Value="48" />
             <Setter Property="Padding" Value="16,12" />
-            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontFamily" Value="IosevkaSlab" />
             <Setter Property="TextTransform" Value="None" />
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
@@ -69,7 +72,52 @@
             <Setter Property="PlaceholderColor" Value="{StaticResource SecondaryText}" />
             <Setter Property="BackgroundColor" Value="Transparent" />
             <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontFamily" Value="IosevkaSlab" />
             <Setter Property="MinimumHeightRequest" Value="56" />
+        </Style>
+        <Style TargetType="Label" BasedOn="{StaticResource BaseLabel}" />
+        <Style TargetType="Button" BasedOn="{StaticResource BaseButton}" />
+        <Style x:Key="Brand" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+            <Setter Property="FontFamily" Value="IosevkaSlabBold" />
+            <Setter Property="FontSize" Value="24" />
+        </Style>
+        <Style x:Key="Section" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+            <Setter Property="FontFamily" Value="IosevkaSlabMedium" />
+            <Setter Property="FontSize" Value="19" />
+        </Style>
+        <Style x:Key="Caption" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="TextColor" Value="{StaticResource SecondaryText}" />
+        </Style>
+        <Style x:Key="Technical" TargetType="Label" BasedOn="{StaticResource Caption}">
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+        <Style x:Key="FileName" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+            <Setter Property="FontFamily" Value="IosevkaSlabMedium" />
+            <Setter Property="FontSize" Value="16" />
+        </Style>
+        <Style x:Key="PrimaryAction" TargetType="Button" BasedOn="{StaticResource BaseButton}">
+            <Setter Property="FontFamily" Value="IosevkaSlabBold" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="MinimumHeightRequest" Value="56" />
+            <Setter Property="BackgroundColor" Value="#F4F4F4" />
+            <Setter Property="TextColor" Value="#151515" />
+            <!-- Keep the action's visual state independent of secondary buttons. -->
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="ActionStates">
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters><Setter Property="Opacity" Value="1" /></VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Pressed">
+                            <VisualState.Setters><Setter Property="Opacity" Value="0.65" /></VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Disabled">
+                            <VisualState.Setters><Setter Property="Opacity" Value="0.4" /></VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
         </Style>
     </Application.Resources>
 </Application>

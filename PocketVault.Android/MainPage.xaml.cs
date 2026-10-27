@@ -1,10 +1,18 @@
 using PocketVault.Android.Services;
 using PocketVault.Core;
+using PocketVault.Android.Localization;
+using System.Security.Cryptography;
 
 namespace PocketVault.Android;
 
 public partial class MainPage : ContentPage
 {
+    private static LocalizationManager L => LocalizationManager.Current;
+    private string statusTitleKey = "LocalOnly";
+    private string statusDetailKey = "LocalOnlyDetail";
+    private bool statusSuccess;
+    private string renderedLanguage = L.Culture.Name;
+    private UI.KeyboardViewport? keyboardViewport;
     private bool isRunning;
     private bool initialized;
     private readonly IDocumentAccess documents = new SafDocumentAccess();
@@ -16,7 +24,10 @@ public partial class MainPage : ContentPage
         InitializeComponent();
         operations = new DocumentOperations(documents);
         initialized = true;
-        UpdateValidation();
+        UpdateSelection();
+        UpdateVisibilityButtons();
+        Loaded += (_, _) => AttachKeyboardViewport();
+        Unloaded += (_, _) => DetachKeyboardViewport();
     }
 
     private bool CanRun => selected is not null && !string.IsNullOrEmpty(PasswordEntry.Text) &&
@@ -31,9 +42,9 @@ public partial class MainPage : ContentPage
         {
             selected = await SafDocumentAccess.OpenContainerAsync(uri);
             UpdateSelection();
-            SetStatus("Контейнер выбран", "Имя и содержимое скрыты до проверки пароля.");
+            SetStatus("ContainerSelected", "ContainerPrivacy");
         }
-        catch (Exception ex) { SetStatus("Не удалось открыть контейнер", UserMessage(ex)); }
+        catch (Exception ex) { SetStatus("ContainerOpenFailed", UserMessage(ex)); }
         finally { SetBusy(false); }
     }
 
@@ -45,20 +56,20 @@ public partial class MainPage : ContentPage
         {
             await HideKeyboardAsync();
             ClearSensitiveData();
-            SetStatus("Выбор файла", "Откройте документ в системном диалоге.");
+            SetStatus("ChoosingFile", "ChoosingFileDetail");
             var document = await documents.PickAsync();
             if (document is null)
             {
-                SetStatus("Выбор отменён", selected is null ? "Файл не выбран. Можно попробовать снова." : "Предыдущий файл остаётся выбранным.");
+                SetStatus("SelectionCancelled", selected is null ? "NoFileRetry" : "PreviousFileKept");
                 return;
             }
             selected = document;
             UpdateSelection();
-            SetStatus(document.IsContainer ? "Контейнер выбран" : "Файл готов к шифрованию",
-                document.IsContainer ? "Имя и содержимое скрыты до проверки пароля." : "Задайте пароль. Восстановить его не получится.");
+            SetStatus(document.IsContainer ? "ContainerSelected" : "ReadyToEncrypt",
+                document.IsContainer ? "ContainerPrivacy" : "SetPasswordWarning");
             AnimateCard(SelectedCard);
         }
-        catch (Exception ex) { SetStatus("Не удалось выбрать файл", UserMessage(ex)); }
+        catch (Exception ex) { SetStatus("SelectionFailed", UserMessage(ex)); }
         finally { SetBusy(false); }
     }
 
@@ -68,7 +79,7 @@ public partial class MainPage : ContentPage
         ClearSensitiveData();
         selected = null;
         UpdateSelection();
-        SetStatus("Файл не выбран", "Выберите один документ из памяти устройства.");
+        SetStatus("NoFile", "SelectOneDocument");
         AnimateCard(PickerCard);
     }
 
@@ -78,20 +89,20 @@ public partial class MainPage : ContentPage
         PickerCard.IsVisible = !hasFile;
         SelectedCard.IsVisible = PickAnotherButton.IsVisible = hasFile;
         FileLabel.Text = selected?.Name;
-        FileSizeLabel.Text = selected?.Size is long size ? FormatSize(size) : "Размер неизвестен · лимит проверяется при чтении";
+        FileSizeLabel.Text = selected?.Size is long size ? FormatSize(size) : L["UnknownSize"];
         bool decrypt = selected?.IsContainer == true;
         ConfirmationGroup.IsVisible = !decrypt;
         PasswordEntry.ReturnType = decrypt ? ReturnType.Done : ReturnType.Next;
-        ModeLabel.Text = !hasFile ? "Один файл · до 32 МиБ" : decrypt ? "Расшифровка · .pvlt v1" : "Шифрование · до 32 МиБ";
-        OperationButton.Text = decrypt ? "Расшифровать" : "Зашифровать";
+        ModeLabel.Text = L[!hasFile ? "FileLimit" : decrypt ? "DecryptMode" : "EncryptMode"];
+        OperationButton.Text = L[decrypt ? "Decrypt" : "Encrypt"];
         UpdateValidation();
     }
 
     private static string FormatSize(long size) => size switch
     {
-        >= 1024 * 1024 => $"{size / (1024d * 1024):0.##} МиБ",
-        >= 1024 => $"{size / 1024d:0.##} КиБ",
-        _ => $"{size:N0} Б"
+        >= 1024 * 1024 => L.Format("SizeMiB", size / (1024d * 1024)),
+        >= 1024 => L.Format("SizeKiB", size / 1024d),
+        _ => L.Format("SizeBytes", size)
     };
 
     private void OnPasswordChanged(object? sender, TextChangedEventArgs e)
@@ -106,11 +117,11 @@ public partial class MainPage : ContentPage
         string password = PasswordEntry.Text ?? "";
         string confirmation = ConfirmationEntry.Text ?? "";
         bool mismatch = !decrypt && confirmation.Length > 0 && password != confirmation;
-        ValidationLabel.Text = isRunning ? "Пароли очищены из полей." : password.Length == 0
-            ? decrypt ? "Введите пароль от контейнера." : "Введите пароль и повторите его."
-            : mismatch ? "Пароли не совпадают."
-            : !decrypt && confirmation.Length == 0 ? "Повторите пароль."
-            : selected is null ? "Теперь выберите файл." : "Всё готово. Можно продолжить.";
+        ValidationLabel.Text = L[isRunning ? "PasswordsCleared" : password.Length == 0
+            ? decrypt ? "EnterContainerPassword" : "EnterAndConfirm"
+            : mismatch ? "PasswordMismatch"
+            : !decrypt && confirmation.Length == 0 ? "RepeatPassword"
+            : selected is null ? "NowSelectFile" : "ReadyToContinue"];
         ConfirmationBorder.Stroke = Color.FromArgb(mismatch ? "#A0A0A0" : ConfirmationEntry.IsFocused ? "#F5F5F5" : "#353535");
         OperationButton.IsEnabled = !isRunning && CanRun;
     }
@@ -126,21 +137,21 @@ public partial class MainPage : ContentPage
         {
             await HideKeyboardAsync();
             ClearSensitiveData();
-            OperationButton.Text = document.IsContainer ? "Расшифровка…" : "Шифрование…";
-            SetStatus(document.IsContainer ? "Расшифровка…" : "Шифрование…", "После обработки выберите, куда сохранить результат.");
+            OperationButton.Text = L[document.IsContainer ? "Decrypting" : "Encrypting"];
+            SetStatus(document.IsContainer ? "Decrypting" : "Encrypting", "ChooseSaveAfterProcessing");
             await FormScroll.ScrollToAsync(StatusCard, ScrollToPosition.MakeVisible, true);
             bool saved = await operations.RunAsync(document, password, confirmation);
-            SetStatus(saved ? "Готово. Файл сохранён" : "Сохранение отменено",
-                saved ? "Исходный документ остался без изменений." : "Результат не записан. Чтобы повторить, введите пароль заново.", saved);
+            SetStatus(saved ? "FileSaved" : "SaveCancelled",
+                saved ? "OriginalUnchanged" : "NotSavedRetry", saved);
             if (saved) TrySuccessHaptic();
         }
-        catch (Exception ex) { SetStatus("Не удалось завершить операцию", UserMessage(ex)); }
+        catch (Exception ex) { SetStatus("OperationFailed", UserMessage(ex)); }
         finally
         {
             password = confirmation = ""; // Managed strings cannot be reliably erased.
             ClearSensitiveData();
             SetBusy(false);
-            OperationButton.Text = document.IsContainer ? "Расшифровать" : "Зашифровать";
+            OperationButton.Text = L[document.IsContainer ? "Decrypt" : "Encrypt"];
         }
     }
 
@@ -169,8 +180,8 @@ public partial class MainPage : ContentPage
     {
         PasswordVisibilityButton.Source = PasswordEntry.IsPassword ? "pv_eye.png" : "pv_eyeoff.png";
         ConfirmationVisibilityButton.Source = ConfirmationEntry.IsPassword ? "pv_eye.png" : "pv_eyeoff.png";
-        SemanticProperties.SetDescription(PasswordVisibilityButton, PasswordEntry.IsPassword ? "Показать пароль" : "Скрыть пароль");
-        SemanticProperties.SetDescription(ConfirmationVisibilityButton, ConfirmationEntry.IsPassword ? "Показать повтор пароля" : "Скрыть повтор пароля");
+        SemanticProperties.SetDescription(PasswordVisibilityButton, L[PasswordEntry.IsPassword ? "ShowPassword" : "HidePassword"]);
+        SemanticProperties.SetDescription(ConfirmationVisibilityButton, L[ConfirmationEntry.IsPassword ? "ShowConfirmation" : "HideConfirmation"]);
     }
 
     private async void OnSettingsClicked(object? sender, EventArgs e)
@@ -224,8 +235,11 @@ public partial class MainPage : ContentPage
 
     private void SetStatus(string title, string detail, bool success = false)
     {
-        StatusTitle.Text = title;
-        ResultLabel.Text = detail;
+        statusTitleKey = title;
+        statusDetailKey = detail;
+        statusSuccess = success;
+        StatusTitle.Text = L[title];
+        ResultLabel.Text = L[detail];
         StatusIcon.Source = success ? "pv_check.png" : "pv_info.png";
     }
 
@@ -249,25 +263,42 @@ public partial class MainPage : ContentPage
         catch (Exception) { /* Haptics are optional; the file was already saved. */ }
     }
 
-    private static string UserMessage(Exception ex) => ex switch
+    // Do not parse localized exception messages or expose internal/provider text.
+    private string UserMessage(Exception ex) => ex switch
     {
-        VaultException or DocumentWriteException => ex.Message,
-        OperationCanceledException => "Системный диалог закрыт. Операция отменена.",
-        UnauthorizedAccessException or System.Security.SecurityException or Java.Lang.SecurityException =>
-            "Нет доступа к документу. Выберите файл заново и проверьте место сохранения.",
-        IOException => "Не удалось прочитать файл. Проверьте его доступность и выберите заново.",
-        OutOfMemoryException => "Недостаточно памяти. Выберите файл меньшего размера или закройте другие приложения.",
-        _ => "Не удалось обработать документ. Проверьте доступ к файлу и месту сохранения, затем повторите."
+        VaultException { InnerException: CryptographicException } => "IncorrectPassword",
+        VaultException => selected?.IsContainer == true ? "InvalidContainer" : "InvalidInput",
+        DocumentWriteException => "WriteFailed",
+        OperationCanceledException => "DialogCancelled",
+        UnauthorizedAccessException or System.Security.SecurityException or Java.Lang.SecurityException => "AccessDenied",
+        IOException => "ReadFailed",
+        OutOfMemoryException => "NotEnoughMemory",
+        _ => "DocumentFailed"
     };
+
+    private void OnLanguageChanged(object? sender, EventArgs e)
+    {
+        renderedLanguage = L.Culture.Name;
+        ClearSensitiveData();
+        UpdateSelection();
+        SetStatus(statusTitleKey, statusDetailKey, statusSuccess);
+    }
 
     protected override void OnSizeAllocated(double width, double height)
     {
         base.OnSizeAllocated(width, height);
         Form.WidthRequest = Math.Min(width, 560);
+        // Preserve the full brand at large system text sizes, without shrinking text.
+        double fontScale = global::Android.App.Application.Context.Resources?.Configuration?.FontScale ?? 1;
+        bool stackedHeader = Math.Min(width, 560) - 144 < 11 * 12 * fontScale;
+        Grid.SetColumnSpan(BrandLabel, stackedHeader ? 2 : 1);
+        Grid.SetRow(SettingsButton, stackedHeader ? 1 : 0);
     }
 
     protected override void OnDisappearing()
     {
+        DetachKeyboardViewport();
+        L.LanguageChanged -= OnLanguageChanged;
         ClearSensitiveData();
         base.OnDisappearing();
     }
@@ -275,7 +306,13 @@ public partial class MainPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+        Dispatcher.Dispatch(AttachKeyboardViewport);
+        L.LanguageChanged -= OnLanguageChanged;
+        L.LanguageChanged += OnLanguageChanged;
+        L.RefreshSystemLanguage();
+        if (renderedLanguage != L.Culture.Name) OnLanguageChanged(this, EventArgs.Empty);
 #if DEBUG
+        Diagnostics.TypographyAudit.Schedule(this, "main");
         if (Diagnostics.SmokeTestRequest.DocumentRunId is { } documentRunId)
         {
             Diagnostics.SmokeTestRequest.DocumentRunId = null;
@@ -289,5 +326,18 @@ public partial class MainPage : ContentPage
 #else
         await Task.CompletedTask;
 #endif
+    }
+
+    private void AttachKeyboardViewport()
+    {
+        if (keyboardViewport is null && FormScroll.Handler?.PlatformView is global::Android.Views.View)
+            keyboardViewport = new UI.KeyboardViewport(this, FormScroll,
+                () => PasswordEntry.IsFocused ? PasswordEntry : ConfirmationEntry.IsFocused ? ConfirmationEntry : null);
+    }
+
+    private void DetachKeyboardViewport()
+    {
+        keyboardViewport?.Detach();
+        keyboardViewport = null;
     }
 }

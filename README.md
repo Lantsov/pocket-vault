@@ -20,11 +20,11 @@
 
 <p align="center"><img src="docs/images/pocketvault-main.png" width="680" alt="PocketVault 1.1.0: dark WPF window with project-notes.txt selected, masked password fields and encryption controls"></p>
 
-The current application interface is in Russian. [Decryption](docs/images/pocketvault-decrypt.png) · [Processing](docs/images/pocketvault-processing.png).
+The Windows interface is in Russian. [Decryption](docs/images/pocketvault-decrypt.png) · [Processing](docs/images/pocketvault-processing.png).
 
-<p align="center"><img src="docs/images/android-stage4-main.png" width="250" alt="PocketVault Android running on the API 36 emulator: offline document selection and password form"> <img src="docs/images/android-stage4-decrypt.png" width="250" alt="PocketVault Android on the emulator with a pvlt container selected for decryption"></p>
+<p align="center"><img src="docs/images/android-ui-main-en.png" width="250" alt="PocketVault Android on the API 29 emulator: English interface with Iosevka Slab typography"> <img src="docs/images/android-ui-settings-en.png" width="250" alt="PocketVault Android settings with System, Russian and English language choices"></p>
 
-These are actual Android emulator screenshots with synthetic data. **Windows: 1.1.1; Android: 1.0.0 release candidate; container format: v1.** An owner-signed ARM64 APK has been verified on Poco X6 Pro; Android publication is a separate step. [Android build, installation and verified testing scope](docs/ANDROID.md).
+These are actual Android emulator screenshots with synthetic data. Android supports Russian and English with instant language switching. [UI polish, all six screenshots and validation scope](docs/ANDROID_UI_POLISH.md). **Windows: 1.1.1; Android: 1.0.0 release candidate; container format: v1.** The earlier owner-signed ARM64 candidate was verified on Poco X6 Pro; the updated UI needs a new owner-signed build before distribution. [Android guide](docs/ANDROID.md).
 
 ## Why PocketVault
 

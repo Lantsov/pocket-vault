@@ -20,11 +20,11 @@
 
 <p align="center"><img src="images/pocketvault-main.png" width="680" alt="PocketVault 1.1.0: тёмное окно WPF, выбран project-notes.txt, скрытые поля пароля и кнопки шифрования"></p>
 
-Текущий интерфейс приложения — на русском языке. [Расшифровка](images/pocketvault-decrypt.png) · [Обработка файла](images/pocketvault-processing.png).
+Интерфейс Windows — на русском языке. [Расшифровка](images/pocketvault-decrypt.png) · [Обработка файла](images/pocketvault-processing.png).
 
-<p align="center"><img src="images/android-stage4-main.png" width="250" alt="Настоящий интерфейс PocketVault Android на эмуляторе API 36: выбор документа и пароль"> <img src="images/android-stage4-decrypt.png" width="250" alt="PocketVault Android на эмуляторе: контейнер pvlt выбран для расшифровки"></p>
+<p align="center"><img src="images/android-ui-main-ru.png" width="250" alt="PocketVault Android на эмуляторе API 29: русский интерфейс со шрифтом Iosevka Slab"> <img src="images/android-ui-settings-ru.png" width="250" alt="Настройки PocketVault Android: системный язык, русский и English"></p>
 
-Это реальные снимки Android-эмулятора с синтетическими данными. **Windows: 1.1.1; Android: кандидат 1.0.0; формат контейнера: v1.** ARM64 APK подписан ключом владельца и проверен на Poco X6 Pro; публикация выполняется отдельно. [Сборка, установка и границы проверок Android](ANDROID.md).
+Это реальные снимки Android-эмулятора с синтетическими данными. Android поддерживает русский и английский с мгновенным переключением. [Полировка UI, все шесть снимков и границы проверки](ANDROID_UI_POLISH.md). **Windows: 1.1.1; Android: кандидат 1.0.0; формат контейнера: v1.** Предыдущий ARM64-кандидат подписан владельцем и проверен на Poco X6 Pro; обновлённый UI перед распространением требует новой сборки с тем же ключом. [Инструкция Android](ANDROID.md).
 
 ## Почему PocketVault
 
