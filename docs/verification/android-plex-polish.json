@@ -1,0 +1,297 @@
+{
+  "date": "2026-10-27",
+  "source_base": "1db45bea876160c733688bfa45ea477bebf29875",
+  "scope": "Android visual polish only",
+  "fonts": {
+    "upstream": {
+      "Source": "https://github.com/IBM/plex",
+      "Commit": "71f558992315a12ca1f06a2215d57962a1992162",
+      "PackageVersion": "2.5.0",
+      "Directory": "packages/plex-mono/fonts/complete/ttf"
+    },
+    "fonts": [
+      {
+        "file": "IBMPlexMono-Medium.ttf",
+        "weight": 500,
+        "version": "Version 2.005",
+        "sha256": "98fbd727aae340b236955879dabed4d991aac9e8e90b3b2a67ce4a59221cc97c",
+        "bytes": 174008,
+        "advance": 600,
+        "units_per_em": 1000,
+        "cyrillic_complete": true,
+        "all_resource_glyphs": true
+      },
+      {
+        "file": "IBMPlexMono-Regular.ttf",
+        "weight": 400,
+        "version": "Version 2.005",
+        "sha256": "7c6fbddca4b700be918f5f6183d9bd4464fa427fe435f0b480d77fe2bb8c5a43",
+        "bytes": 173052,
+        "advance": 600,
+        "units_per_em": 1000,
+        "cyrillic_complete": true,
+        "all_resource_glyphs": true
+      },
+      {
+        "file": "IBMPlexMono-SemiBold.ttf",
+        "weight": 600,
+        "version": "Version 2.005",
+        "sha256": "f04d7c488ddf7d1fa99f2574efc3406ea4cbe17bb1af3a1ab960f84d0c96a172",
+        "bytes": 174608,
+        "advance": 600,
+        "units_per_em": 1000,
+        "cyrillic_complete": true,
+        "all_resource_glyphs": true
+      }
+    ]
+  },
+  "native_typefaces": {
+    "main": {
+      "controls": 18,
+      "native_typeface_matches": true,
+      "latin_cyrillic_glyphs": true,
+      "password_mask_preserved": true,
+      "families": [
+        "IBMPlexMonoMedium",
+        "IBMPlexMonoRegular",
+        "IBMPlexMonoSemiBold"
+      ]
+    },
+    "settings": {
+      "controls": 26,
+      "native_typeface_matches": true,
+      "latin_cyrillic_glyphs": true,
+      "password_mask_preserved": true,
+      "families": [
+        "IBMPlexMonoMedium",
+        "IBMPlexMonoRegular",
+        "IBMPlexMonoSemiBold"
+      ]
+    }
+  },
+  "resources": [
+    {
+      "file": "AppResources.resx",
+      "keys": 102,
+      "changed_keys": [
+        "FontLicense",
+        "FontLicenseDetail"
+      ]
+    },
+    {
+      "file": "AppResources.ru.resx",
+      "keys": 102,
+      "changed_keys": [
+        "FontLicense",
+        "FontLicenseDetail"
+      ]
+    }
+  ],
+  "runtime": {
+    "android_api": 29,
+    "android_version": "10",
+    "abi": "x86_64",
+    "build": "Debug; existing demo_screenshots opt-out only",
+    "primary_display_dp": [
+      411,
+      914
+    ],
+    "primary_languages": [
+      "en",
+      "ru"
+    ],
+    "additional_displays": [
+      {
+        "language": "en",
+        "dp": "360x640",
+        "font_scale": 1,
+        "primary_reachable": true,
+        "languages_reachable": true,
+        "settings_complete": true
+      },
+      {
+        "language": "en",
+        "dp": "640x360",
+        "font_scale": 1,
+        "primary_reachable": true,
+        "languages_reachable": true,
+        "settings_complete": true
+      },
+      {
+        "language": "en",
+        "dp": "360x640",
+        "font_scale": 2,
+        "primary_reachable": true,
+        "languages_reachable": true,
+        "settings_complete": true
+      },
+      {
+        "language": "en",
+        "dp": "640x360",
+        "font_scale": 2,
+        "primary_reachable": true,
+        "languages_reachable": true,
+        "settings_complete": true
+      },
+      {
+        "language": "en",
+        "dp": "411x914",
+        "font_scale": 2,
+        "primary_reachable": true,
+        "languages_reachable": true,
+        "settings_complete": true
+      },
+      {
+        "language": "ru",
+        "dp": "360x640",
+        "font_scale": 1,
+        "primary_reachable": true,
+        "languages_reachable": true,
+        "settings_complete": true
+      },
+      {
+        "language": "ru",
+        "dp": "640x360",
+        "font_scale": 1,
+        "primary_reachable": true,
+        "languages_reachable": true,
+        "settings_complete": true
+      },
+      {
+        "language": "ru",
+        "dp": "360x640",
+        "font_scale": 2,
+        "primary_reachable": true,
+        "languages_reachable": true,
+        "settings_complete": true
+      },
+      {
+        "language": "ru",
+        "dp": "640x360",
+        "font_scale": 2,
+        "primary_reachable": true,
+        "languages_reachable": true,
+        "settings_complete": true
+      },
+      {
+        "language": "ru",
+        "dp": "411x914",
+        "font_scale": 2,
+        "primary_reachable": true,
+        "languages_reachable": true,
+        "settings_complete": true
+      }
+    ],
+    "brief_ui_check": {
+      "language_persisted": true,
+      "password_validation": true,
+      "small_file_encryption_reached_save": true,
+      "save_cancel_status": true,
+      "live_status_translation": true,
+      "passwords_cleared_and_masked": true,
+      "ibm_license_available_offline": true,
+      "primary_action_reachable_after_password_input": true,
+      "password_show_hide": true,
+      "focused_fields_above_ime": true,
+      "primary_action_reachable_above_ime": true,
+      "keyboard_hides": true,
+      "full_viewport_restored": true
+    },
+    "system_bar_footer_overlap_fixed": true
+  },
+  "screenshots": [
+    {
+      "path": "docs/images/android-plex-settings-en.png",
+      "pixels": [
+        822,
+        1828
+      ],
+      "dp": [
+        411,
+        914
+      ],
+      "sha256": "7315dce7af70ebb1d52569f68b52778485857f09d22c76149407c8dbb27646eb"
+    },
+    {
+      "path": "docs/images/android-plex-settings-ru.png",
+      "pixels": [
+        822,
+        1828
+      ],
+      "dp": [
+        411,
+        914
+      ],
+      "sha256": "2e868c4e3fc296da513d3826848eae74fd6f9fcdfaedecda3245a2229622c45b"
+    },
+    {
+      "path": "docs/images/android-plex-main-en.png",
+      "pixels": [
+        822,
+        1828
+      ],
+      "dp": [
+        411,
+        914
+      ],
+      "sha256": "61fad3225789a549e1722b80f41e94754f26d0b95aceeca03788423c734b589c"
+    },
+    {
+      "path": "docs/images/android-plex-main-ru.png",
+      "pixels": [
+        822,
+        1828
+      ],
+      "dp": [
+        411,
+        914
+      ],
+      "sha256": "2c76d57b67d79ddb953b2b8e0ae251afb8a64c10bd472c36a2a08687a944bbd6"
+    }
+  ],
+  "packages": [
+    {
+      "bytes": 46270835,
+      "sha256": "60e691b3143ab921c57ba7834e7ec0f9a552f30a3c6e734f0c9005b48c31ce89",
+      "fonts": [
+        "assets/IBMPlexMono-Medium.ttf",
+        "assets/IBMPlexMono-Regular.ttf",
+        "assets/IBMPlexMono-SemiBold.ttf"
+      ],
+      "no_iosevka": true,
+      "kind": "debug-x64"
+    },
+    {
+      "bytes": 17747514,
+      "sha256": "8013a61bcd9eee4f2250aaed2184d86d2185681b9f71335d9a6032abd01a13bc",
+      "fonts": [
+        "assets/IBMPlexMono-Medium.ttf",
+        "assets/IBMPlexMono-Regular.ttf",
+        "assets/IBMPlexMono-SemiBold.ttf"
+      ],
+      "no_iosevka": true,
+      "kind": "release-arm64-unsigned"
+    }
+  ],
+  "unchanged": {
+    "protected_paths": [
+      "PocketVault.Core",
+      "PocketVault.App",
+      "PocketVault.Android/Services",
+      "PocketVault.Android/Platforms",
+      "PocketVault.Android/Localization",
+      "PocketVault.Android/UI/KeyboardViewport.cs",
+      "scripts",
+      ".github"
+    ],
+    "owner_signed_apk_sha256": "08c43b6e19ac54d8d8f2a671845b34f4b183f56b05df917e7d3d92d8d1d11e81",
+    "owner_signed_apk_bytes": 27860070,
+    "owner_signing_key_accessed": false
+  },
+  "limitations": [
+    "At this UI-only validation stage, the new UI had not yet been tested on the physical Android device.",
+    "New UI requires an owner-signed ARM64 rebuild before distribution.",
+    "No additional long cryptographic/provider tests run.",
+    "No PR merge or GitHub Release publication."
+  ]
+}

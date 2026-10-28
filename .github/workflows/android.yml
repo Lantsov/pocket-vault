@@ -1,0 +1,91 @@
+name: Android build and host checks
+
+on:
+  push:
+    branches: [main, feature/android-mvp]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  android:
+    name: Android ARM64 · unsigned Release validation
+    runs-on: windows-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: pwsh
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: '1'
+      DOTNET_NOLOGO: '1'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: '10.0.403'
+
+      - name: Set up MAUI, Android SDK and JDK 21
+        run: |
+          $jdk = $env:JAVA_HOME_21_X64
+          if (!$jdk -or !(Test-Path "$jdk/bin/java.exe")) { throw 'Runner requires JDK 21.' }
+          "JAVA_HOME=$jdk" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          $env:JAVA_HOME = $jdk
+          $manager = Join-Path $env:ANDROID_HOME 'cmdline-tools/latest/bin/sdkmanager.bat'
+          if (!(Test-Path $manager)) { throw 'Runner requires Android command-line tools.' }
+          & $manager 'platforms;android-36' 'build-tools;36.0.0' 'platform-tools'
+          if ($LASTEXITCODE -ne 0) { throw 'Android SDK setup failed.' }
+          dotnet workload install maui-android --skip-manifest-update
+          if ($LASTEXITCODE -ne 0) { throw 'MAUI workload setup failed.' }
+
+      - name: Windows/Core/WPF and shared Android document checks (host runtime)
+        run: ./scripts/build.ps1
+
+      - name: Android Debug ARM64 compile and development signature check
+        run: ./scripts/build-android.ps1 -Configuration Debug -SkipWindowsTests
+
+      - name: Android Release ARM64 compile, manifest and unsigned artifact checks
+        run: ./scripts/build-android.ps1 -Configuration Release -Unsigned -SkipWindowsTests
+
+      - name: Check documentation
+        run: |
+          python ./scripts/check-docs.py
+          if ($LASTEXITCODE -ne 0) { throw 'Documentation checks failed.' }
+
+      - name: Record testing scope
+        if: always()
+        run: |
+          New-Item -ItemType Directory -Path dist/android -Force | Out-Null
+          'CI compiles Android and runs host tests. No emulator/physical-device runtime tests run here. No production key or release publication.' |
+            Set-Content dist/android/CI-SCOPE.txt
+          Get-Content dist/android/CI-SCOPE.txt | Add-Content $env:GITHUB_STEP_SUMMARY
+
+      - name: Save check reports (explicitly approved, no APKs or signing keys)
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: PocketVault-android-check-reports
+          path: |
+            dist/android/debug/**/BUILD.txt
+            dist/android/debug/**/SIGNATURE.txt
+            dist/android/debug/**/manifest.txt
+            dist/android/debug/**/SHA256SUMS.txt
+            dist/android/unsigned/**/BUILD.txt
+            dist/android/unsigned/**/SIGNATURE.txt
+            dist/android/unsigned/**/manifest.txt
+            dist/android/unsigned/**/SHA256SUMS.txt
+            dist/android/CI-SCOPE.txt
+            dist/test-results.txt
+          if-no-files-found: warn
+          retention-days: 14

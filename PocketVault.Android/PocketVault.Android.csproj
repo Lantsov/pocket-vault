@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0-android</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>PocketVault.Android</RootNamespace>
+    <UseMaui>true</UseMaui>
+    <SingleProject>true</SingleProject>
+    <SupportedOSPlatformVersion>29.0</SupportedOSPlatformVersion>
+    <ApplicationId>com.lantsov.pocketvault</ApplicationId>
+    <ApplicationTitle>PocketVault</ApplicationTitle>
+    <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
+    <ApplicationVersion>1</ApplicationVersion>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <!-- Keep SDK publish/trim inference from adding the desktop host RID. -->
+    <UseDefaultPublishRuntimeIdentifier>false</UseDefaultPublishRuntimeIdentifier>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../PocketVault.Tests/DocumentOperationChecks.cs" Link="Diagnostics/DocumentOperationChecks.cs" Condition="'$(Configuration)' == 'Debug'" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+    <ProjectReference Include="../PocketVault.Core/PocketVault.Core.csproj" />
+    <MauiIcon Include="Resources/AppIcon/appicon.svg" ForegroundFile="Resources/AppIcon/appiconfg.svg" Color="#141414" ForegroundScale="0.65" />
+    <MauiSplashScreen Include="Resources/AppIcon/appiconfg.svg" Color="#141414" BaseSize="128,128" />
+    <MauiImage Include="Resources/Images/*.svg" />
+    <MauiFont Include="Resources/Fonts/*.ttf" />
+    <EmbeddedResource Include="Resources/Fonts/OFL.txt" LogicalName="PocketVault.Android.FontLicense" />
+    <MauiImage Include="../docs/images/pocketvault-logo.png" Link="Resources/Images/pocketvault_logo.png" />
+    <EmbeddedResource Include="../PocketVault.Tests/Fixtures/v1-container.base64" LogicalName="PocketVault.Android.Fixtures.V1" />
+    <EmbeddedResource Include="../PocketVault.Tests/Fixtures/v1.1.0-container.base64" LogicalName="PocketVault.Android.Fixtures.V110" />
+  </ItemGroup>
+</Project>

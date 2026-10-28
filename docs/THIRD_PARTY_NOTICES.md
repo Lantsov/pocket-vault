@@ -22,8 +22,12 @@ The self-contained build also contains WPF's `D3DCompiler_47_cor3.dll`. Microsof
 
 See Microsoft's [asset licensing model](https://github.com/dotnet/runtime/blob/main/docs/project/licensing-assets.md), [redistribution information](https://github.com/dotnet/core/blob/main/license-information.md), [Windows component licensing](https://github.com/dotnet/core/blob/main/license-information-windows.md) and [.NET Library license](https://dotnet.microsoft.com/en-us/dotnet_library_license.htm). These distinguish source licensing from Windows binary licensing, including WPF/native components. The copied upstream documents remain the terms accompanying the actual build; this summary does not relicense Microsoft binaries under PocketVault's MIT grant.
 
-The 1.1.0 archives predate this packaging change and are retained unchanged by the owner's decision. Version 1.1.1 provides newly packaged distributions; it does not silently replace historical assets. See [the publication review](PUBLICATION_REVIEW.md) for the actual build/runtime versions and validation results.
+The 1.1.0 archives predate this packaging change and remain available unchanged. Windows 1.1.1 provides separately packaged distributions with these notices; earlier release assets were not replaced.
+
+## Android font
+
+The Android app redistributes official **IBM Plex Mono** Regular, Medium and SemiBold TTF files, licensed under the **SIL Open Font License 1.1**. The [font provenance and checksums](../PocketVault.Android/Resources/Fonts/README.md) and complete [OFL license](../PocketVault.Android/Resources/Fonts/OFL.txt) are included. The source files are not re-licensed under PocketVault's MIT license.
 
 ## Development tools
 
-Python/Pillow is used only to draw repository artwork, not bundled in the application. WPF uses the system's Segoe UI font; no font file is redistributed. GitHub Actions and the .NET SDK are build infrastructure and are not application features.
+Python/Pillow is used only for repository artwork and is not bundled in the application. Windows WPF uses the system Segoe UI font. GitHub Actions and the .NET SDK are build infrastructure, not application features.

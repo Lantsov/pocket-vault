@@ -1,45 +1,31 @@
 # Changelog
 
-Notable changes based on the repository history and published releases. Dates use the release date where a release exists.
+Published PocketVault releases. Windows and Android have independent application version numbers; both use container format `.pvlt` v1.
 
-## v1.1.1 — Maintenance release
+## [Android 1.0.0](https://github.com/Lantsov/pocket-vault/releases/tag/android-v1.0.0) — 2026-10-27
 
-Prepared for release; not yet tagged or published.
+First signed ARM64 APK for Android 10+:
 
-- Added required redistribution license notices for packaged .NET runtime components.
-- Improved release packaging and third-party attribution, including the framework-dependent executable host.
-- No changes to encryption, file format or application functionality. Containers remain format v1 and compatible with v1.1.0.
+- Local encryption and decryption using the existing compatible PocketVault Core and Android system document picker.
+- Shared `.pvlt` v1 files with PocketVault for Windows; one file at a time, up to 32 MiB on Android.
+- Dark mobile UI with IBM Plex Mono, Russian and English, instant language switching and responsive layouts.
+- Password clearing and masking, protected app screenshots, disabled app backups, no broad storage permission or app network access.
+- Signed APK, published SHA-256 and certificate fingerprint, and a separate Android CI build.
+- Android 10/API 29 runtime checks, device testing of the earlier functional build and emulator UI checks for the final IBM Plex version. See [release verification](docs/ANDROID_RELEASE_1.0.0.md) for the precise scope.
 
-## Public-release documentation preparation
+## [Windows 1.1.1](https://github.com/Lantsov/pocket-vault/releases/tag/v1.1.1) — 2026-10-26
 
-### Added
+- Added distribution licenses and third-party notices for the packaged .NET runtime and executable host.
+- Improved repeatable release packaging and validation.
+- No changes to encryption, format v1, file processing or the Windows interface; compatible with v1.1.0.
 
-- English and Russian project pages, genuine WPF preview images and a social preview asset.
-- Security model, format/build/usage guides, bilingual disclaimer, MIT license and third-party notices.
-- Contribution guidance, issue forms, pull request checklist and a public-release preparation report.
-- Repeatable documentation screenshots and packaging/checksum tooling for future releases.
+## [Windows 1.1.0](https://github.com/Lantsov/pocket-vault/releases/tag/v1.1.0) — 2026-10-26
 
-### Changed
+- Replaced the WinForms UI with a minimal dark WPF interface.
+- Added background operations, password visibility/clearing, drag and drop, inline status, DPI/layout adjustments and keyboard accessibility.
+- Added WPF interaction tests, screenshot tooling and legacy container-compatibility coverage.
+- Published Windows x64 self-contained and framework-dependent ZIPs.
 
-- Documentation organization and publication hygiene; no cryptographic, API or container-format changes.
+## Initial implementation — 2026-10-26
 
-## [1.1.0] - 2026-10-26
-
-### Changed
-
-- Replaced the WinForms interface with a dark WPF/XAML window while retaining v1 container compatibility.
-- Added background operations, password visibility/clearing, drag-and-drop handling and inline status/error feedback.
-- Added DPI/work-area layout handling and keyboard accessibility.
-
-### Added
-
-- WPF interaction/layout tests, multiple-DPI render captures and a legacy v1 container fixture.
-- Windows manifest and GUI-aware publish smoke checks.
-
-The release contains self-contained and framework-dependent Windows x64 ZIPs and `SHA256SUMS.txt`.
-
-## Initial source - 2026-10-26
-
-Commit [`661c57c`](https://github.com/Lantsov/pocket-vault/commit/661c57c65ada7af8b13ddd4e17c0aadb75c4d372) introduced the WinForms application, AES-256-GCM/PBKDF2 v1 format, in-memory ZIP, verified optional deletion, Explorer association, tests, icons and Windows build workflow. This snapshot has no separate release or version tag in the available history.
-
-[1.1.0]: https://github.com/Lantsov/pocket-vault/releases/tag/v1.1.0
+Commit [`661c57c`](https://github.com/Lantsov/pocket-vault/commit/661c57c65ada7af8b13ddd4e17c0aadb75c4d372) introduced password-based AES-256-GCM/PBKDF2 v1, in-memory ZIP, the original Windows UI, optional verified deletion, Explorer association and tests. It has no separate release tag.

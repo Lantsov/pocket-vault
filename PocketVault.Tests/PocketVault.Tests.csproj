@@ -5,6 +5,7 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="../PocketVault.Android/Services/DocumentOperations.cs" Link="Android/DocumentOperations.cs" />
     <EmbeddedResource Include="Fixtures/v1-container.base64" LogicalName="PocketVault.LegacyContainer" />
     <EmbeddedResource Include="Fixtures/v1.1.0-container.base64" LogicalName="PocketVault.V110Container" />
     <ProjectReference Include="../PocketVault.Core/PocketVault.Core.csproj" />

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:loc="clr-namespace:PocketVault.Android.Localization"
+             x:Class="PocketVault.Android.SettingsPage" Title="{loc:Translate Settings}"
+             BackgroundColor="{StaticResource PageBackground}" SafeAreaEdges="None"
+             NavigationPage.HasNavigationBar="False">
+    <Grid x:Name="PageLayout" IsClippedToBounds="True" SafeAreaEdges="None">
+        <ScrollView>
+            <VerticalStackLayout x:Name="SettingsContent" Padding="24,8,24,24" Spacing="16"
+                                 MaximumWidthRequest="560" HorizontalOptions="Center">
+                <VerticalStackLayout Spacing="8">
+                  <Grid ColumnDefinitions="48,*" ColumnSpacing="12">
+                    <ImageButton Source="pv_back.png" Clicked="OnBackClicked"
+                                 AutomationId="SettingsBack" SemanticProperties.Description="{loc:Translate BackToFile}" />
+                    <Label Grid.Column="1" Text="{loc:Translate Settings}" Style="{StaticResource Brand}"
+                           VerticalOptions="Center" SemanticProperties.HeadingLevel="Level1" />
+                  </Grid>
+                  <VerticalStackLayout Spacing="4">
+                    <Label Text="PocketVault" Style="{StaticResource Section}" />
+                    <Label Text="{loc:Translate PersonalSpace}" Style="{StaticResource Caption}" />
+                  </VerticalStackLayout>
+                </VerticalStackLayout>
+                <Border Padding="16">
+                    <VerticalStackLayout Spacing="12">
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="{loc:Translate Language}" Style="{StaticResource Section}"
+                                   SemanticProperties.HeadingLevel="Level2" />
+                            <Label Text="{loc:Translate LanguageHint}" Style="{StaticResource Caption}" />
+                        </VerticalStackLayout>
+                        <Grid x:Name="LanguageOptions" ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="8">
+                            <Button x:Name="SystemLanguageButton" Text="{loc:Translate SystemLanguage}"
+                                    Style="{StaticResource LanguageOption}" CommandParameter="system" Clicked="OnLanguageClicked" AutomationId="LanguageSystem" />
+                            <Button x:Name="RussianLanguageButton" Grid.Column="1" Text="{loc:Translate RussianLanguage}"
+                                    Style="{StaticResource LanguageOption}" CommandParameter="ru" Clicked="OnLanguageClicked" AutomationId="LanguageRu" />
+                            <Button x:Name="EnglishLanguageButton" Grid.Column="2" Text="{loc:Translate EnglishLanguage}"
+                                    Style="{StaticResource LanguageOption}" CommandParameter="en" Clicked="OnLanguageClicked" AutomationId="LanguageEn" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+                <Border Padding="16">
+                    <VerticalStackLayout Spacing="12">
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="{loc:Translate ApplicationSection}" Style="{StaticResource Technical}" />
+                            <Label x:Name="VersionLabel" AutomationId="AppVersion" />
+                        </VerticalStackLayout>
+                        <BoxView Color="{StaticResource BorderColor}" HeightRequest="1" />
+                        <Grid x:Name="AppFacts" ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto"
+                              ColumnSpacing="16" RowSpacing="8">
+                            <Label x:Name="FormatCaption" Text="{loc:Translate ContainerFormat}" Style="{StaticResource Caption}" VerticalOptions="Center" />
+                            <Label x:Name="FormatValue" Grid.Column="1" Text=".pvlt v1" VerticalOptions="Center" />
+                            <Label x:Name="LimitCaption" Grid.Row="1" Text="{loc:Translate SourceFileSize}" Style="{StaticResource Caption}" VerticalOptions="Center" />
+                            <Label x:Name="LimitValue" Grid.Row="1" Grid.Column="1" Text="{loc:Translate UpTo32MiB}" VerticalOptions="Center" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+                <Border Padding="16">
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="{loc:Translate LocalOnly}" Style="{StaticResource Section}"
+                               SemanticProperties.HeadingLevel="Level2" />
+                        <Label Text="{loc:Translate OfflineExplanation}" Style="{StaticResource Caption}" />
+                        <Label Text="{loc:Translate NoRecovery}" Style="{StaticResource Caption}" />
+                    </VerticalStackLayout>
+                </Border>
+                <VerticalStackLayout Spacing="8">
+                    <Button x:Name="GitHubButton" Text="{loc:Translate GitHubProject}" Clicked="OnGitHubClicked"
+                            AutomationId="OpenGitHub" SemanticProperties.Hint="{loc:Translate BrowserHint}" />
+                    <Label x:Name="LinkErrorLabel" IsVisible="False" Style="{StaticResource Caption}"
+                           AutomationId="SettingsLinkError" />
+                    <Button x:Name="LicenseButton" Text="{loc:Translate MitLicense}" Clicked="OnLicenseClicked"
+                            AutomationId="ShowLicense" SemanticProperties.Hint="{loc:Translate ShowLicenseHint}" />
+                    <Border x:Name="LicensePanel" IsVisible="False" Padding="16">
+                        <Label x:Name="LicenseLabel" Style="{StaticResource Caption}" />
+                    </Border>
+                    <Button x:Name="FontLicenseButton" Text="{loc:Translate FontLicense}" Clicked="OnFontLicenseClicked"
+                            AutomationId="ShowFontLicense" SemanticProperties.Hint="{loc:Translate ShowLicenseHint}" />
+                    <Border x:Name="FontLicensePanel" IsVisible="False" Padding="16">
+                        <VerticalStackLayout Spacing="12">
+                            <Label Text="{loc:Translate FontLicenseDetail}" Style="{StaticResource Caption}" />
+                            <Label x:Name="FontLicenseLabel" Style="{StaticResource Technical}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="{loc:Translate NoWarranty}" Style="{StaticResource Section}" />
+                    <Label Text="{loc:Translate WarrantyDetail}" Style="{StaticResource Caption}" />
+                    <Label Text="© 2026 Lantsov" Style="{StaticResource Technical}" Margin="0,8,0,0" />
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

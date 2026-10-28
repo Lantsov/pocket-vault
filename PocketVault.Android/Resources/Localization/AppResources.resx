@@ -1,0 +1,315 @@
+<?xml version='1.0' encoding='utf-8'?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <data xml:space="preserve" name="CheckCount">
+    <value>{0:N0}/{1:N0}</value>
+  </data>
+  <data xml:space="preserve" name="Tagline">
+    <value>Your files. Your password. Your control.</value>
+  </data>
+  <data xml:space="preserve" name="LogoDescription">
+    <value>PocketVault logo</value>
+  </data>
+  <data xml:space="preserve" name="Settings">
+    <value>Settings</value>
+  </data>
+  <data xml:space="preserve" name="FileSection">
+    <value>FILE</value>
+  </data>
+  <data xml:space="preserve" name="SelectFile">
+    <value>Select a file</value>
+  </data>
+  <data xml:space="preserve" name="FromDevice">
+    <value>From your device</value>
+  </data>
+  <data xml:space="preserve" name="BrowseFiles">
+    <value>Browse files</value>
+  </data>
+  <data xml:space="preserve" name="RemoveFile">
+    <value>Remove selected file</value>
+  </data>
+  <data xml:space="preserve" name="ChooseAnother">
+    <value>Choose another file</value>
+  </data>
+  <data xml:space="preserve" name="FileLimit">
+    <value>One file · up to 32 MiB</value>
+  </data>
+  <data xml:space="preserve" name="Password">
+    <value>Password</value>
+  </data>
+  <data xml:space="preserve" name="EnterPassword">
+    <value>Password</value>
+  </data>
+  <data xml:space="preserve" name="ConfirmPassword">
+    <value>Confirm password</value>
+  </data>
+  <data xml:space="preserve" name="EnterAgain">
+    <value>Repeat</value>
+  </data>
+  <data xml:space="preserve" name="ShowPassword">
+    <value>Show password</value>
+  </data>
+  <data xml:space="preserve" name="HidePassword">
+    <value>Hide password</value>
+  </data>
+  <data xml:space="preserve" name="ShowConfirmation">
+    <value>Show password confirmation</value>
+  </data>
+  <data xml:space="preserve" name="HideConfirmation">
+    <value>Hide password confirmation</value>
+  </data>
+  <data xml:space="preserve" name="PasswordHint">
+    <value>Your password is never saved.</value>
+  </data>
+  <data xml:space="preserve" name="ConfirmationHint">
+    <value>Enter the same password again.</value>
+  </data>
+  <data xml:space="preserve" name="Encrypt">
+    <value>Encrypt</value>
+  </data>
+  <data xml:space="preserve" name="Decrypt">
+    <value>Decrypt</value>
+  </data>
+  <data xml:space="preserve" name="LocalOnly">
+    <value>On your device only</value>
+  </data>
+  <data xml:space="preserve" name="LocalOnlyDetail">
+    <value>No cloud or accounts. Only you know the password.</value>
+  </data>
+  <data xml:space="preserve" name="TechnicalFooter">
+    <value>Offline · AES-256-GCM · .pvlt</value>
+  </data>
+  <data xml:space="preserve" name="ContainerSelected">
+    <value>Container selected</value>
+  </data>
+  <data xml:space="preserve" name="ContainerPrivacy">
+    <value>Name and contents stay hidden until the password is verified.</value>
+  </data>
+  <data xml:space="preserve" name="ContainerOpenFailed">
+    <value>Could not open container</value>
+  </data>
+  <data xml:space="preserve" name="ChoosingFile">
+    <value>Select a file</value>
+  </data>
+  <data xml:space="preserve" name="ChoosingFileDetail">
+    <value>Open a document in the system picker.</value>
+  </data>
+  <data xml:space="preserve" name="SelectionCancelled">
+    <value>Selection cancelled</value>
+  </data>
+  <data xml:space="preserve" name="NoFileRetry">
+    <value>No file selected. You can try again.</value>
+  </data>
+  <data xml:space="preserve" name="PreviousFileKept">
+    <value>The previous file is still selected.</value>
+  </data>
+  <data xml:space="preserve" name="ReadyToEncrypt">
+    <value>File ready to encrypt</value>
+  </data>
+  <data xml:space="preserve" name="SetPasswordWarning">
+    <value>Choose a password. It cannot be recovered.</value>
+  </data>
+  <data xml:space="preserve" name="SelectionFailed">
+    <value>Could not select file</value>
+  </data>
+  <data xml:space="preserve" name="NoFile">
+    <value>No file selected</value>
+  </data>
+  <data xml:space="preserve" name="SelectOneDocument">
+    <value>Choose one document from your device.</value>
+  </data>
+  <data xml:space="preserve" name="UnknownSize">
+    <value>Size unknown · checked when reading</value>
+  </data>
+  <data xml:space="preserve" name="DecryptMode">
+    <value>Decryption · .pvlt v1</value>
+  </data>
+  <data xml:space="preserve" name="EncryptMode">
+    <value>Encryption · up to 32 MiB</value>
+  </data>
+  <data xml:space="preserve" name="SizeMiB">
+    <value>{0:0.##} MiB</value>
+  </data>
+  <data xml:space="preserve" name="SizeKiB">
+    <value>{0:0.##} KiB</value>
+  </data>
+  <data xml:space="preserve" name="SizeBytes">
+    <value>{0:N0} B</value>
+  </data>
+  <data xml:space="preserve" name="PasswordsCleared">
+    <value>Password fields have been cleared.</value>
+  </data>
+  <data xml:space="preserve" name="EnterContainerPassword">
+    <value>Enter the container password.</value>
+  </data>
+  <data xml:space="preserve" name="EnterAndConfirm">
+    <value>Enter and confirm your password.</value>
+  </data>
+  <data xml:space="preserve" name="PasswordMismatch">
+    <value>Passwords don't match.</value>
+  </data>
+  <data xml:space="preserve" name="RepeatPassword">
+    <value>Confirm your password.</value>
+  </data>
+  <data xml:space="preserve" name="NowSelectFile">
+    <value>Now choose a file.</value>
+  </data>
+  <data xml:space="preserve" name="ReadyToContinue">
+    <value>Ready. You can continue.</value>
+  </data>
+  <data xml:space="preserve" name="Decrypting">
+    <value>Decrypting…</value>
+  </data>
+  <data xml:space="preserve" name="Encrypting">
+    <value>Encrypting…</value>
+  </data>
+  <data xml:space="preserve" name="ChooseSaveAfterProcessing">
+    <value>After processing, choose where to save the result.</value>
+  </data>
+  <data xml:space="preserve" name="FileSaved">
+    <value>Done. File saved</value>
+  </data>
+  <data xml:space="preserve" name="SaveCancelled">
+    <value>Save cancelled</value>
+  </data>
+  <data xml:space="preserve" name="OriginalUnchanged">
+    <value>The original document is unchanged.</value>
+  </data>
+  <data xml:space="preserve" name="NotSavedRetry">
+    <value>Nothing was saved. Enter your password again to retry.</value>
+  </data>
+  <data xml:space="preserve" name="OperationFailed">
+    <value>Could not complete operation</value>
+  </data>
+  <data xml:space="preserve" name="IncorrectPassword">
+    <value>Incorrect password or corrupted file.</value>
+  </data>
+  <data xml:space="preserve" name="InvalidContainer">
+    <value>Invalid or unsupported container. Check the file and the 32 MiB limit.</value>
+  </data>
+  <data xml:space="preserve" name="InvalidInput">
+    <value>Check the file name, password and size (up to 32 MiB).</value>
+  </data>
+  <data xml:space="preserve" name="WriteFailed">
+    <value>Could not save. The original is unchanged. Check the destination and remove any incomplete file before retrying.</value>
+  </data>
+  <data xml:space="preserve" name="DialogCancelled">
+    <value>System dialog closed. Operation cancelled.</value>
+  </data>
+  <data xml:space="preserve" name="AccessDenied">
+    <value>No access to this document. Select it again and check the save location.</value>
+  </data>
+  <data xml:space="preserve" name="ReadFailed">
+    <value>Could not read the file. Check that it is available and select it again.</value>
+  </data>
+  <data xml:space="preserve" name="NotEnoughMemory">
+    <value>Not enough memory. Choose a smaller file or close other apps.</value>
+  </data>
+  <data xml:space="preserve" name="DocumentFailed">
+    <value>Could not process the document. Check access to the file and save location, then retry.</value>
+  </data>
+  <data xml:space="preserve" name="BackToFile">
+    <value>Back to file</value>
+  </data>
+  <data xml:space="preserve" name="PersonalSpace">
+    <value>A private space for your files.</value>
+  </data>
+  <data xml:space="preserve" name="Language">
+    <value>Language</value>
+  </data>
+  <data xml:space="preserve" name="LanguageHint">
+    <value>Changes apply immediately. Password fields are cleared.</value>
+  </data>
+  <data xml:space="preserve" name="SystemLanguage">
+    <value>System</value>
+  </data>
+  <data xml:space="preserve" name="RussianLanguage">
+    <value>Русский</value>
+  </data>
+  <data xml:space="preserve" name="EnglishLanguage">
+    <value>English</value>
+  </data>
+  <data xml:space="preserve" name="LanguageSelected">
+    <value>Selected language</value>
+  </data>
+  <data xml:space="preserve" name="ApplicationSection">
+    <value>APPLICATION</value>
+  </data>
+  <data xml:space="preserve" name="VersionFormat">
+    <value>Version {0} ({1})</value>
+  </data>
+  <data xml:space="preserve" name="ContainerFormat">
+    <value>Container format</value>
+  </data>
+  <data xml:space="preserve" name="SourceFileSize">
+    <value>Source file size</value>
+  </data>
+  <data xml:space="preserve" name="UpTo32MiB">
+    <value>Up to 32 MiB</value>
+  </data>
+  <data xml:space="preserve" name="OfflineExplanation">
+    <value>No accounts, cloud or activity history. Files are processed locally. Encryption needs no internet connection.</value>
+  </data>
+  <data xml:space="preserve" name="NoRecovery">
+    <value>Passwords cannot be recovered. Keep yours somewhere safe: without it, your file cannot be decrypted.</value>
+  </data>
+  <data xml:space="preserve" name="GitHubProject">
+    <value>Project on GitHub ↗</value>
+  </data>
+  <data xml:space="preserve" name="BrowserHint">
+    <value>Opens your browser. Internet connection required.</value>
+  </data>
+  <data xml:space="preserve" name="BrowserFailed">
+    <value>Could not open browser. Project: github.com/Lantsov/pocket-vault</value>
+  </data>
+  <data xml:space="preserve" name="MitLicense">
+    <value>MIT license</value>
+  </data>
+  <data xml:space="preserve" name="HideMitLicense">
+    <value>Hide MIT license</value>
+  </data>
+  <data xml:space="preserve" name="ShowLicenseHint">
+    <value>Show the full license text on this screen.</value>
+  </data>
+  <data xml:space="preserve" name="HideLicenseHint">
+    <value>Hide the full license text.</value>
+  </data>
+  <data xml:space="preserve" name="FontLicense">
+    <value>IBM Plex Mono · OFL 1.1</value>
+  </data>
+  <data xml:space="preserve" name="HideFontLicense">
+    <value>Hide font license</value>
+  </data>
+  <data xml:space="preserve" name="FontLicenseDetail">
+    <value>Bundled font by IBM. Original license below.</value>
+  </data>
+  <data xml:space="preserve" name="NoWarranty">
+    <value>No warranty</value>
+  </data>
+  <data xml:space="preserve" name="WarrantyDetail">
+    <value>Provided “as is”, without warranty. The authors are not liable for data loss or other damages. Back up important files and check recovery before deleting the original.</value>
+  </data>
+  <data xml:space="preserve" name="DebugCheck">
+    <value>Debug check</value>
+  </data>
+  <data xml:space="preserve" name="DebugDocuments">
+    <value>Synthetic document checks…</value>
+  </data>
+  <data xml:space="preserve" name="DocumentChecks">
+    <value>Document checks</value>
+  </data>
+  <data xml:space="preserve" name="CheckFailed">
+    <value>Check failed</value>
+  </data>
+  <data xml:space="preserve" name="DebugRuntime">
+    <value>Checking on Android runtime…</value>
+  </data>
+  <data xml:space="preserve" name="CryptoChecks">
+    <value>Cryptography check</value>
+  </data>
+</root>

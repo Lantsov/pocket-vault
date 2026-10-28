@@ -1,74 +1,81 @@
-<p align="center"><a href="../README.md">English</a> · <a href="README.ru.md">Русский</a></p>
-
-<p align="center"><img src="images/pocketvault-logo.png" width="80" height="80" alt="Логотип PocketVault — замок"></p>
-
-<h1 align="center">PocketVault</h1>
-<p align="center"><strong>Ваши файлы. Ваш пароль. Ваш контроль.</strong></p>
-<p align="center">Небольшая офлайн-утилита для Windows: сжимает и шифрует один файл в защищённый паролем контейнер <code>.pvlt</code>.</p>
-
 <p align="center">
-  <a href="https://github.com/Lantsov/pocket-vault/actions/workflows/build.yml"><img src="https://github.com/Lantsov/pocket-vault/actions/workflows/build.yml/badge.svg" alt="Сборка и тесты Windows"></a>
-  <a href="https://github.com/Lantsov/pocket-vault/releases/latest"><img src="https://img.shields.io/github/v/release/Lantsov/pocket-vault?style=flat&amp;color=555" alt="Последний релиз GitHub"></a>
-  <img src="https://img.shields.io/badge/platform-Windows_x64-555?style=flat" alt="Windows x64">
-  <img src="https://img.shields.io/badge/.NET-10-555?style=flat" alt=".NET 10">
-  <a href="../LICENSE"><img src="https://img.shields.io/badge/license-MIT-555?style=flat" alt="Лицензия MIT"></a>
+  <a href="../README.md">English</a> · <a href="README.ru.md">Русский</a>
 </p>
 
-<p align="center"><a href="https://github.com/Lantsov/pocket-vault/releases/latest"><strong>Скачать PocketVault</strong></a> · <a href="SECURITY_MODEL.md">Модель безопасности</a> · <a href="../README.md">English</a></p>
+<p align="center"><img src="images/pocketvault-logo.png" width="88" height="88" alt="Логотип PocketVault — замок"></p>
+<h1 align="center">PocketVault</h1>
+<p align="center"><strong>Ваши файлы. Ваш пароль. Ваш контроль.</strong></p>
+<p align="center">Простое офлайн-шифрование файлов для <strong>Windows</strong> и <strong>Android</strong>.<br>Один защищённый паролем формат <code>.pvlt</code>, совместимый на обеих платформах.</p>
+
+<p align="center">
+  <a href="https://github.com/Lantsov/pocket-vault/actions/workflows/build.yml"><img src="https://github.com/Lantsov/pocket-vault/actions/workflows/build.yml/badge.svg" alt="Проверки Windows"></a>
+  <a href="https://github.com/Lantsov/pocket-vault/actions/workflows/android.yml"><img src="https://github.com/Lantsov/pocket-vault/actions/workflows/android.yml/badge.svg" alt="Проверки Android"></a>
+  <a href="../LICENSE"><img src="https://img.shields.io/badge/license-MIT-555" alt="Лицензия MIT"></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/Lantsov/pocket-vault/releases/tag/v1.1.1"><strong>Скачать для Windows</strong></a>
+  ·
+  <a href="https://github.com/Lantsov/pocket-vault/releases/tag/android-v1.0.0"><strong>Скачать для Android</strong></a>
+</p>
 
 ## Интерфейс
 
-<p align="center"><img src="images/pocketvault-main.png" width="680" alt="PocketVault 1.1.0: тёмное окно WPF, выбран project-notes.txt, скрытые поля пароля и кнопки шифрования"></p>
-
-Текущий интерфейс приложения — на русском языке. [Расшифровка](images/pocketvault-decrypt.png) · [Обработка файла](images/pocketvault-processing.png).
-
-## Почему PocketVault
-
-- **Полностью офлайн.** Приложение не использует аккаунты, сетевые запросы или телеметрию.
-- **Шифрование с паролем.** AES-256-GCM, новая случайная соль и nonce для каждого контейнера.
-- **Сначала сжатие.** Имя и содержимое файла находятся внутри зашифрованного ZIP.
-- **Компактное приложение Windows.** Переносимый WPF-интерфейс, перетаскивание файла и добровольная интеграция с Проводником.
-- **Без сторонних NuGet-зависимостей.** Используются библиотеки среды выполнения .NET.
+<p align="center"><img src="images/pocketvault-main.png" width="550" alt="PocketVault в Windows: тёмный интерфейс шифрования файлов"></p>
+<p align="center"><em>Windows · WPF · русский язык</em></p>
+<p align="center">
+  <img src="images/android-plex-main-ru.png" width="235" alt="Главный экран PocketVault Android на русском">
+  &nbsp;
+  <img src="images/android-plex-settings-en.png" width="235" alt="Настройки PocketVault Android на английском">
+</p>
+<p align="center"><em>Android · IBM Plex Mono · русский / английский · реальные снимки эмулятора с тестовыми данными</em></p>
 
 ## Скачать
 
-Скачайте и распакуйте архив из [последнего релиза](https://github.com/Lantsov/pocket-vault/releases/latest). Обе сборки рассчитаны на **Windows x64** и версию Windows, поддерживаемую .NET 10.
+| Платформа | Версия | Скачать | Требования |
+| --- | --- | --- | --- |
+| **Windows** | **1.1.1** | [Автономный ZIP](https://github.com/Lantsov/pocket-vault/releases/download/v1.1.1/PocketVault-1.1.1-win-x64-self-contained.zip) | Windows x64; .NET отдельно не нужен |
+| Windows | 1.1.1 | [Компактный ZIP](https://github.com/Lantsov/pocket-vault/releases/download/v1.1.1/PocketVault-1.1.1-win-x64-framework-dependent.zip) | Windows x64 и .NET Desktop Runtime 10 x64 |
+| **Android** | **1.0.0** | [Подписанный APK ARM64](https://github.com/Lantsov/pocket-vault/releases/download/android-v1.0.0/PocketVault-1.0.0-android-arm64-release.apk) | Android 10+ (API 29), ARM64 |
 
-| Сборка | Когда выбрать |
-| --- | --- |
-| [Автономный ZIP](https://github.com/Lantsov/pocket-vault/releases/latest) | Нужен самостоятельный EXE без установки .NET. При первом запуске распаковываются нативные библиотеки среды. |
-| [Компактный ZIP](https://github.com/Lantsov/pocket-vault/releases/latest) | Уже установлен [.NET Desktop Runtime 10 x64](https://dotnet.microsoft.com/ru-ru/download/dotnet/10.0). Переносите всю распакованную папку. |
+Проверьте SHA-256 по файлу **SHA256SUMS.txt** из соответствующего [релиза Windows](https://github.com/Lantsov/pocket-vault/releases/tag/v1.1.1) или [релиза Android](https://github.com/Lantsov/pocket-vault/releases/tag/android-v1.0.0). Для Android опубликован также отпечаток сертификата подписи. Контрольные суммы обнаруживают изменение файла, но сами по себе не подтверждают личность издателя.
 
-Сравните результат `Get-FileHash -Algorithm SHA256` для архива с [SHA256SUMS.txt](https://github.com/Lantsov/pocket-vault/releases/latest). Суммы выявляют различие байтов, но не подтверждают издателя при компрометации источника загрузки.
+**Windows:** распакуйте ZIP и запустите PocketVault.exe. EXE не подписан цифровой подписью: SmartScreen может предупредить о неизвестном издателе. **Android:** скачайте APK и разрешите установку из выбранного источника. В Google Play приложения пока нет.
 
-EXE **не подписан**. Windows SmartScreen может предупредить о неизвестном издателе. Перед запуском оцените исходники и источник загрузки. Установщика нет; обычная работа не требует прав администратора.
+## Возможности
+
+- **Приватность:** файлы обрабатываются локально; без аккаунтов, телеметрии и серверного шифрования.
+- **Общий формат:** можно зашифровать файл на Windows и восстановить на Android — или наоборот.
+- **Шифрование:** AES-256-GCM и PBKDF2-HMAC-SHA256 с 600 000 итераций.
+- **Защита имени:** исходное имя и содержимое находятся внутри зашифрованного ZIP.
+- **Минималистичный интерфейс:** тёмная Windows-версия и мобильный интерфейс с русским/английским языками и шрифтом IBM Plex Mono.
+- **Системная работа с файлами:** перетаскивание и интеграция с Проводником в Windows; системный выбор документов Android (SAF) без полного доступа к накопителю.
 
 ## Как пользоваться
 
-1. Выберите или перетащите один файл в окно.
-2. Введите и повторите пароль. Регистр и пробелы имеют значение.
-3. Нажмите **Зашифровать** и сохраните контейнер `.pvlt`.
-4. Для восстановления откройте `.pvlt`, введите пароль, нажмите **Расшифровать** и выберите выходную папку.
+1. Выберите **один файл**.
+2. Введите надёжный пароль (при шифровании — дважды).
+3. Зашифруйте файл и сохраните контейнер `.pvlt`.
+4. Для восстановления откройте контейнер, введите тот же пароль и сохраните исходный файл.
 
-Существующие файлы не перезаписываются. Исходник по умолчанию сохраняется. Его удаление требует подтверждения и повторного чтения с проверкой записанного контейнера; это обычное удаление, без безопасного уничтожения данных. Регистрация в Проводнике и клавиатурное управление описаны в [руководстве](USAGE.md).
+Восстановить забытый пароль нельзя. Храните резервные копии и проверяйте расшифровку до удаления оригиналов. Подробности: [Windows](USAGE.md) · [Android](ANDROID.md).
 
-## Безопасность
+## Безопасность и ограничения
 
-Формат v1 получает 256-битный ключ через **PBKDF2-HMAC-SHA256, 600 000 итераций**, с независимо сгенерированной **16-байтовой солью**. **AES-256-GCM** использует случайный **12-байтовый nonce** и **16-байтовый тег аутентификации**. Все 52 байта заголовка аутентифицируются как AAD. Аутентификация завершается до открытия ZIP и записи восстановленного содержимого.
+| | Windows | Android |
+| --- | --- | --- |
+| Максимальный размер файла | **128 МиБ** | **32 МиБ** |
+| Интерфейс | WPF; русский | .NET MAUI; русский и английский |
+| Выбор файлов | Локальные пути / Проводник | Системный выбор документов |
+| Удаление оригинала | По желанию, с проверкой; **не безопасное стирание** | Не поддерживается |
 
-Имя и содержимое исходника зашифрованы. Заголовок, длина шифротекста и метаданные файловой системы остаются видимыми. Пароли можно подбирать офлайн: используйте длинную уникальную парольную фразу. Подробнее: [модель безопасности](SECURITY_MODEL.md), [формат](FORMAT.md), [сообщения об уязвимостях](../SECURITY.md).
+Обработка происходит в памяти, поэтому крупные файлы могут требовать много ОЗУ. В Windows при восстановлении создаётся временный открытый файл в целевой папке; при сбое Android-провайдера может остаться частичный документ. Размер контейнера и внешние метаданные не скрываются. Программа не защищает от вредоносного ПО на заражённом устройстве и **не проходила независимый криптографический аудит**.
 
-## Ограничения
-
-- Один обычный файл до **128 МиБ**; папки и пакетная обработка не поддерживаются.
-- ZIP и шифрование выполняются в памяти: потребление может достигать сотен МиБ, в отдельных операциях — приближаться к 1 ГиБ.
-- Нет восстановления пароля, отмены операции, безопасного стирания или независимого криптографического аудита.
-- При восстановлении открытые данные записываются во временный файл целевой папки. После аварии он может остаться на диске.
-- Восстанавливаются имя и содержимое; права NTFS, альтернативные потоки и другие метаданные отдельно не сохраняются.
+Используйте длинную уникальную парольную фразу. Подробнее: [модель безопасности](SECURITY_MODEL.md), [формат контейнера](FORMAT.md), [отказ от гарантий](DISCLAIMER.md), [сообщение об уязвимости](../SECURITY.md).
 
 ## Сборка из исходников
 
-На Windows x64 со стабильным .NET 10 SDK:
+Windows (стабильный .NET 10 SDK):
 
 ```powershell
 dotnet build PocketVault.slnx -c Release
@@ -76,20 +83,10 @@ dotnet run --project PocketVault.Tests -c Release
 .\scripts\build.ps1 -Publish
 ```
 
-Тесты запускаются отдельной консольной программой и открывают настоящие окна WPF. `dotnet test` **не** выполняет эти проверки. Подробнее: [сборка, публикация и снимки](BUILD.md).
+Для Android нужны .NET MAUI, Android SDK и JDK 21. Инструкция по сборке и подписи — в [ANDROID.md](ANDROID.md). Проверки Windows запускаются отдельной программой, **не** через `dotnet test`.
 
-## Документация
+## Проект
 
-[Использование](USAGE.md) · [Модель безопасности](SECURITY_MODEL.md) · [Формат контейнера](FORMAT.md) · [Сборка](BUILD.md) · [История изменений](../CHANGELOG.md) · [English](../README.md)
+[Windows](USAGE.md) · [Android](ANDROID.md) · [Сборка](BUILD.md) · [История](../CHANGELOG.md) · [Участие](../CONTRIBUTING.md) · [Лицензия](../LICENSE) · [Сторонние лицензии](THIRD_PARTY_NOTICES.md)
 
-## Участие
-
-Небольшие исправления приветствуются. Прочитайте [CONTRIBUTING.md](../CONTRIBUTING.md): изменения криптографии и формата требуют особого внимания к совместимости. О возможных уязвимостях сообщайте приватно по правилам [SECURITY.md](../SECURITY.md).
-
-## Лицензия
-
-[MIT](../LICENSE), copyright © 2026 Lantsov. Сведения о поставляемой среде выполнения — в [уведомлениях о сторонних компонентах](THIRD_PARTY_NOTICES.md).
-
-## Отказ от гарантий
-
-Программа предоставляется **AS IS («как есть»)** по лицензии MIT. Независимый криптографический аудит не проводился; безопасность реализации не гарантируется. Пользователь отвечает за пароли и резервные копии; потеря пароля может сделать восстановление невозможным. Программа не защищает скомпрометированную ОС и не противодействует вредоносному ПО и кейлоггерам. После обычного удаления могут сохраняться копии, индексы, миниатюры и остаточные данные; после аварии — временные файлы с открытыми данными. Не используйте её как единственную защиту критически важных данных без независимой оценки рисков. [Полный текст / full disclaimer](DISCLAIMER.md).
+Лицензия **MIT**, © 2026 Lantsov. Приложение предоставляется **«как есть»**, без гарантий. Об уязвимостях сообщайте приватно по [SECURITY.md](../SECURITY.md).
